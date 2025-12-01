@@ -55,7 +55,6 @@ data class Achievement(
     @Enumerated(EnumType.STRING)
     val contributionLevel: ContributionLevel? = null,
 
-
     @Column(columnDefinition = "TEXT")
     val skills: String? = null,
 
@@ -79,7 +78,8 @@ enum class WorkType {
     OPERATION, // 상시 업무 개선
     INCIDENT, // 장애 대응
     PERSONAL, // 개인 프로젝트
-    LEARNING; // 스터디 교육 등
+    LEARNING, // 스터디 교육 등
+    OTHER; // 기타
 }
 
 enum class ContributionLevel {

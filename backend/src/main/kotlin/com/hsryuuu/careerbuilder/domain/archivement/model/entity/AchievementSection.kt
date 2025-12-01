@@ -43,7 +43,7 @@ data class AchievementSection(
 )
 
 enum class SectionKind(
-    val description: String
+    val display: String
 ) {
     NONE("미정"),         // 아직 정하지 않음
     CONTEXT("배경/상황"),   // 일을 하게 된 배경 / 상황
@@ -52,6 +52,6 @@ enum class SectionKind(
     RESULT("결과 및 성과"),            // 결과, 성과 (숫자)
     CHALLENGE("어려웠던 점"),   // 어려웠던 점
     LEARNING("배운 점"),    // 배운 점 / 성장
-    FEEDBACK("피드백/인정"), // 받은 피드백, 평가
+    FEEDBACK("피드백/평가"), // 받은 피드백, 평가
     ARTIFACT("증빙 자료/링크");
 }
