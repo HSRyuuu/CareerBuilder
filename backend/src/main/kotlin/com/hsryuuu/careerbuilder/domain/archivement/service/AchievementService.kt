@@ -35,7 +35,11 @@ class AchievementService(
             durationStart = request.durationStart,
             durationEnd = request.durationEnd,
             impactSummary = request.impactSummary,
+            goalSummary = request.goalSummary,
             status = request.status,
+            roleTitle = request.roleTitle,
+            workType = request.workType,
+            contributionLevel = request.contributionLevel,
             skills = request.skills
         )
 
@@ -102,7 +106,11 @@ class AchievementService(
             durationStart = request.durationStart,
             durationEnd = request.durationEnd,
             impactSummary = request.impactSummary,
+            goalSummary = request.goalSummary,
             status = request.status,
+            roleTitle = request.roleTitle,
+            workType = request.workType,
+            contributionLevel = request.contributionLevel,
             skills = request.skills
         )
 

@@ -1,9 +1,6 @@
 package com.hsryuuu.careerbuilder.domain.archivement.model.dto
 
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.Achievement
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.AchievementSection
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.AchievementStatus
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.SectionKind
+import com.hsryuuu.careerbuilder.domain.archivement.model.entity.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -15,7 +12,11 @@ data class CreateAchievementRequest(
     val durationStart: LocalDate,
     val durationEnd: LocalDate? = null,
     val impactSummary: String? = null,
+    val goalSummary: String? = null,
     val status: AchievementStatus = AchievementStatus.DRAFT,
+    val roleTitle: String? = null,
+    val workType: WorkType? = null,
+    val contributionLevel: ContributionLevel? = null,
     val skills: String? = null,
     val sections: List<CreateSectionRequest> = emptyList()
 )
@@ -33,7 +34,11 @@ data class UpdateAchievementRequest(
     val durationStart: LocalDate,
     val durationEnd: LocalDate? = null,
     val impactSummary: String? = null,
+    val goalSummary: String? = null,
     val status: AchievementStatus,
+    val roleTitle: String? = null,
+    val workType: WorkType? = null,
+    val contributionLevel: ContributionLevel? = null,
     val skills: String? = null,
     val sections: List<UpdateSectionRequest> = emptyList()
 )
@@ -55,7 +60,11 @@ data class AchievementResponse(
     val durationStart: LocalDate,
     val durationEnd: LocalDate?,
     val impactSummary: String?,
+    val goalSummary: String?,
     val status: AchievementStatus,
+    val roleTitle: String?,
+    val workType: WorkType?,
+    val contributionLevel: ContributionLevel?,
     val skills: String?,
     val sections: List<SectionResponse>,
     val createdAt: LocalDateTime,
@@ -71,7 +80,11 @@ data class AchievementResponse(
                 durationStart = achievement.durationStart,
                 durationEnd = achievement.durationEnd,
                 impactSummary = achievement.impactSummary,
+                goalSummary = achievement.goalSummary,
                 status = achievement.status,
+                roleTitle = achievement.roleTitle,
+                workType = achievement.workType,
+                contributionLevel = achievement.contributionLevel,
                 skills = achievement.skills,
                 sections = sections.map { SectionResponse.from(it) },
                 createdAt = achievement.createdAt,
