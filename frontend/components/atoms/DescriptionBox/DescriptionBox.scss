@@ -1,0 +1,40 @@
+.description-box {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 6px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  // Info variant (기본 - 파란색)
+  &--info {
+    color: #6b7280;
+    background: #f9fafb;
+    border-left: 3px solid #3b82f6;
+  }
+
+  // Warning variant (주황색)
+  &--warning {
+    color: #92400e;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+  }
+
+  // Success variant (초록색)
+  &--success {
+    color: #065f46;
+    background: #f0fdf4;
+    border-left: 3px solid #10b981;
+  }
+
+  // Neutral variant (회색)
+  &--neutral {
+    color: #4b5563;
+    background: #f3f4f6;
+    border-left: 3px solid #9ca3af;
+  }
+}
+

@@ -1,0 +1,211 @@
+// DatePicker 커스텀 스타일 (@vuepic/vue-datepicker)
+
+// Input 필드 스타일
+:deep(.dp__input) {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1px solid #e8e9eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #1a1d1f;
+  transition: all 0.2s ease;
+  outline: none;
+
+  &::placeholder {
+    color: #9ca3af;
+    font-size: 13px;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: #d1d5db;
+  }
+
+  &:focus {
+    border-color: #1e40af;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  }
+
+  &:disabled {
+    background: #f7f8fa;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  &:read-only {
+    background: #f7f8fa;
+    cursor: default;
+  }
+}
+
+// 아이콘 스타일
+:deep(.dp__input_icon),
+:deep(.dp__clear_icon) {
+  padding: 0 4px;
+  color: #6b7280;
+
+  &:hover {
+    color: #1e40af;
+  }
+}
+
+// 달력 팝업 스타일
+:deep(.dp__menu) {
+  border: 1px solid #e8e9eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+}
+
+// 액션 버튼 영역
+:deep(.dp__action_row) {
+  padding: 8px;
+  border-top: 1px solid #e8e9eb;
+  margin-top: 8px;
+}
+
+:deep(.dp__action_button) {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+:deep(.dp__action_select) {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  border: none;
+
+  &:hover {
+    background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
+  }
+}
+
+:deep(.dp__action_cancel) {
+  color: #6b7280;
+  background: transparent;
+  border: none;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #1a1d1f;
+  }
+}
+
+// 오늘 날짜 스타일
+:deep(.dp__today) {
+  border: 1.5px solid #2563eb;
+  color: #2563eb;
+}
+
+// 선택된 날짜 스타일
+:deep(.dp__active_date) {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+}
+
+// 날짜 셀 hover 효과
+:deep(.dp__cell_inner) {
+  &:hover {
+    background: #f3f4f6;
+    color: #1a1d1f;
+  }
+}
+
+// 범위 선택 스타일
+:deep(.dp__range_start),
+:deep(.dp__range_end) {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+}
+
+:deep(.dp__range_between) {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1a1d1f;
+}
+
+// 비활성화된 날짜
+:deep(.dp__cell_disabled) {
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+// 월/년도 선택 버튼
+:deep(.dp__month_year_select) {
+  font-weight: 600;
+  color: #1a1d1f;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #2563eb;
+  }
+}
+
+// 화살표 버튼
+:deep(.dp__arrow_top),
+:deep(.dp__arrow_bottom) {
+  color: #6b7280;
+
+  &:hover {
+    color: #2563eb;
+    background: #f3f4f6;
+  }
+}
+
+// 헤더 스타일
+:deep(.dp__calendar_header) {
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+// 시간 선택 스타일 (useTimePicker 사용 시)
+:deep(.dp__time_input) {
+  border: 1px solid #e8e9eb;
+  border-radius: 6px;
+
+  &:focus {
+    border-color: #2563eb;
+  }
+}
+
+:deep(.dp__time_col_reg_block) {
+  &:hover {
+    background: #f3f4f6;
+  }
+}
+
+// 화살표 아이콘 스타일
+:deep(.dp__icon) {
+  color: #6b7280;
+}
+
+// 포커스된 셀
+:deep(.dp__cell_offset) {
+  color: #9ca3af;
+}
+
+// 월/년도 오버레이
+:deep(.dp__overlay) {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.dp__overlay_cell) {
+  padding: 8px;
+  border-radius: 6px;
+  
+  &:hover {
+    background: #f3f4f6;
+    color: #2563eb;
+  }
+
+  &.dp__overlay_cell_active {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+  }
+}

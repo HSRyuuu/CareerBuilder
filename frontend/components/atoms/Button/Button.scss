@@ -1,0 +1,131 @@
+.cb-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  // Sizes
+  &--small {
+    padding: 6px 12px;
+    font-size: 13px;
+
+    &.cb-button--icon-only {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+    }
+  }
+
+  &--medium {
+    padding: 8px 16px;
+    font-size: 14px;
+
+    &.cb-button--icon-only {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+    }
+  }
+
+  &--large {
+    padding: 12px 24px;
+    font-size: 16px;
+
+    &.cb-button--icon-only {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+    }
+  }
+
+  // Variants
+  &--primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25);
+
+    &:hover:not(.cb-button--disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.35);
+    }
+
+    &:active:not(.cb-button--disabled) {
+      transform: translateY(0);
+    }
+  }
+
+  &--secondary {
+    background: #f7f8fa;
+    color: #6b7280;
+    border: 1px solid #e8e9eb;
+
+    &:hover:not(.cb-button--disabled) {
+      background: #eef0f2;
+      color: #1a1d1f;
+    }
+  }
+
+  &--outlined {
+    background: #ffffff;
+    color: #1e40af;
+    border: 1px solid #e8e9eb;
+
+    &:hover:not(.cb-button--disabled) {
+      background: #f7f8fa;
+      border-color: #1e40af;
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: #1e40af;
+
+    &:hover:not(.cb-button--disabled) {
+      background: #f3f4f6;
+    }
+  }
+
+  &--danger {
+    background: #fee;
+    color: #f87171;
+    border: none;
+
+    &:hover:not(.cb-button--disabled) {
+      background: #fecaca;
+      color: #dc2626;
+    }
+  }
+
+  // Block
+  &--block {
+    width: 100%;
+  }
+
+  // Disabled
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Icon only
+  &--icon-only {
+    .button-label {
+      display: none;
+    }
+  }
+
+  .button-label {
+    line-height: 1;
+  }
+}

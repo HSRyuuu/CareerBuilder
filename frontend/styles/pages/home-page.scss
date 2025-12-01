@@ -1,0 +1,136 @@
+.home-page {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-welcome-section {
+  margin-bottom: 48px;
+}
+
+.home-page-title {
+  font-size: 42px;
+  font-weight: 700;
+  color: #1a1d1f;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.home-page-subtitle {
+  font-size: 18px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.home-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.home-info-card {
+  background: #ffffff;
+  border: 1px solid #e8e9eb;
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: #d1d5db;
+  }
+}
+
+.home-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.home-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1d1f;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+
+.home-card-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.home-card-action-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e40af;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #0f172a;
+    transform: translateX(4px);
+  }
+}
+
+.home-card-action-button {
+  padding: 0 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+.home-stats-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 24px rgba(30, 64, 175, 0.25);
+}
+
+.home-stat-item {
+  text-align: center;
+  color: white;
+}
+
+.home-stat-number {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.home-stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.home-stat-divider {
+  width: 1px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
