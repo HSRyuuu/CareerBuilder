@@ -40,6 +40,7 @@ data class AchievementSection(
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now()
+
 )
 
 enum class SectionKind(

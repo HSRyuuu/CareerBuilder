@@ -7,7 +7,6 @@ data class LoginRequest(
     val password: String
 )
 
-
 data class LoginResponse(
     val accessToken: String,
     val userInfo: UserInfo

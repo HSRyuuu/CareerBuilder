@@ -3,8 +3,9 @@ package com.hsryuuu.careerbuilder.domain.user.appuser.model.dto
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
+import java.util.*
 
-data class UserSignupRequest(
+data class UserSignUpRequest(
     @field:NotBlank(message = "아이디는 필수입니다.")
     @field:Size(min = 4, max = 20, message = "아이디는 4~20자 사이여야 합니다.")
     val username: String,
@@ -21,3 +22,15 @@ data class UserSignupRequest(
     @field:Email(message = "올바른 이메일 형식이 아닙니다.")
     val email: String
 )
+
+data class DuplicateCheckResponse(
+    val exists: Boolean
+)
+
+data class SignupResponse(
+    val id: UUID,
+    val username: String,
+    val nickname: String,
+    val email: String
+)
+

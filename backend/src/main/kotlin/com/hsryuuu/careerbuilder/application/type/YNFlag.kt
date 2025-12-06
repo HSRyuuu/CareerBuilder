@@ -1,8 +1,7 @@
 package com.hsryuuu.careerbuilder.application.type
 
-import com.hsryuuu.careerbuilder.application.exception.GlobalErrorMessage
+import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
-import org.springframework.http.HttpStatus
 
 enum class YNFlag(val value: Boolean) {
     Y(true),
@@ -13,7 +12,7 @@ enum class YNFlag(val value: Boolean) {
 
         fun fromString(value: String): YNFlag =
             entries.firstOrNull { it.name.equals(value, ignoreCase = true) }
-                ?: throw GlobalException(HttpStatus.BAD_REQUEST, GlobalErrorMessage.BAD_REQUEST_ENUM);
+                ?: throw GlobalException(ErrorCode.BAD_ENUM_REQUEST);
 
         fun getYesFlags(): List<YNFlag> = listOf(Y)
         fun getNoFlags(): List<YNFlag> = listOf(N)

@@ -2,7 +2,7 @@ package com.hsryuuu.careerbuilder.domain.user.auth
 
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.dto.DuplicateCheckResponse
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.dto.SignupResponse
-import com.hsryuuu.careerbuilder.domain.user.appuser.model.dto.UserSignupRequest
+import com.hsryuuu.careerbuilder.domain.user.appuser.model.dto.UserSignUpRequest
 import com.hsryuuu.careerbuilder.domain.user.appuser.service.AuthService
 import com.hsryuuu.careerbuilder.domain.user.auth.model.LoginRequest
 import com.hsryuuu.careerbuilder.domain.user.auth.model.LoginResponse
@@ -10,6 +10,7 @@ import com.hsryuuu.careerbuilder.domain.user.auth.model.LogoutResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "인증/인가 API")
@@ -37,14 +38,10 @@ class AuthController(
     }
 
     @PostMapping("/signup")
-    fun signup(@Valid @RequestBody request: UserSignupRequest): SignupResponse {
+    fun signup(@Valid @RequestBody request: UserSignUpRequest): ResponseEntity<SignupResponse> {
         val userId = authService.signup(request)
-        return SignupResponse(
-            id = userId,
-            username = request.username,
-            nickname = request.nickname,
-            email = request.email
-        )
+        return ResponseEntity.noContent().build();
+
     }
 
     @PostMapping("/login")

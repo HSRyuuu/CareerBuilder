@@ -1,5 +1,6 @@
 package com.hsryuuu.careerbuilder.domain.archivement.service
 
+import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import com.hsryuuu.careerbuilder.domain.archivement.model.dto.AchievementResponse
 import com.hsryuuu.careerbuilder.domain.archivement.model.dto.CreateAchievementRequest
@@ -11,10 +12,11 @@ import com.hsryuuu.careerbuilder.domain.archivement.repository.AchievementReposi
 import com.hsryuuu.careerbuilder.domain.archivement.repository.AchievementSectionRepository
 import com.hsryuuu.careerbuilder.domain.user.appuser.repository.AppUserRepository
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+
+private const val string = "Hello"
 
 @Service
 class AchievementService(
@@ -26,7 +28,7 @@ class AchievementService(
     @Transactional
     fun createAchievement(userId: UUID, request: CreateAchievementRequest): AchievementResponse {
         val user = appUserRepository.findByIdOrNull(userId)
-            ?: throw GlobalException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.")
+            ?: throw GlobalException(ErrorCode.MEMBER_NOT_FOUND)
 
         val achievement = Achievement(
             user = user,
@@ -56,6 +58,7 @@ class AchievementService(
             )
             achievementSectionRepository.save(section)
         }
+        val str = string;
 
         return AchievementResponse.from(savedAchievement, savedSections)
     }
@@ -63,10 +66,10 @@ class AchievementService(
     @Transactional(readOnly = true)
     fun getAchievement(id: UUID, userId: UUID): AchievementResponse {
         val achievement = achievementRepository.findByIdOrNull(id)
-            ?: throw GlobalException(HttpStatus.NOT_FOUND, "성과를 찾을 수 없습니다.")
+            ?: throw GlobalException(ErrorCode.ACHIEVEMENT_NOT_FOUND)
 
         if (achievement.user.id != userId) {
-            throw GlobalException(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.")
+            throw GlobalException(ErrorCode.FORBIDDEN)
         }
 
         val sections = achievementSectionRepository.findByAchievementIdOrderBySortOrderAsc(id)
@@ -94,10 +97,10 @@ class AchievementService(
     @Transactional
     fun updateAchievement(id: UUID, userId: UUID, request: UpdateAchievementRequest): AchievementResponse {
         val achievement = achievementRepository.findByIdOrNull(id)
-            ?: throw GlobalException(HttpStatus.NOT_FOUND, "성과를 찾을 수 없습니다.")
+            ?: throw GlobalException(ErrorCode.ACHIEVEMENT_NOT_FOUND)
 
         if (achievement.user.id != userId) {
-            throw GlobalException(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.")
+            throw GlobalException(ErrorCode.FORBIDDEN)
         }
 
         val updatedAchievement = achievement.copy(
@@ -137,10 +140,10 @@ class AchievementService(
     @Transactional
     fun deleteAchievement(id: UUID, userId: UUID) {
         val achievement = achievementRepository.findByIdOrNull(id)
-            ?: throw GlobalException(HttpStatus.NOT_FOUND, "성과를 찾을 수 없습니다.")
+            ?: throw GlobalException(ErrorCode.ACHIEVEMENT_NOT_FOUND)
 
         if (achievement.user.id != userId) {
-            throw GlobalException(HttpStatus.FORBIDDEN, "접근 권한이 없습니다.")
+            throw GlobalException(ErrorCode.FORBIDDEN)
         }
 
         achievementRepository.delete(achievement)
