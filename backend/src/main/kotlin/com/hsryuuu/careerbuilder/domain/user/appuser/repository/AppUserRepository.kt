@@ -2,7 +2,9 @@ package com.hsryuuu.careerbuilder.domain.user.appuser.repository
 
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
@@ -11,4 +13,12 @@ interface AppUserRepository : JpaRepository<AppUser, UUID> {
     fun existsByNickname(nickname: String): Boolean
     fun existsByEmail(email: String): Boolean
     fun findByUsername(username: String): AppUser?
+
+    @Modifying
+    @Transactional
+    fun deleteByUsername(username: String)
+
+    @Modifying
+    @Transactional
+    fun deleteByEmail(email: String)
 }
