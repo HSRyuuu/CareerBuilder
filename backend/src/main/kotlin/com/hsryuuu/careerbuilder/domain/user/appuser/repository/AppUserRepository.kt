@@ -10,7 +10,6 @@ import java.util.*
 @Repository
 interface AppUserRepository : JpaRepository<AppUser, UUID> {
     fun existsByUsername(username: String): Boolean
-    fun existsByNickname(nickname: String): Boolean
     fun existsByEmail(email: String): Boolean
     fun findByUsername(username: String): AppUser?
 

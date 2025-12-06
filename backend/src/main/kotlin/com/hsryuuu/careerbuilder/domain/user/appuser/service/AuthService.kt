@@ -11,6 +11,7 @@ import com.hsryuuu.careerbuilder.domain.user.appuser.repository.AppUserRepositor
 import com.hsryuuu.careerbuilder.domain.user.auth.model.LoginRequest
 import com.hsryuuu.careerbuilder.domain.user.auth.model.LoginResponse
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpHeaders
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -29,10 +30,6 @@ class AuthService(
         return userRepository.existsByUsername(username)
     }
 
-    fun existsByNickname(nickname: String): Boolean {
-        return userRepository.existsByNickname(nickname)
-    }
-
     fun existsByEmail(email: String): Boolean {
         return userRepository.existsByEmail(email)
     }
@@ -40,15 +37,11 @@ class AuthService(
     @Transactional
     fun signup(request: UserSignUpRequest): UUID {
         // 중복 체크
-        if (existsByUsername(request.username)) {
-            throw IllegalArgumentException("이미 사용중인 아이디입니다.")
-        }
-        if (existsByNickname(request.nickname)) {
-            throw IllegalArgumentException("이미 사용중인 닉네임입니다.")
-        }
-
         if (existsByEmail(request.email)) {
-            throw IllegalArgumentException("이미 사용중인 이메일입니다.")
+            throw GlobalException(ErrorCode.DUPLICATE_EMAIL)
+        }
+        if (existsByUsername(request.username)) {
+            throw GlobalException(ErrorCode.DUPLICATE_USERNAME)
         }
 
         // 비밀번호 암호화
@@ -58,12 +51,15 @@ class AuthService(
         val appUser = AppUser(
             username = request.username,
             password = encodedPassword,
-            nickname = request.nickname,
             email = request.email
         )
+        try {
+            val savedUser = userRepository.save(appUser)
+            return savedUser.id!!
 
-        val savedUser = userRepository.save(appUser)
-        return savedUser.id ?: throw IllegalStateException("회원 저장에 실패했습니다.")
+        } catch (e: DataIntegrityViolationException) {
+            throw GlobalException(ErrorCode.DUPLICATE_VALUE)
+        }
     }
 
     @Transactional(readOnly = true)

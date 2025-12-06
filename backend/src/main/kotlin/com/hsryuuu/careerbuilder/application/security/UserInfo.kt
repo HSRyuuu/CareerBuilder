@@ -6,7 +6,6 @@ import java.util.*
 data class UserInfo(
     val id: UUID?,
     val username: String,
-    val nickname: String,
     val email: String,
     val role: UserRole
 ) {
@@ -14,9 +13,8 @@ data class UserInfo(
         fun from(appUser: AppUser): UserInfo {
             return UserInfo(
                 id = appUser.id,
-                username = appUser.username,
-                nickname = appUser.nickname,
                 email = appUser.email,
+                username = appUser.username,
                 role = UserRole.ROLE_USER
             )
         }

@@ -37,10 +37,9 @@ class AuthControllerTest(
     ) {
         // Arrange
         val request = UserSignUpRequest(
+            email = TEST_EMAIL,
             username = TEST_USERNAME,
             password = "test-password",
-            nickname = "test-user",
-            email = TEST_EMAIL
         )
         // Act
         val response = client.postForEntity("/api/auth/signup", request, Void::class.java)
@@ -64,10 +63,9 @@ class AuthControllerTest(
     ) {
         // Arrange
         val request = UserSignUpRequest(
-            username = "user-for-test",
+            email,
+            username = TEST_USERNAME,
             password = "test-password",
-            nickname = "test-user",
-            email = email
         )
         // Act
         val response = client.postForEntity("/api/auth/signup", request, Void::class.java)
@@ -89,10 +87,9 @@ class AuthControllerTest(
     ) {
         // Arrange
         val request = UserSignUpRequest(
-            username,
+            email = TEST_EMAIL,
+            username = username,
             password = "test-password",
-            nickname = "test-user",
-            email = "test-email@test.com"
         )
         // Act
         val response = client.postForEntity("/api/auth/signup", request, Void::class.java)
@@ -108,7 +105,6 @@ class AuthControllerTest(
             "ABCDEFG",
             "test-user-",
             "test."
-
         ]
     )
     fun signup_username_형식이_올바른_형식일_경우_204_No_Content_상태_응답(
@@ -117,10 +113,9 @@ class AuthControllerTest(
     ) {
         // Arrange
         val request = UserSignUpRequest(
-            username,
+            email = TEST_EMAIL,
             password = "test-password",
-            nickname = "test-user",
-            email = TEST_EMAIL
+            username
         )
         // Act
         val response = client.postForEntity("/api/auth/signup", request, Void::class.java)
@@ -141,14 +136,44 @@ class AuthControllerTest(
     ) {
         // Arrange
         val request = UserSignUpRequest(
+            email = TEST_EMAIL,
             username = TEST_USERNAME,
             password = password,
-            nickname = "test-user",
-            email = TEST_EMAIL
         )
         // Act
         val response = client.postForEntity("/api/auth/signup", request, Void::class.java)
         // Assert
         assertThat(response.statusCode.value()).isEqualTo(400)
     }
+
+    @Test
+    fun signup_username_중복일_경우_400_Bad_Request_상태_응답(
+        @Autowired client: TestRestTemplate
+    ) {
+        // Arrange
+        val username = TEST_USERNAME
+        client.postForEntity(
+            "/api/auth/signup",
+            UserSignUpRequest(
+                email = TEST_EMAIL,
+                username = username,
+                password = "test-password",
+            ),
+            Void::class.java
+        )
+        // Act
+        val response = client.postForEntity(
+            "/api/auth/signup",
+            UserSignUpRequest(
+                email = TEST_EMAIL,
+                password = "test-password",
+                username,
+            ),
+            Void::class.java
+        )
+        // Assert
+        assertThat(response.statusCode.value()).isEqualTo(409)
+
+    }
+
 }

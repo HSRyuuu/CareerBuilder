@@ -25,12 +25,6 @@ class AuthController(
         return DuplicateCheckResponse(exists)
     }
 
-    @GetMapping("/check/nickname")
-    fun checkNicknameExists(@RequestParam nickname: String): DuplicateCheckResponse {
-        val exists = authService.existsByNickname(nickname)
-        return DuplicateCheckResponse(exists)
-    }
-
     @GetMapping("/check/email")
     fun checkEmailExists(@RequestParam email: String): DuplicateCheckResponse {
         val exists = authService.existsByEmail(email)

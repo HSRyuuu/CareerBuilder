@@ -11,7 +11,6 @@ class UserPrincipal(
     val id: UUID?,
     private val username: String,
     private val password: String,
-    private val nickname: String,
     private val email: String,
     private val role: UserRole
 ) : UserDetails {
@@ -22,7 +21,6 @@ class UserPrincipal(
                 id = appUser.id,
                 username = appUser.username,
                 password = appUser.password,
-                nickname = appUser.nickname,
                 email = appUser.email,
                 role = UserRole.ROLE_USER
             )
@@ -31,7 +29,6 @@ class UserPrincipal(
         fun toUserInfo(userPrincipal: UserPrincipal): UserInfo = UserInfo(
             id = userPrincipal.id,
             username = userPrincipal.username,
-            nickname = userPrincipal.nickname,
             email = userPrincipal.email,
             role = userPrincipal.role
         )

@@ -50,7 +50,6 @@ class SwaggerConfig {
         val userInfo = UserInfo(
             id = UUID.fromString("48eebe36-eaf2-4195-9d31-88427fa82ca9"),
             username = "happyhsyru",
-            nickname = "happyhsyru",
             email = "happyhsyru@gmail.com",
             role = UserRole.ROLE_USER
         )

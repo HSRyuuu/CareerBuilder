@@ -30,7 +30,6 @@ class JwtTokenProvider {
                 mapOf(
                     "id" to userInfo.id,
                     "username" to userInfo.username,
-                    "nickname" to userInfo.nickname,
                     "email" to userInfo.email,
                     "role" to userInfo.role.name
                 )
@@ -54,7 +53,6 @@ class JwtTokenProvider {
         return UserInfo(
             id = UUID.fromString(claims["id"] as String),
             username = claims["username"] as String,
-            nickname = claims["nickname"] as String,
             email = claims["email"] as String,
             role = UserRole.valueOf(claims["role"] as String)
         )
