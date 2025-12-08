@@ -4,6 +4,7 @@ import com.hsryuuu.careerbuilder.domain.user.appuser.model.dto.UserSignUpRequest
 import com.hsryuuu.careerbuilder.domain.user.appuser.repository.AppUserRepository
 import com.hsryuuu.careerbuilder.generator.TestDataGenerator
 import com.hsryuuu.careerbuilder.generator.TestDataGenerator.generateTestEmail
+import com.hsryuuu.careerbuilder.generator.TestDataGenerator.generateTestPassword
 import com.hsryuuu.careerbuilder.generator.TestDataGenerator.generateTestUsername
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -14,6 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -205,7 +207,29 @@ class AuthControllerTest(
         )
         // Assert
         assertThat(response.statusCode.value()).isEqualTo(409)
-
     }
 
+    @Test
+    fun signup_password를_올바르게_암호화_한다(
+        @Autowired client: TestRestTemplate,
+        @Autowired appUserRepository: AppUserRepository,
+        @Autowired passwordEncoder: PasswordEncoder
+    ) {
+
+        // Arrange
+        val request = UserSignUpRequest(
+            email = generateTestEmail(),
+            username = generateTestUsername(),
+            password = generateTestPassword(),
+        )
+        // Act
+        client.postForEntity("/api/auth/signup", request, Void::class.java)
+        // Assert
+        val appUser = appUserRepository.findByEmail(request.email)
+            ?: throw IllegalArgumentException("no-data")
+        val actual = appUser.password
+        assertThat(actual).isNotNull
+        assertThat(passwordEncoder.matches(request.password, actual)).isTrue
+
+    }
 }

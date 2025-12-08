@@ -22,7 +22,7 @@ data class AppUser(
     @Column(nullable = false, unique = true, length = 50)
     val username: String,
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 1000)
     val password: String,
 
     @CreatedDate

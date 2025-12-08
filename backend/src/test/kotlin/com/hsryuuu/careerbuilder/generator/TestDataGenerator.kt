@@ -5,7 +5,8 @@ import java.util.*
 object TestDataGenerator {
 
     const val TEST_EMAIL_SUFFIX = "@test.com"
-    const val TEST_USERNAME_PREFIX = "test"
+    const val TEST_USERNAME_PREFIX = "test-username-"
+    const val TEST_PASSWORD_PREFIX = "testpw-"
 
     fun generateTestEmail(): String {
         return UUID.randomUUID().toString() + TEST_EMAIL_SUFFIX
@@ -13,6 +14,10 @@ object TestDataGenerator {
 
     fun generateTestUsername(): String {
         return TEST_USERNAME_PREFIX + UUID.randomUUID().toString()
+    }
+
+    fun generateTestPassword(): String {
+        return TEST_PASSWORD_PREFIX + UUID.randomUUID().toString()
     }
 
 }
