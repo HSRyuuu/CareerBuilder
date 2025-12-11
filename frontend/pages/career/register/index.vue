@@ -434,6 +434,8 @@ import {
   WORK_TYPE_INFO,
   CONTRIBUTION_LEVEL_INFO,
 } from '@/types/achievement-types';
+import { createAchievement } from '@/api/archievement/api';
+import type { TAchievementCreate } from '@/api/archievement/types';
 
 const toast = useToast();
 
@@ -590,7 +592,7 @@ const cancelSectionTitleEdit = (index: number) => {
   section.isEditingTitle = false;
 };
 
-const handleSave = () => {
+const handleSave = async () => {
   // 필수 필드 검증 (최소한의 필수 블록만)
   if (!formData.value.title.trim()) {
     toast.error('제목을 입력해주세요.');
@@ -601,9 +603,42 @@ const handleSave = () => {
     return;
   }
 
-  console.log('저장할 데이터:', formData.value);
-  // TODO: API 호출하여 저장
+  // API 요청 데이터 변환
+  const requestBody: TAchievementCreate = {
+    title: formData.value.title,
+    orgName: formData.value.orgName || undefined,
+    roleTitle: formData.value.roleTitle || undefined,
+    durationStart: formData.value.durationStart,
+    durationEnd: formData.value.durationEnd || undefined,
+    workType: formData.value.workType || undefined,
+    contributionLevel: formData.value.contributionLevel || undefined,
+    goalSummary: formData.value.goalSummary || undefined,
+    impactSummary: formData.value.impactSummary || undefined,
+    skills: formData.value.skills || undefined,
+    sections: formData.value.sections.map((section, index) => ({
+      kind: section.kind,
+      title: section.title || `블록 ${index + 1}`,
+      content: section.content,
+      sortOrder: section.sortOrder ?? index,
+    })),
+  };
+
+  console.log('요청 데이터:', requestBody);
+
+  // API 호출
+  const { data, error } = await createAchievement(requestBody);
+
+  if (error) {
+    console.error('API 에러:', error);
+    return;
+  }
+
+  // 성공 응답 출력 (테스트용)
+  console.log('성공 응답:', data);
   toast.success('저장되었습니다!');
+
+  // 목록 페이지로 이동
+  await navigateTo('/career');
 };
 
 const handleCancel = () => {
