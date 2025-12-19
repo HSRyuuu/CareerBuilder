@@ -89,7 +89,7 @@ frontend/pnpm-debug.log*
 # Environment files
 frontend/.env
 frontend/.env.*
-!frontend/.env.example
+frontend/.env.dev
 
 # =========================
 # 🐳 Docker
