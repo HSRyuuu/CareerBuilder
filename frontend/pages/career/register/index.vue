@@ -194,7 +194,7 @@
         <!-- 상세 블록들 (개별 form-section으로 구성) -->
         <section
           v-for="(section, index) in formData.sections"
-          :key="section.tempId"
+          :key="section.id"
           class="form-section"
         >
           <div class="section-header">
@@ -384,7 +384,7 @@
             >
               <div
                 v-for="(section, index) in formData.sections"
-                :key="section.tempId"
+                :key="section.id"
                 class="sidebar-section-item"
               >
                 <div class="sidebar-section-drag-handle">
@@ -444,7 +444,6 @@ definePageMeta({
 });
 
 interface FormSection extends AchievementSection {
-  tempId: string; // 프론트엔드에서 임시로 사용할 ID
   isEditingTitle?: boolean; // 제목 편집 모드 여부
   tempTitle?: string; // 편집 중인 임시 제목 (수정 전 원본 저장)
   showHelp?: boolean; // help description 표시 여부
@@ -506,7 +505,7 @@ let sectionCounter = 0;
 
 const addSection = () => {
   formData.value.sections.push({
-    tempId: `section_${Date.now()}_${sectionCounter++}`,
+    id: `new_section_${Date.now()}_${sectionCounter++}`,
     kind: AchievementSectionKind.NONE,
     title: '',
     content: '',

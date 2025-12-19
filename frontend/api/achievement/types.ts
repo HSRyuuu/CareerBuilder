@@ -19,6 +19,17 @@ export type TAchievementSectionCreate = {
 };
 
 /**
+ * 성과 블록 수정 요청 타입 (id 포함)
+ */
+export type TAchievementSectionUpdate = {
+  id?: string; // 기존 블록: 서버 id, 새 블록: new_section_* 또는 undefined
+  kind: AchievementSectionKind | string;
+  title: string;
+  content: string;
+  sortOrder: number;
+};
+
+/**
  * 성과 블록 응답 타입
  */
 export type TAchievementSection = {
@@ -53,7 +64,20 @@ export type TAchievementCreate = {
 /**
  * 성과 수정 요청 타입
  */
-export type TAchievementUpdate = TAchievementCreate;
+export type TAchievementUpdate = {
+  title: string;
+  orgName?: string;
+  roleTitle?: string;
+  durationStart: string;
+  durationEnd?: string;
+  workType?: WorkType | string;
+  contributionLevel?: ContributionLevel | string;
+  goalSummary?: string;
+  impactSummary?: string;
+  skills?: string;
+  status?: AchievementStatus | string;
+  sections: TAchievementSectionUpdate[];
+};
 
 /**
  * 성과 응답 타입
