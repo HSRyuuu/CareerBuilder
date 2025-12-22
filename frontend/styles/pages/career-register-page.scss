@@ -34,23 +34,6 @@
   }
 }
 
-.page-header {
-  margin-bottom: 32px;
-}
-
-.page-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1a1d1f;
-  margin-bottom: 8px;
-  letter-spacing: -0.5px;
-}
-
-.page-subtitle {
-  font-size: 16px;
-  color: #6b7280;
-}
-
 .page-layout {
   display: grid;
   grid-template-columns: 4fr 1fr;
@@ -316,7 +299,6 @@
   }
 }
 
-
 // help 상세 설명 (토글)
 .section-help-detail {
   flex: 1 1 100%;
@@ -503,7 +485,7 @@
 // 오른쪽 액션 사이드바
 .action-sidebar {
   position: sticky;
-  top: 88px; // header(64px) + gap(24px)
+  top: 100px; // PageHeader sticky 영역 아래
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -648,13 +630,7 @@
 // 구분선
 .sidebar-divider {
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    #e8e9eb 20%,
-    #e8e9eb 80%,
-    transparent
-  );
+  background: linear-gradient(to right, transparent, #e8e9eb 20%, #e8e9eb 80%, transparent);
   margin: 8px 0;
 }
 

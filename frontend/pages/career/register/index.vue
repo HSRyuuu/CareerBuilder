@@ -1,10 +1,18 @@
 <template>
   <div class="career-register-page">
-    <!-- 메인 콘텐츠 -->
-    <div class="page-header">
-      <h1 class="page-title">성과 등록</h1>
-      <p class="page-subtitle">새로운 성과를 등록하고 관리하세요</p>
-    </div>
+    <!-- 페이지 헤더 -->
+    <PageHeader title="성과 등록" subtitle="새로운 성과를 등록하고 관리하세요">
+      <template #actions>
+        <Button :variant="ButtonVariant.Secondary" :size="CommonSize.Medium" @click="handleCancel">
+          <v-icon size="small">mdi-close</v-icon>
+          취소
+        </Button>
+        <Button :variant="ButtonVariant.Primary" :size="CommonSize.Medium" @click="handleSave">
+          <v-icon size="small">mdi-check</v-icon>
+          저장
+        </Button>
+      </template>
+    </PageHeader>
 
     <div class="page-layout">
       <!-- 왼쪽: 메인 폼 영역 (4) -->
@@ -299,16 +307,6 @@
             블록 추가
           </Button>
         </div>
-
-        <!-- 액션 버튼 -->
-        <div class="form-actions">
-          <Button :variant="ButtonVariant.Secondary" :size="CommonSize.Large" @click="handleCancel">
-            취소
-          </Button>
-          <Button :variant="ButtonVariant.Primary" :size="CommonSize.Large" @click="handleSave">
-            저장
-          </Button>
-        </div>
       </div>
 
       <!-- 오른쪽: 액션 사이드바 (1) -->
@@ -419,6 +417,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
+import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import Input from '@/components/atoms/Input/Input.vue';
 import TextArea from '@/components/atoms/TextArea/TextArea.vue';

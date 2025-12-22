@@ -1,0 +1,89 @@
+.page-header {
+  position: sticky;
+  top: -32px; // layout-content의 padding 만큼 위로
+  z-index: 10;
+  background: linear-gradient(90deg, #e8f0fe 0%, #f0f4ff 50%, #eef2ff 100%);
+  padding: 24px 0 20px;
+  margin: -32px -32px 24px; // layout-content padding에 맞춤
+  padding-left: 32px;
+  padding-right: 32px;
+  border-radius: 16px 16px 0 0; // 상단만 둥글게
+
+  // 하단 구분선
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 32px;
+    right: 32px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #dbeafe 50%, transparent 100%);
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1d1f;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+  }
+
+  &__subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 6px 0 0 0;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+}
+
+// 반응형 대응
+@media (max-width: 768px) {
+  .page-header {
+    padding: 20px 16px 16px;
+    margin: -24px -24px 20px;
+
+    &__content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    &__title {
+      font-size: 24px;
+    }
+
+    &__subtitle {
+      font-size: 13px;
+    }
+
+    &__actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    &::after {
+      left: 16px;
+      right: 16px;
+    }
+  }
+}

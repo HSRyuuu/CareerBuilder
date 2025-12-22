@@ -1,12 +1,44 @@
 <template>
   <div class="career-register-page">
-    <!-- 메인 콘텐츠 -->
-    <div class="page-header">
-      <h1 class="page-title">{{ isEditMode ? '성과 수정' : '성과 상세' }}</h1>
-      <p class="page-subtitle">
-        {{ isEditMode ? '성과 정보를 수정하세요' : '성과 정보를 확인하세요' }}
-      </p>
-    </div>
+    <!-- 페이지 헤더 -->
+    <PageHeader
+      :title="isEditMode ? '성과 수정' : '성과 상세'"
+      :subtitle="isEditMode ? '성과 정보를 수정하세요' : '성과 정보를 확인하세요'"
+    >
+      <template #actions>
+        <!-- 수정 모드일 때: 저장/취소 버튼 -->
+        <template v-if="isEditMode">
+          <Button
+            :variant="ButtonVariant.Secondary"
+            :size="CommonSize.Medium"
+            @click="handleCancel"
+          >
+            <v-icon size="small">mdi-close</v-icon>
+            취소
+          </Button>
+          <Button :variant="ButtonVariant.Primary" :size="CommonSize.Medium" @click="handleSave">
+            <v-icon size="small">mdi-check</v-icon>
+            저장
+          </Button>
+        </template>
+
+        <!-- 상세 모드일 때: 수정하기/목록으로 버튼 -->
+        <template v-else>
+          <Button :variant="ButtonVariant.Secondary" :size="CommonSize.Medium" @click="handleBack">
+            <v-icon size="small">mdi-arrow-left</v-icon>
+            목록으로
+          </Button>
+          <Button
+            :variant="ButtonVariant.Primary"
+            :size="CommonSize.Medium"
+            @click="handleEnterEditMode"
+          >
+            <v-icon size="small">mdi-pencil</v-icon>
+            수정하기
+          </Button>
+        </template>
+      </template>
+    </PageHeader>
 
     <div class="page-layout">
       <!-- 왼쪽: 메인 폼 영역 (4) -->
@@ -331,19 +363,7 @@
             <h3 class="sidebar-title">{{ isEditMode ? '편집' : '목차' }}</h3>
           </div>
 
-          <!-- 수정하기 버튼 (상세 모드) -->
-          <Button
-            v-if="!isEditMode"
-            :variant="ButtonVariant.Primary"
-            :size="CommonSize.Medium"
-            class="sidebar-add-btn"
-            @click="handleEnterEditMode"
-          >
-            <v-icon size="small">mdi-pencil</v-icon>
-            수정하기
-          </Button>
-
-          <!-- 블록 추가 버튼 (수정 모드) -->
+          <!-- 블록 추가 버튼 (수정 모드일 때만) -->
           <Button
             v-if="isEditMode"
             :variant="ButtonVariant.Primary"
@@ -445,41 +465,6 @@
             </template>
           </div>
         </div>
-
-        <!-- 저장/취소 버튼 (수정 모드) -->
-        <div v-if="isEditMode" class="sidebar-section sidebar-actions">
-          <Button
-            :variant="ButtonVariant.Primary"
-            :size="CommonSize.Large"
-            class="sidebar-action-btn"
-            @click="handleSave"
-          >
-            <v-icon size="small">mdi-check</v-icon>
-            저장
-          </Button>
-          <Button
-            :variant="ButtonVariant.Secondary"
-            :size="CommonSize.Large"
-            class="sidebar-action-btn"
-            @click="handleCancel"
-          >
-            <v-icon size="small">mdi-close</v-icon>
-            취소
-          </Button>
-        </div>
-
-        <!-- 목록으로 버튼 (상세 모드) -->
-        <div v-else class="sidebar-section sidebar-actions">
-          <Button
-            :variant="ButtonVariant.Secondary"
-            :size="CommonSize.Large"
-            class="sidebar-action-btn"
-            @click="handleBack"
-          >
-            <v-icon size="small">mdi-arrow-left</v-icon>
-            목록으로
-          </Button>
-        </div>
       </aside>
     </div>
   </div>
@@ -488,6 +473,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
+import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import Input from '@/components/atoms/Input/Input.vue';
 import TextArea from '@/components/atoms/TextArea/TextArea.vue';
@@ -777,19 +763,5 @@ const handleBack = () => {
 // 읽기 전용 블록 스타일
 .sidebar-section-readonly {
   padding-left: 12px;
-}
-
-// 저장/취소 버튼 영역
-.sidebar-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.sidebar-action-btn {
-  width: 100%;
 }
 </style>
