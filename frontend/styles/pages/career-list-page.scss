@@ -125,7 +125,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .career-list-section-title {
@@ -139,6 +139,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 24px;
+  justify-content: flex-end;
 }
 
 .career-list-sort-label {

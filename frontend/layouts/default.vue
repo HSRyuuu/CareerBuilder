@@ -46,11 +46,12 @@
       <!-- 메뉴 리스트 -->
       <nav class="layout-sidebar-nav">
         <NuxtLink
-          v-for="item in menuItems"
-          :key="item.path"
+          v-for="item in menu.menuItems"
+          :key="item.key"
           :to="item.path"
           class="layout-sidebar-nav-item"
-          :class="{ 'layout-sidebar-nav-item--active': isActiveRoute(item.path) }"
+          :class="{ 'layout-sidebar-nav-item--active': menu.isActive(item.key) }"
+          @click="menu.select(item.key)"
         >
           <div class="layout-sidebar-nav-item-icon">
             <v-icon>{{ item.icon }}</v-icon>
@@ -74,32 +75,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import Button from '@/components/atoms/Button/Button.vue';
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
+import { useMenu } from '@/composables/useMenu';
 
 const route = useRoute();
+const menu = useMenu();
 const isSidebarCollapsed = ref(false);
 
-interface MenuItem {
-  path: string;
-  label: string;
-  icon: string;
-}
-
-const menuItems: MenuItem[] = [
-  { path: '/home', label: '홈', icon: 'mdi-home' },
-  { path: '/career', label: '경험 목록', icon: 'mdi-file-document' },
-  { path: '/career/register', label: '경험 등록', icon: 'mdi-file-document-edit' },
-];
+// 페이지 이동 시 메뉴 상태 동기화
+watch(
+  () => route.path,
+  (path) => {
+    menu.selectByPath(path);
+  },
+  { immediate: true }
+);
 
 const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
-};
-
-const isActiveRoute = (path: string) => {
-  return route.path === path;
 };
 </script>
 

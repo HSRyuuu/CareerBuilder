@@ -68,25 +68,34 @@
     <div class="career-list-table-section">
       <div class="career-list-table-header">
         <h2 class="career-list-section-title">내 경험 목록</h2>
-        <div class="career-list-sort-wrapper">
-          <label class="career-list-sort-label">정렬:</label>
-          <Select
-            v-model="sortOption"
-            :items="sortOptions"
-            :size="FormSize.Compact"
-            :variant="FormVariant.Outlined"
-            class="career-list-sort-select-component"
-          />
-          <button
-            :title="sortDirection === 'DESC' ? '내림차순' : '오름차순'"
-            class="career-list-sort-direction-button"
-            @click="toggleSortDirection"
-          >
-            <v-icon>
-              {{ sortDirection === 'DESC' ? 'mdi-sort-descending' : 'mdi-sort-ascending' }}
-            </v-icon>
-          </button>
-        </div>
+        <Button
+          :variant="ButtonVariant.Primary"
+          :size="CommonSize.Medium"
+          :round="true"
+          @click="handleRegister"
+        >
+          <v-icon size="small">mdi-plus</v-icon>
+          경험 등록
+        </Button>
+      </div>
+      <div class="career-list-sort-wrapper">
+        <label class="career-list-sort-label">정렬:</label>
+        <Select
+          v-model="sortOption"
+          :items="sortOptions"
+          :size="FormSize.Compact"
+          :variant="FormVariant.Outlined"
+          class="career-list-sort-select-component"
+        />
+        <button
+          :title="sortDirection === 'DESC' ? '내림차순' : '오름차순'"
+          class="career-list-sort-direction-button"
+          @click="toggleSortDirection"
+        >
+          <v-icon>
+            {{ sortDirection === 'DESC' ? 'mdi-sort-descending' : 'mdi-sort-ascending' }}
+          </v-icon>
+        </button>
       </div>
 
       <Table
@@ -120,7 +129,8 @@ import { fetchAchievements } from '~/api/achievement/api';
 import Table from '@/components/organisms/Table/Table.vue';
 import Select from '@/components/atoms/Select/Select.vue';
 import type { TSelectItem } from '@/components/atoms/Select/Select.vue';
-import { FormSize, FormVariant } from '@/constants/enums/style-enum';
+import Button from '@/components/atoms/Button/Button.vue';
+import { FormSize, FormVariant, ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
 import { achievementColumns } from '@/columns/achievement';
 
 definePageMeta({
@@ -191,6 +201,10 @@ loadAchievements();
 watch([sortOption, sortDirection], () => {
   loadAchievements();
 });
+
+const handleRegister = () => {
+  navigateTo('/career/register');
+};
 
 const handleAiAnalysis = () => {
   console.log('AI 커리어 분석 클릭');
