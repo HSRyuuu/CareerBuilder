@@ -1,3 +1,5 @@
+@use '../variables' as *;
+
 .home-page {
   animation: fadeIn 0.5s ease;
   padding: 0;
@@ -83,7 +85,8 @@
   align-items: center;
   gap: 16px;
   padding: 24px !important;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary) !important;
   border-radius: 16px;
 
   .stat-icon {
@@ -98,7 +101,7 @@
   .stat-label {
     font-size: 13px;
     font-weight: 600;
-    color: #64748b;
+    color: var(--text-secondary);
     display: block;
     margin-bottom: 4px;
   }
@@ -106,7 +109,7 @@
   .stat-value {
     font-size: 24px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-primary);
     margin: 0;
   }
 }
@@ -124,8 +127,8 @@
 
 // Recent Activities
 .recent-activities {
-  background: white;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 32px;
 
@@ -139,7 +142,7 @@
   .section-title {
     font-size: 20px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-primary);
   }
 
   .view-all {
@@ -170,8 +173,8 @@
     border: 1px solid transparent;
 
     &:hover {
-      background: #f8fafc;
-      border-color: #e2e8f0;
+      background: var(--bg-secondary);
+      border-color: var(--border-color);
     }
 
     .activity-date {
@@ -187,13 +190,13 @@
       .activity-title {
         font-size: 15px;
         font-weight: 600;
-        color: #1e293b;
+        color: var(--text-primary);
         margin-bottom: 2px;
       }
 
       .activity-org {
         font-size: 13px;
-        color: #64748b;
+        color: var(--text-secondary);
       }
     }
   }
@@ -204,7 +207,7 @@
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    color: #94a3b8;
+    color: var(--text-tertiary);
     text-align: center;
   }
 }
@@ -214,7 +217,7 @@
   .section-title {
     font-size: 20px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-primary);
     margin-bottom: 24px;
   }
 
@@ -225,8 +228,8 @@
   }
 
   .ai-card {
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -246,8 +249,8 @@
       right: 12px;
       padding: 4px 8px;
       border-radius: 6px;
-      background: #f1f5f9;
-      color: #64748b;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
@@ -262,13 +265,13 @@
       .ai-card-title {
         font-size: 16px;
         font-weight: 700;
-        color: #1e293b;
+        color: var(--text-primary);
         margin-bottom: 4px;
       }
 
       .ai-card-desc {
         font-size: 13px;
-        color: #64748b;
+        color: var(--text-secondary);
         line-height: 1.5;
       }
     }

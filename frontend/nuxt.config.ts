@@ -7,7 +7,15 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  modules: ['@pinia/nuxt', '@nuxt/eslint', 'pinia-plugin-persistedstate/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/eslint', 'pinia-plugin-persistedstate/nuxt', '@nuxtjs/color-mode'],
+
+  colorMode: {
+    preference: 'system',
+    fallback: 'light',
+    classPrefix: '',
+    classSuffix: '-mode',
+    storageKey: 'nuxt-color-mode'
+  },
 
   // 환경변수 설정
   runtimeConfig: {
@@ -16,7 +24,7 @@ export default defineNuxtConfig({
     },
   },
 
-  css: ['vuetify/styles'],
+  css: ['vuetify/styles', '@/styles/global.scss'],
 
   build: {
     transpile: ['vuetify'],

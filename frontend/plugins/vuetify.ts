@@ -26,10 +26,33 @@ export default defineNuxtPlugin((nuxtApp) => {
             warning: '#FB8C00',
           },
         },
+        dark: {
+          dark: true,
+          colors: {
+            primary: '#2196F3',
+            secondary: '#424242',
+            accent: '#FF4081',
+            error: '#FF5252',
+            info: '#2196F3',
+            success: '#4CAF50',
+            warning: '#FB8C00',
+            surface: '#1e293b',
+            background: '#0f172a',
+          },
+        },
       },
     },
   });
 
   nuxtApp.vueApp.use(vuetify);
+
+  // 다크 모드 동기화
+  if (!import.meta.env.SSR) {
+    const colorMode = useColorMode();
+    watch(() => colorMode.value, (val) => {
+      // @ts-ignore
+      vuetify.theme.global.name.value = val === 'dark' ? 'dark' : 'light';
+    }, { immediate: true });
+  }
 });
 

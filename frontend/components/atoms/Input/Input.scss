@@ -1,3 +1,5 @@
+@use '@/styles/variables' as *;
+
 .cb-input-wrapper {
   display: flex;
   flex-direction: column;
@@ -8,7 +10,7 @@
 .cb-input-label {
   font-size: 14px;
   font-weight: 600;
-  color: #1a1d1f;
+  color: var(--text-primary);
 }
 
 .cb-input-required {
@@ -18,11 +20,11 @@
 
 .cb-input {
   width: 100%;
-  border: 1px solid #e8e9eb;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   font-size: 14px;
-  color: #1a1d1f;
-  background: #ffffff;
+  color: var(--text-primary);
+  background: var(--bg-primary);
   transition: all 0.2s ease;
   font-family: inherit;
 
@@ -33,7 +35,7 @@
   }
 
   &::placeholder {
-    color: #9ca3af;
+    color: var(--text-tertiary);
   }
 
   // Sizes
@@ -63,8 +65,8 @@
   }
 
   &--disabled {
-    background: #f7f8fa;
-    color: #9ca3af;
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
     cursor: not-allowed;
 
     &::placeholder {
@@ -73,13 +75,14 @@
   }
 
   &--readonly {
-    background: #f7f8fa;
+    background: var(--bg-tertiary);
     cursor: default;
   }
 
   // Number input 스타일 제거
   &[type='number'] {
     -moz-appearance: textfield;
+    appearance: textfield;
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {

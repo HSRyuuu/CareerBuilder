@@ -22,5 +22,5 @@ const variantClass = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '@/components/atoms/DescriptionBox/DescriptionBox.scss';
+@import './DescriptionBox.scss';
 </style>

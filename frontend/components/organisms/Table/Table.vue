@@ -125,6 +125,8 @@ const getColumnStyle = (column: TTableColumn) => {
 </script>
 
 <style lang="scss" scoped>
+@use '@/styles/variables' as *;
+
 .table-container {
   overflow-x: auto;
 }
@@ -135,15 +137,15 @@ const getColumnStyle = (column: TTableColumn) => {
   border-collapse: collapse;
 
   thead {
-    background: #f9fafb;
-    border-bottom: 2px solid #e5e7eb;
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
 
     th {
       padding: 16px;
       text-align: center; // 기본값 (align 옵션으로 오버라이드 가능)
       font-size: 14px;
       font-weight: 700;
-      color: #6b7280;
+      color: var(--text-secondary);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -151,12 +153,12 @@ const getColumnStyle = (column: TTableColumn) => {
 
   tbody {
     :deep(tr) {
-      border-bottom: 1px solid #e8e9eb;
+      border-bottom: 1px solid var(--border-color);
       transition: all 0.2s ease;
       cursor: pointer;
 
       &:hover {
-        background: #f9fafb;
+        background: var(--bg-tertiary);
       }
 
       &:last-child {
@@ -167,7 +169,7 @@ const getColumnStyle = (column: TTableColumn) => {
     :deep(td) {
       padding: 16px;
       font-size: 14px;
-      color: #1a1d1f;
+      color: var(--text-primary);
     }
   }
 }

@@ -129,6 +129,7 @@ const handleLogin = async () => {
       authStore.setUserInfo({
         userId: data.userInfo.id,
         userName: data.userInfo.username,
+        email: data.userInfo.email,
       });
       toast.success(`${data.userInfo.username}님, 환영합니다!`);
       navigateTo('/home');

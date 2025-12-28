@@ -386,7 +386,7 @@
 
             <div class="sidebar-section-item sidebar-section-fixed">
               <div class="sidebar-section-info">
-                <v-icon size="small" color="#10b981">mdi-flag-checkered</v-icon>
+                <v-icon size="small" color="var(--text-primary)">mdi-flag-checkered</v-icon>
                 <span class="sidebar-section-title">목표</span>
               </div>
             </div>
@@ -811,7 +811,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--card-shadow);
   flex-shrink: 0;
 }
 

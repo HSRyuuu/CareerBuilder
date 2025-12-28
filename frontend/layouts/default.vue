@@ -16,18 +16,21 @@
     <!-- 좌측 사이드바 -->
     <aside :class="['layout-sidebar', { 'layout-sidebar--collapsed': isSidebarCollapsed }]">
       <!-- 토글 버튼 -->
-      <Button
-        :variant="ButtonVariant.Secondary"
-        :size="CommonSize.Small"
-        icon-only
-        :icon="isSidebarCollapsed ? 'mdi-menu' : 'mdi-menu-open'"
-        class="layout-sidebar-toggle"
-        @click="toggleSidebar"
-      />
+      <div class="layout-sidebar-header">
+        <Button
+          :variant="ButtonVariant.Secondary"
+          :size="CommonSize.Small"
+          icon-only
+          :icon="isSidebarCollapsed ? 'mdi-menu' : 'mdi-menu-open'"
+          class="layout-sidebar-toggle"
+          @click="toggleSidebar"
+        />
+      </div>
 
       <!-- 사용자 정보 -->
       <div
         :class="['layout-sidebar-user', { 'layout-sidebar-user--collapsed': isSidebarCollapsed }]"
+        @click="navigateTo('/settings')"
       >
         <div v-if="isSidebarCollapsed" class="layout-sidebar-user-icon-only">
           <v-icon>mdi-account-circle</v-icon>
@@ -37,8 +40,8 @@
             <v-icon>mdi-account-circle</v-icon>
           </div>
           <div class="layout-sidebar-user-info">
-            <div class="layout-sidebar-user-name">사용자</div>
-            <div class="layout-sidebar-user-email">user@example.com</div>
+            <div class="layout-sidebar-user-name">{{ authStore.userName || '사용자' }}</div>
+            <div class="layout-sidebar-user-email">{{ authStore.email || 'user@example.com' }}</div>
           </div>
         </template>
       </div>
@@ -80,9 +83,11 @@ import { useRoute } from 'vue-router';
 import Button from '@/components/atoms/Button/Button.vue';
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
 import { useMenu } from '@/composables/useMenu';
+import { useAuthStore } from '@/stores/auth';
 
 const route = useRoute();
 const menu = useMenu();
+const authStore = useAuthStore();
 const isSidebarCollapsed = ref(false);
 
 // 페이지 이동 시 메뉴 상태 동기화

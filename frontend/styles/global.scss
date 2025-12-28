@@ -1,0 +1,30 @@
+@use './variables' as *;
+
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Global Transition for Theme Switching
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+// vue-datepicker global variables for theme
+:root, .dark-mode {
+  --dp-background-color: var(--bg-primary);
+  --dp-text-color: var(--text-primary);
+  --dp-hover-color: var(--bg-tertiary);
+  --dp-hover-text-color: var(--text-primary);
+  --dp-hover-icon-color: var(--primary-color);
+  --dp-primary-color: var(--primary-color);
+  --dp-primary-disabled-color: var(--text-tertiary);
+  --dp-primary-text-color: #ffffff;
+  --dp-secondary-color: var(--text-secondary);
+  --dp-border-color: var(--border-color);
+  --dp-menu-border-color: var(--border-color);
+  --dp-menu-background-color: var(--bg-primary);
+  --dp-divider-color: var(--border-color);
+  --dp-icon-color: var(--text-secondary);
+}

@@ -15,12 +15,14 @@
     :now-button-label="customLocale.today"
     :format="format"
     :placeholder="placeholder"
+    :dark="isDark"
     auto-apply
     @update:model-value="handleUpdate"
   />
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import DatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
@@ -43,6 +45,9 @@ export type TDatePickerProps = {
   useTimePicker?: boolean;
   useTimePickerInline?: boolean;
 };
+
+const colorMode = useColorMode();
+const isDark = computed(() => colorMode.value === 'dark');
 
 const {
   locale = 'ko',
@@ -93,6 +98,6 @@ const handleUpdate = (value: string | string[] | Date | Date[]) => {
 };
 </script>
 
-<style lang="scss">
-@use './DatePicker.scss';
+<style lang="scss" scoped>
+@import './DatePicker.scss';
 </style>

@@ -1,3 +1,5 @@
+@use '@/styles/variables' as *;
+
 .description-box {
   flex: 1;
   font-size: 13px;
@@ -8,33 +10,30 @@
   display: flex;
   align-items: center;
   transition: all 0.2s ease;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 
   // Info variant (기본 - 파란색)
   &--info {
-    color: #6b7280;
-    background: #f9fafb;
-    border-left: 3px solid #3b82f6;
+    border-left: 4px solid var(--primary-color);
   }
 
   // Warning variant (주황색)
   &--warning {
-    color: #92400e;
-    background: #fffbeb;
-    border-left: 3px solid #f59e0b;
+    border-left: 4px solid #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
   }
 
   // Success variant (초록색)
   &--success {
-    color: #065f46;
-    background: #f0fdf4;
-    border-left: 3px solid #10b981;
+    border-left: 4px solid #10b981;
+    background: rgba(16, 185, 129, 0.1);
   }
 
   // Neutral variant (회색)
   &--neutral {
-    color: #4b5563;
-    background: #f3f4f6;
-    border-left: 3px solid #9ca3af;
+    border-left: 4px solid var(--text-tertiary);
   }
 }
 

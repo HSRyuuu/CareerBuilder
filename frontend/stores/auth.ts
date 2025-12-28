@@ -12,6 +12,7 @@ export const useAuthStore = defineStore(
     const accessToken = ref<string | null>(null);
     const userId = ref<string | null>(null);
     const userName = ref<string | null>(null);
+    const email = ref<string | null>(null);
 
     // ===== Getters =====
     const isAuthenticated = computed(() => !!accessToken.value);
@@ -35,9 +36,10 @@ export const useAuthStore = defineStore(
     /**
      * 사용자 정보 설정
      */
-    const setUserInfo = (info: { userId: string; userName: string }): void => {
+    const setUserInfo = (info: { userId: string; userName: string; email: string }): void => {
       userId.value = info.userId;
       userName.value = info.userName;
+      email.value = info.email;
     };
 
     /**
@@ -47,6 +49,7 @@ export const useAuthStore = defineStore(
       accessToken.value = null;
       userId.value = null;
       userName.value = null;
+      email.value = null;
     };
 
     return {
@@ -54,6 +57,7 @@ export const useAuthStore = defineStore(
       accessToken,
       userId,
       userName,
+      email,
       // Getters
       isAuthenticated,
       // Actions
@@ -68,7 +72,7 @@ export const useAuthStore = defineStore(
     persist: {
       key: 'auth',
       storage: piniaPluginPersistedstate.localStorage(),
-      pick: ['accessToken', 'userId', 'userName'],
+      pick: ['accessToken', 'userId', 'userName', 'email'],
     },
   }
 );

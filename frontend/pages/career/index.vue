@@ -3,10 +3,7 @@
     <!-- Part1: 카드 그리드 -->
     <div class="career-list-cards-grid">
       <div class="career-list-info-card" @click="handleAiAnalysis">
-        <div
-          class="career-list-card-icon"
-          style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)"
-        >
+        <div class="career-list-card-icon ai-analysis">
           <v-icon color="white">mdi-brain</v-icon>
         </div>
         <h3 class="career-list-card-title">AI 커리어 분석</h3>
@@ -17,10 +14,7 @@
       </div>
 
       <div class="career-list-info-card" @click="handleDashboard">
-        <div
-          class="career-list-card-icon"
-          style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)"
-        >
+        <div class="career-list-card-icon dashboard">
           <v-icon color="white">mdi-chart-box</v-icon>
         </div>
         <h3 class="career-list-card-title">현재 분석 결과 대시보드</h3>
@@ -29,10 +23,7 @@
       </div>
 
       <div class="career-list-info-card" @click="handleExport">
-        <div
-          class="career-list-card-icon"
-          style="background: linear-gradient(135deg, #10b981 0%, #059669 100%)"
-        >
+        <div class="career-list-card-icon export">
           <v-icon color="white">mdi-download</v-icon>
         </div>
         <h3 class="career-list-card-title">내 전체 커리어 Export</h3>
