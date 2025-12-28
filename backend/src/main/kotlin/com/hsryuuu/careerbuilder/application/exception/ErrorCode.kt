@@ -26,8 +26,8 @@ enum class ErrorCode(
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "사용자를 찾을 수 없습니다."),
 
 
-    // Achievement
-    ACHIEVEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "ACHIEVEMENT_NOT_FOUND", "성과 항목을 찾을 수 없습니다."),
+    // Experience
+    EXPERIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "EXPERIENCE_NOT_FOUND", "경험 항목을 찾을 수 없습니다."),
     VALIDATION_ERROR_DURATION_SEQUENCE(
         HttpStatus.BAD_REQUEST,
         "VALIDATION_ERROR_DURATION_SEQUENCE",

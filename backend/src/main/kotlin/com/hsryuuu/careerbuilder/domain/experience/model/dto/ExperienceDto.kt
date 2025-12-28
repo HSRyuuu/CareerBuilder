@@ -1,20 +1,20 @@
-package com.hsryuuu.careerbuilder.domain.archivement.model.dto
+package com.hsryuuu.careerbuilder.domain.experience.model.dto
 
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.*
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.*
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
 // Request DTOs
-data class CreateAchievementRequest(
+data class CreateExperienceRequest(
     val title: String,
     val orgName: String? = null,
     val durationStart: LocalDate,
     val durationEnd: LocalDate? = null,
     val impactSummary: String? = null,
     val goalSummary: String? = null,
-    val status: AchievementStatus = AchievementStatus.DRAFT,
+    val status: ExperienceStatus = ExperienceStatus.DRAFT,
     val roleTitle: String? = null,
     val workType: WorkType? = null,
     val contributionLevel: ContributionLevel? = null,
@@ -24,8 +24,8 @@ data class CreateAchievementRequest(
     companion object {
         fun createEntity(
             user: AppUser,
-            request: CreateAchievementRequest
-        ): Achievement = Achievement(
+            request: CreateExperienceRequest
+        ): Experience = Experience(
             user = user,
             title = request.title,
             orgName = request.orgName,
@@ -51,8 +51,8 @@ data class CreateSectionRequest(
     companion object {
         fun createEntity(
             sectionRequest: CreateSectionRequest
-        ): AchievementSection = AchievementSection(
-            achievement = null,
+        ): ExperienceSection = ExperienceSection(
+            experience = null,
             kind = sectionRequest.kind,
             title = sectionRequest.title,
             content = sectionRequest.content,
@@ -61,7 +61,7 @@ data class CreateSectionRequest(
     }
 }
 
-data class UpdateAchievementRequest(
+data class UpdateExperienceRequest(
     val title: String,
     val orgName: String? = null,
     val durationStart: LocalDate,
@@ -84,7 +84,7 @@ data class UpdateSectionRequest(
 )
 
 // Response DTOs
-data class AchievementResponse(
+data class ExperienceResponse(
     val id: UUID,
     val userId: UUID,
     val title: String,
@@ -93,7 +93,7 @@ data class AchievementResponse(
     val durationEnd: LocalDate?,
     val impactSummary: String?,
     val goalSummary: String?,
-    val status: AchievementStatus,
+    val status: ExperienceStatus,
     val roleTitle: String?,
     val workType: WorkType?,
     val contributionLevel: ContributionLevel?,
@@ -104,45 +104,45 @@ data class AchievementResponse(
 ) {
     companion object {
 
-        fun fromEntityWithoutSections(achievement: Achievement): AchievementResponse {
-            return AchievementResponse(
-                id = achievement.id!!,
-                userId = achievement.user.id!!,
-                title = achievement.title,
-                orgName = achievement.orgName,
-                durationStart = achievement.durationStart,
-                durationEnd = achievement.durationEnd,
-                impactSummary = achievement.impactSummary,
-                goalSummary = achievement.goalSummary,
-                status = achievement.status,
-                roleTitle = achievement.roleTitle,
-                workType = achievement.workType,
-                contributionLevel = achievement.contributionLevel,
-                skills = achievement.skills,
+        fun fromEntityWithoutSections(experience: Experience): ExperienceResponse {
+            return ExperienceResponse(
+                id = experience.id!!,
+                userId = experience.user.id!!,
+                title = experience.title,
+                orgName = experience.orgName,
+                durationStart = experience.durationStart,
+                durationEnd = experience.durationEnd,
+                impactSummary = experience.impactSummary,
+                goalSummary = experience.goalSummary,
+                status = experience.status,
+                roleTitle = experience.roleTitle,
+                workType = experience.workType,
+                contributionLevel = experience.contributionLevel,
+                skills = experience.skills,
                 sections = emptyList(),
-                createdAt = achievement.createdAt,
-                updatedAt = achievement.updatedAt
+                createdAt = experience.createdAt,
+                updatedAt = experience.updatedAt
             )
         }
 
-        fun fromEntity(achievement: Achievement, sections: List<AchievementSection>): AchievementResponse {
-            return AchievementResponse(
-                id = achievement.id!!,
-                userId = achievement.user.id!!,
-                title = achievement.title,
-                orgName = achievement.orgName,
-                durationStart = achievement.durationStart,
-                durationEnd = achievement.durationEnd,
-                impactSummary = achievement.impactSummary,
-                goalSummary = achievement.goalSummary,
-                status = achievement.status,
-                roleTitle = achievement.roleTitle,
-                workType = achievement.workType,
-                contributionLevel = achievement.contributionLevel,
-                skills = achievement.skills,
+        fun fromEntity(experience: Experience, sections: List<ExperienceSection>): ExperienceResponse {
+            return ExperienceResponse(
+                id = experience.id!!,
+                userId = experience.user.id!!,
+                title = experience.title,
+                orgName = experience.orgName,
+                durationStart = experience.durationStart,
+                durationEnd = experience.durationEnd,
+                impactSummary = experience.impactSummary,
+                goalSummary = experience.goalSummary,
+                status = experience.status,
+                roleTitle = experience.roleTitle,
+                workType = experience.workType,
+                contributionLevel = experience.contributionLevel,
+                skills = experience.skills,
                 sections = sections.map { SectionResponse.from(it) },
-                createdAt = achievement.createdAt,
-                updatedAt = achievement.updatedAt
+                createdAt = experience.createdAt,
+                updatedAt = experience.updatedAt
             )
         }
     }
@@ -158,7 +158,7 @@ data class SectionResponse(
     val updatedAt: LocalDateTime
 ) {
     companion object {
-        fun from(section: AchievementSection): SectionResponse {
+        fun from(section: ExperienceSection): SectionResponse {
             return SectionResponse(
                 id = section.id!!,
                 kind = section.kind,

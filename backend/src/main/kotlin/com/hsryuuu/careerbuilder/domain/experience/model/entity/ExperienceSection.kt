@@ -1,4 +1,4 @@
-package com.hsryuuu.careerbuilder.domain.archivement.model.entity
+package com.hsryuuu.careerbuilder.domain.experience.model.entity
 
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
@@ -10,15 +10,15 @@ import java.util.*
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-@Table(name = "achievement_sections")
-class AchievementSection(
+@Table(name = "experience_sections")
+class ExperienceSection(
     @Id
     @UuidGenerator
     val id: UUID? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "achievement_id", nullable = false)
-    var achievement: Achievement? = null,
+    @JoinColumn(name = "experience_id", nullable = false)
+    var experience: Experience? = null,
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)

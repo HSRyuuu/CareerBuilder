@@ -1,4 +1,4 @@
-package com.hsryuuu.careerbuilder.domain.archivement.model.entity
+package com.hsryuuu.careerbuilder.domain.experience.model.entity
 
 import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
@@ -14,8 +14,8 @@ import java.util.*
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-@Table(name = "achievements")
-class Achievement(
+@Table(name = "experiences")
+class Experience(
     @Id
     @UuidGenerator
     val id: UUID? = null,
@@ -44,7 +44,7 @@ class Achievement(
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    var status: AchievementStatus = AchievementStatus.DRAFT,
+    var status: ExperienceStatus = ExperienceStatus.DRAFT,
 
     @Column(name = "role_title")
     var roleTitle: String? = null,
@@ -69,22 +69,22 @@ class Achievement(
     var updatedAt: LocalDateTime = LocalDateTime.now(),
 
     @OneToMany(
-        mappedBy = "achievement",
+        mappedBy = "experience",
         cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE],
         orphanRemoval = true
     )
-    val sections: MutableList<AchievementSection> = mutableListOf()
+    val sections: MutableList<ExperienceSection> = mutableListOf()
 ) {
     /**
      * Section을 추가하고 양방향 연관관계를 설정합니다.
      */
-    fun addSection(section: AchievementSection) {
+    fun addSection(section: ExperienceSection) {
         sections.add(section)
-        section.achievement = this
+        section.experience = this
     }
 
     /**
-     * Achievement의 기본 정보를 업데이트합니다.
+     * Experience의 기본 정보를 업데이트합니다.
      * DDD 패턴: 도메인 로직을 엔티티 내부에 캡슐화
      */
     fun update(
@@ -120,14 +120,14 @@ class Achievement(
      * Section 컬렉션을 업데이트합니다.
      * 전략: Clear & AddAll 방식 (orphanRemoval=true로 삭제 자동 처리)
      */
-    fun updateSections(newSections: List<AchievementSection>) {
+    fun updateSections(newSections: List<ExperienceSection>) {
         sections.clear()
         newSections.forEach { addSection(it) }
     }
 }
 
 
-enum class AchievementStatus {
+enum class ExperienceStatus {
     DRAFT,
     PUBLISHED,
     ARCHIVED

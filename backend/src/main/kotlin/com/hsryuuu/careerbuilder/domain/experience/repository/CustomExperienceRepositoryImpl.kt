@@ -1,9 +1,9 @@
-package com.hsryuuu.careerbuilder.domain.archivement.repository
+package com.hsryuuu.careerbuilder.domain.experience.repository
 
 import com.hsryuuu.careerbuilder.common.dto.type.SortDirection
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.Achievement
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.QAchievement
-import com.hsryuuu.careerbuilder.domain.archivement.model.type.AchievementSortKey
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.Experience
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.QExperience
+import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import com.querydsl.core.types.Order
 import com.querydsl.core.types.OrderSpecifier
@@ -15,17 +15,17 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-class CustomAchievementRepositoryImpl(
+class CustomExperienceRepositoryImpl(
     private val queryFactory: JPAQueryFactory
-) : CustomAchievementRepository {
+) : CustomExperienceRepository {
 
-    private val achievement = QAchievement.achievement
+    private val experience = QExperience.experience
 
-    override fun searchAchievement(
+    override fun searchExperience(
         user: AppUser,
-        searchKeyword: String?, sortKey: AchievementSortKey,
+        searchKeyword: String?, sortKey: ExperienceSortKey,
         sortDirection: SortDirection?, pageable: Pageable
-    ): Page<Achievement> {
+    ): Page<Experience> {
         // 검색 조건 생성
         val searchCondition = createSearchCondition(searchKeyword)
 
@@ -34,8 +34,8 @@ class CustomAchievementRepositoryImpl(
 
         // 데이터 조회
         val results = queryFactory
-            .selectFrom(achievement)
-            .where(achievement.user.eq(user), searchCondition)
+            .selectFrom(experience)
+            .where(experience.user.eq(user), searchCondition)
             .orderBy(*orderSpecifiers.toTypedArray())
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
@@ -43,8 +43,8 @@ class CustomAchievementRepositoryImpl(
 
         // 전체 개수 조회
         val total = queryFactory
-            .select(achievement.count())
-            .from(achievement)
+            .select(experience.count())
+            .from(experience)
             .where(searchCondition)
             .fetchOne() ?: 0L
 
@@ -60,15 +60,15 @@ class CustomAchievementRepositoryImpl(
         }
 
         val keyword = searchKeyword.lowercase()
-        return achievement.title.lower().contains(keyword)
-            .or(achievement.orgName.lower().contains(keyword))
+        return experience.title.lower().contains(keyword)
+            .or(experience.orgName.lower().contains(keyword))
     }
 
     /**
      * 정렬 조건 생성
      */
     private fun createOrderSpecifiers(
-        sortKey: AchievementSortKey,
+        sortKey: ExperienceSortKey,
         sortDirection: SortDirection?
     ): List<OrderSpecifier<*>> {
 
@@ -80,12 +80,12 @@ class CustomAchievementRepositoryImpl(
 
         // 1차 정렬 기준: sortKey 에 따라 createdAt / updatedAt
         val primary = when (sortKey) {
-            AchievementSortKey.DURATION_START -> OrderSpecifier(direction, achievement.durationStart)
-            AchievementSortKey.UPDATED_AT -> OrderSpecifier(direction, achievement.updatedAt)
+            ExperienceSortKey.DURATION_START -> OrderSpecifier(direction, experience.durationStart)
+            ExperienceSortKey.UPDATED_AT -> OrderSpecifier(direction, experience.updatedAt)
         }
 
         // 2차 정렬 기준: 같은 시간일 때 정렬 안정성을 위해 id 기준 추가 (선택사항)
-        val secondary = OrderSpecifier(Order.DESC, achievement.id)
+        val secondary = OrderSpecifier(Order.DESC, experience.id)
 
         return listOf(primary, secondary)
     }

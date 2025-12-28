@@ -1,15 +1,15 @@
-package com.hsryuuu.careerbuilder.domain.archivement.service
+package com.hsryuuu.careerbuilder.domain.experience.service
 
 import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
-import com.hsryuuu.careerbuilder.domain.archivement.model.dto.CreateAchievementRequest
-import com.hsryuuu.careerbuilder.domain.archivement.model.dto.CreateSectionRequest
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.AchievementStatus
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.ContributionLevel
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.SectionKind
-import com.hsryuuu.careerbuilder.domain.archivement.model.entity.WorkType
-import com.hsryuuu.careerbuilder.domain.archivement.repository.AchievementRepository
-import com.hsryuuu.careerbuilder.domain.archivement.repository.AchievementSectionRepository
+import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateExperienceRequest
+import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateSectionRequest
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.ContributionLevel
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.SectionKind
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.WorkType
+import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceRepository
+import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceSectionRepository
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import com.hsryuuu.careerbuilder.domain.user.appuser.repository.AppUserRepository
 import com.hsryuuu.careerbuilder.generator.TestDataGenerator
@@ -26,17 +26,17 @@ import java.util.*
 
 @SpringBootTest
 @Transactional
-@DisplayName("성과 서비스 테스트")
-class AchievementServiceTest {
+@DisplayName("경험 서비스 테스트")
+class ExperienceServiceTest {
 
     @Autowired
-    private lateinit var achievementService: AchievementService
+    private lateinit var experienceService: ExperienceService
 
     @Autowired
-    private lateinit var achievementRepository: AchievementRepository
+    private lateinit var experienceRepository: ExperienceRepository
 
     @Autowired
-    private lateinit var achievementSectionRepository: AchievementSectionRepository
+    private lateinit var experienceSectionRepository: ExperienceSectionRepository
 
     @Autowired
     private lateinit var appUserRepository: AppUserRepository
@@ -65,17 +65,17 @@ class AchievementServiceTest {
     }
 
     @Test
-    @DisplayName("[SUCCESS] 성과 생성 - 섹션 포함 성공")
-    fun createAchievement_섹션_포함_생성_성공() {
+    @DisplayName("[SUCCESS] 경험 생성 - 섹션 포함 성공")
+    fun createExperience_섹션_포함_생성_성공() {
         // Arrange
-        val request = CreateAchievementRequest(
-            title = "테스트 성과",
+        val request = CreateExperienceRequest(
+            title = "테스트 경험",
             orgName = "테스트 조직",
             durationStart = LocalDate.of(2024, 1, 1),
             durationEnd = LocalDate.of(2024, 12, 31),
             impactSummary = "영향 요약",
             goalSummary = "목표 요약",
-            status = AchievementStatus.DRAFT,
+            status = ExperienceStatus.DRAFT,
             roleTitle = "개발자",
             workType = WorkType.PROJECT,
             contributionLevel = ContributionLevel.OWNER,
@@ -103,18 +103,18 @@ class AchievementServiceTest {
         )
 
         // Act
-        val response = achievementService.createAchievement(testUser.id!!, request)
+        val response = experienceService.createExperience(testUser.id!!, request)
 
         // Assert
         assertThat(response.id).isNotNull
         assertThat(response.userId).isEqualTo(testUser.id)
-        assertThat(response.title).isEqualTo("테스트 성과")
+        assertThat(response.title).isEqualTo("테스트 경험")
         assertThat(response.orgName).isEqualTo("테스트 조직")
         assertThat(response.durationStart).isEqualTo(LocalDate.of(2024, 1, 1))
         assertThat(response.durationEnd).isEqualTo(LocalDate.of(2024, 12, 31))
         assertThat(response.impactSummary).isEqualTo("영향 요약")
         assertThat(response.goalSummary).isEqualTo("목표 요약")
-        assertThat(response.status).isEqualTo(AchievementStatus.DRAFT)
+        assertThat(response.status).isEqualTo(ExperienceStatus.DRAFT)
         assertThat(response.roleTitle).isEqualTo("개발자")
         assertThat(response.workType).isEqualTo(WorkType.PROJECT)
         assertThat(response.contributionLevel).isEqualTo(ContributionLevel.OWNER)
@@ -123,17 +123,17 @@ class AchievementServiceTest {
     }
 
     @Test
-    @DisplayName("[SUCCESS] 성과 생성 - 섹션 없이 성공")
-    fun createAchievement_섹션_없이_생성_성공() {
+    @DisplayName("[SUCCESS] 경험 생성 - 섹션 없이 성공")
+    fun createExperience_섹션_없이_생성_성공() {
         // Arrange
-        val request = CreateAchievementRequest(
-            title = "테스트 성과",
+        val request = CreateExperienceRequest(
+            title = "테스트 경험",
             orgName = "테스트 조직",
             durationStart = LocalDate.of(2024, 1, 1),
             durationEnd = LocalDate.of(2024, 12, 31),
             impactSummary = "영향 요약",
             goalSummary = "목표 요약",
-            status = AchievementStatus.DRAFT,
+            status = ExperienceStatus.DRAFT,
             roleTitle = "개발자",
             workType = WorkType.PROJECT,
             contributionLevel = ContributionLevel.OWNER,
@@ -142,18 +142,18 @@ class AchievementServiceTest {
         )
 
         // Act
-        val response = achievementService.createAchievement(testUser.id!!, request)
+        val response = experienceService.createExperience(testUser.id!!, request)
 
         // Assert
         assertThat(response.id).isNotNull
         assertThat(response.userId).isEqualTo(testUser.id)
-        assertThat(response.title).isEqualTo("테스트 성과")
+        assertThat(response.title).isEqualTo("테스트 경험")
         assertThat(response.orgName).isEqualTo("테스트 조직")
         assertThat(response.durationStart).isEqualTo(LocalDate.of(2024, 1, 1))
         assertThat(response.durationEnd).isEqualTo(LocalDate.of(2024, 12, 31))
         assertThat(response.impactSummary).isEqualTo("영향 요약")
         assertThat(response.goalSummary).isEqualTo("목표 요약")
-        assertThat(response.status).isEqualTo(AchievementStatus.DRAFT)
+        assertThat(response.status).isEqualTo(ExperienceStatus.DRAFT)
         assertThat(response.roleTitle).isEqualTo("개발자")
         assertThat(response.workType).isEqualTo(WorkType.PROJECT)
         assertThat(response.contributionLevel).isEqualTo(ContributionLevel.OWNER)
@@ -162,36 +162,36 @@ class AchievementServiceTest {
     }
 
     @Test
-    @DisplayName("[FAIL] 성과 생성 - 존재하지 않는 사용자로 실패")
-    fun createAchievement_존재하지_않는_사용자로_실패() {
+    @DisplayName("[FAIL] 경험 생성 - 존재하지 않는 사용자로 실패")
+    fun createExperience_존재하지_않는_사용자로_실패() {
         // Arrange
         val nonExistentUserId = UUID.randomUUID()
-        val request = CreateAchievementRequest(
-            title = "테스트 성과",
+        val request = CreateExperienceRequest(
+            title = "테스트 경험",
             durationStart = LocalDate.of(2024, 1, 1)
         )
 
         // Act & Assert
         assertThatThrownBy {
-            achievementService.createAchievement(nonExistentUserId, request)
+            experienceService.createExperience(nonExistentUserId, request)
         }
             .isInstanceOf(GlobalException::class.java)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.MEMBER_NOT_FOUND)
     }
 
     @Test
-    @DisplayName("[FAIL] 성과 생성 - 기간 순서가 잘못되어 실패")
-    fun createAchievement_기간_순서가_잘못되어_실패() {
+    @DisplayName("[FAIL] 경험 생성 - 기간 순서가 잘못되어 실패")
+    fun createExperience_기간_순서가_잘못되어_실패() {
         // Arrange
-        val request = CreateAchievementRequest(
-            title = "테스트 성과",
+        val request = CreateExperienceRequest(
+            title = "테스트 경험",
             durationStart = LocalDate.of(2024, 12, 1),
             durationEnd = LocalDate.of(2024, 1, 1)
         )
 
         // Act & Assert
         assertThatThrownBy {
-            achievementService.createAchievement(testUser.id!!, request)
+            experienceService.createExperience(testUser.id!!, request)
         }
             .isInstanceOf(GlobalException::class.java)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.VALIDATION_ERROR_DURATION_SEQUENCE)
