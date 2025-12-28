@@ -34,3 +34,4 @@ export const getMenuKeyByPath = (path: string): TMenuKey | undefined => {
   const menu = MENU_ITEMS.find((item) => path.startsWith(item.path));
   return menu?.key;
 };
+

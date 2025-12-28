@@ -340,7 +340,6 @@ API 관련 코드는 `/api/{도메인}/` 폴더에 4개 파일로 구성됩니�
 api/
 ├── resource/              # 도메인별 폴더
 │   ├── api.ts            # 순수 API 호출 함수
-│   ├── composables.ts    # Nuxt Composables (use* 함수)
 │   ├── types.ts          # 타입 정의
 │   └── keys.ts           # 쿼리 키 상수
 ├── category/
@@ -374,31 +373,27 @@ import type {
 // 2. API 함수 정의
 
 // GET - 목록 조회
-export const fetchDataResources = (fetchOptions?: TFetchOptions): Promise<TDataResource[]> => {
-  return useSpringApi<undefined, undefined, TDataResource[]>({
-    url: `/api/data/resources`,
-    method: Method.Get,
-    fetchOptions,
+export const fetchAchievements = (params?: TAchievementListParams) => {
+  return useApi<TPageResponse<TAchievement>>({
+    url: '/api/achievements',
+    method: HttpMethod.GET,
+    params,
   });
 };
 
 // GET - 단건 조회
-export const fetchDataResource = (
-  id: string,
-  fetchOptions?: TFetchOptions
-): Promise<TDataResourceDetail> => {
-  return useSpringApi<undefined, undefined, TDataResourceDetail>({
-    url: `/api/data/resources/${id}`,
-    method: Method.Get,
-    fetchOptions,
+export const fetchAchievement = (id: string) => {
+  return useApi<TAchievement>({
+    url: `/api/achievements/${id}`,
+    method: HttpMethod.GET,
   });
 };
 
 // POST - 생성
-export const createDataResource = async (body: TDataResourceDetail): Promise<void> => {
-  return useSpringApi({
-    url: '/api/data/resources',
-    method: Method.Post,
+export const updateAchievement = (id: string, body: TAchievementUpdate) => {
+  return useApi<TAchievement>({
+    url: `/api/achievements/${id}`,
+    method: HttpMethod.PUT,
     body,
   });
 };
@@ -413,10 +408,10 @@ export const updateDataResource = (id: string, body: TDataResourceCommon): Promi
 };
 
 // DELETE - 삭제
-export const deleteDataResource = (id: string): Promise<void> => {
-  return useSpringApi({
-    url: `/api/data/resources/${id}`,
-    method: Method.Delete,
+export const deleteAchievement = (id: string) => {
+  return useApi<null>({
+    url: `/api/achievements/${id}`,
+    method: HttpMethod.DELETE,
   });
 };
 
@@ -442,98 +437,8 @@ export const downloadDistribution = (distributionId: string): Promise<Blob> => {
   - 다운로드: `download{Resource}`
 - 파라미터 순서: `id`, `body`, `fetchOptions`
 - 반환 타입: `Promise<T>` 명시 필수
-- `useSpringApi` 또는 `useEtlApi` 사용
+- `useApi` 사용
 - Method enum 사용 (문자열 직접 사용 금지)
-
-#### **composables.ts - Nuxt Composables**
-
-```typescript
-// 1. 외부 라이브러리 import
-import fileDownload from 'js-file-download';
-
-// 2. Type import
-import type { TAsyncData, TFetchOptions } from '@/constants/types/api';
-import type {
-  TDataResource,
-  TDataResourceCommon,
-  TDataResourceDetail,
-  TDistribution,
-  TGroup,
-} from './types';
-
-// 3. API 함수 import
-import {
-  fetchDataResources,
-  createDataResource,
-  fetchDataResource,
-  fetchDistributions,
-  updateDataResource,
-  deleteDataResource,
-  downloadDistribution,
-} from './api';
-
-// 4. 쿼리 키 import
-import {
-  DATA_RESOURCE_LIST_KEY,
-  DATA_RESOURCE_DETAIL_KEY,
-  DATA_DISTRIBUTION_LIST_KEY,
-} from './keys';
-
-// 5. Composable 함수 정의
-
-// ===== SSR 지원 (useAsyncData 사용) =====
-// GET 요청에 사용
-
-export const useFetchDataResources = (): TAsyncData<TDataResource[]> => {
-  return useAsyncData<TDataResource[]>(DATA_RESOURCE_LIST_KEY, () => fetchDataResources());
-};
-
-export const useFetchDataResource = (id: string): TAsyncData<TDataResourceDetail> => {
-  return useAsyncData<TDataResourceDetail>(DATA_RESOURCE_DETAIL_KEY(id), () =>
-    fetchDataResource(id)
-  );
-};
-
-export const useFetchDistributions = (id: string): TAsyncData<TDistribution[]> => {
-  return useAsyncData<TDistribution[]>(DATA_DISTRIBUTION_LIST_KEY(id), () =>
-    fetchDistributions(id)
-  );
-};
-
-// ===== Client-side only (useClientFetch 사용) =====
-// POST/PUT/DELETE 요청에 사용
-
-export const useCreateDataResource = (body: TDataResourceDetail) => {
-  return useClientFetch(() => createDataResource(body));
-};
-
-export const useUpdateDataResource = (id: string, body: TDataResourceCommon) => {
-  return useClientFetch(() => updateDataResource(id, body));
-};
-
-export const useDeleteDataResource = (id: string) => {
-  return useClientFetch(() => deleteDataResource(id));
-};
-
-// ===== 파일 다운로드 (특수 케이스) =====
-
-export const useDownloadDistribution = async (distributionId: string, fileName: string) => {
-  const blob = await downloadDistribution(distributionId);
-  return fileDownload(blob, fileName);
-};
-```
-
-**작성 규칙:**
-
-- 함수명: `use` prefix 필수 (Nuxt Composable 규칙)
-- **GET 요청**: `useAsyncData` 사용
-  - SSR 지원
-  - 자동 캐싱
-  - 쿼리 키 필수
-- **POST/PUT/DELETE**: `useClientFetch` 사용
-  - Client-side only
-  - 에러 처리 자동화
-- **파일 다운로드**: `fileDownload` 라이브러리 사용
 
 #### **types.ts - 타입 정의**
 
@@ -1259,7 +1164,7 @@ export enum Color {
 - [ ] Vue 파일 작성 순서를 따랐는가?
 - [ ] Props는 destructuring + 기본값으로 선언했는가?
 - [ ] Emits는 타입 안전하게 선언했는가?
-- [ ] API 파일 4개 (api.ts, composables.ts, types.ts, keys.ts)를 생성했는가?
+- [ ] API 파일 4개 (api.ts, types.ts, keys.ts)를 생성했는가?
 - [ ] Type 이름은 `T` prefix를 사용했는가?
 - [ ] Composable 함수는 `use` prefix를 사용했는가?
 - [ ] 컴포넌트는 Atomic Design 패턴을 따랐는가?

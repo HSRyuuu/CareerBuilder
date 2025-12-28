@@ -25,3 +25,4 @@ export const useMenuStore = defineStore('menu', () => {
     isActive,
   };
 });
+

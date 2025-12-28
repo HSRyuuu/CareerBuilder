@@ -2,7 +2,7 @@
   <div class="career-register-page">
     <!-- 페이지 헤더 -->
     <PageHeader
-      :title="isEditMode ? '경험 수정' : '경험 상세'"
+      :title="pageTitleView"
       :subtitle="isEditMode ? '경험 정보를 수정하세요' : '경험 정보를 확인하세요'"
     >
       <template #actions>
@@ -463,8 +463,28 @@
 </template>
 
 <script setup lang="ts">
+// 1. 외부 라이브러리 import
 import { ref, computed, onMounted } from 'vue';
 import { VueDraggableNext } from 'vue-draggable-next';
+
+// 2. 프로젝트 내부 import
+import { ButtonVariant, CommonSize, FormSize } from '@/constants/enums/style-enum';
+import {
+  AchievementSectionKind,
+  SECTION_KIND_INFO,
+  WORK_TYPE_INFO,
+  CONTRIBUTION_LEVEL_INFO,
+} from '@/types/achievement-types';
+
+// 3. API/Composables import
+import { fetchAchievement, updateAchievement } from '~/api/achievement/api';
+
+// 4. Type import (type 키워드 사용)
+import type { TSelectItem } from '@/components/atoms/Select/Select.vue';
+import type { AchievementSection } from '@/types/achievement-types';
+import type { TAchievementUpdate } from '~/api/achievement/types';
+
+// 5. 로컬 컴포넌트 import
 import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
 import Card from '@/components/molecules/Card/Card.vue';
 import Button from '@/components/atoms/Button/Button.vue';
@@ -472,38 +492,64 @@ import Input from '@/components/atoms/Input/Input.vue';
 import TextArea from '@/components/atoms/TextArea/TextArea.vue';
 import DatePicker from '@/components/atoms/DatePicker/DatePicker.vue';
 import Select from '@/components/atoms/Select/Select.vue';
-import type { TSelectItem } from '@/components/atoms/Select/Select.vue';
 import DescriptionBox from '@/components/atoms/DescriptionBox/DescriptionBox.vue';
-import { ButtonVariant, CommonSize, FormSize } from '@/constants/enums/style-enum';
-import {
-  type AchievementSection,
-  AchievementSectionKind,
-  SECTION_KIND_INFO,
-  WORK_TYPE_INFO,
-  CONTRIBUTION_LEVEL_INFO,
-} from '@/types/achievement-types';
-import { fetchAchievement, updateAchievement } from '~/api/achievement/api';
-import type { TAchievementUpdate } from '~/api/achievement/types';
 
-const route = useRoute();
-const toast = useToast();
-
-definePageMeta({
-  layout: 'default',
-});
-
-// 성과 ID
-const achievementId = computed(() => route.params.id as string);
-
-// 수정 모드 여부 (기본값: 상세 모드)
-const isEditMode = ref(false);
-
+// 6. Type 선언 (Props, Emits용 타입 및 기타 인터페이스)
 interface FormSection extends AchievementSection {
   isEditingTitle?: boolean; // 제목 편집 모드 여부
   tempTitle?: string; // 편집 중인 임시 제목 (수정 전 원본 저장)
   showHelp?: boolean; // help description 표시 여부
 }
 
+interface FormData {
+  title: string;
+  orgName: string;
+  durationStart: string;
+  durationEnd: string;
+  roleTitle: string;
+  workType: string | null;
+  contributionLevel: string | null;
+  goalSummary: string;
+  impactSummary: string;
+  skills: string;
+  sections: FormSection[];
+}
+
+// 7. Props 선언 (없음)
+
+// 8. Emits 선언 (없음)
+
+// 9. Ref/Reactive 선언
+definePageMeta({
+  layout: 'default',
+});
+
+const route = useRoute();
+const toast = useToast();
+
+// 성과 ID
+const achievementId = computed(() => route.params.id as string);
+
+// 수정 모드 여부 (기본값: 상세 모드)
+const isEditMode = ref(false);
+const pageTitle = ref('');
+const formData = ref<FormData>({
+  title: '',
+  orgName: '',
+  durationStart: '',
+  durationEnd: '',
+  roleTitle: '',
+  workType: null,
+  contributionLevel: null,
+  goalSummary: '',
+  impactSummary: '',
+  skills: '',
+  sections: [],
+});
+
+let sectionCounter = 0;
+
+// 10. Computed 선언
 // 블록 유형 옵션 생성
 const sectionKindOptions = computed<TSelectItem[]>(() => {
   return Object.entries(SECTION_KIND_INFO).map(([key, value]) => ({
@@ -528,36 +574,12 @@ const contributionLevelOptions = computed<TSelectItem[]>(() => {
   }));
 });
 
-interface FormData {
-  title: string;
-  orgName: string;
-  durationStart: string;
-  durationEnd: string;
-  roleTitle: string;
-  workType: string | null;
-  contributionLevel: string | null;
-  goalSummary: string;
-  impactSummary: string;
-  skills: string;
-  sections: FormSection[];
-}
-
-const formData = ref<FormData>({
-  title: '',
-  orgName: '',
-  durationStart: '',
-  durationEnd: '',
-  roleTitle: '',
-  workType: null,
-  contributionLevel: null,
-  goalSummary: '',
-  impactSummary: '',
-  skills: '',
-  sections: [],
+const pageTitleView = computed(() => {
+  const title = isEditMode.value ? '경험 수정' : '경험 상세';
+  return `${title} - ${pageTitle.value}`;
 });
 
-let sectionCounter = 0;
-
+// 11. 함수 선언 (핸들러, 유틸리티 함수)
 // 데이터 로드 함수 (취소 시 재사용)
 const loadAchievementData = async () => {
   const { data, error } = await fetchAchievement(achievementId.value);
@@ -590,12 +612,8 @@ const loadAchievementData = async () => {
         })) || [],
     };
   }
+  pageTitle.value = formData.value.title;
 };
-
-// 초기 데이터 로드
-onMounted(() => {
-  loadAchievementData();
-});
 
 const addSection = () => {
   formData.value.sections.push({
@@ -748,6 +766,11 @@ const handleSave = async () => {
 const handleBack = () => {
   navigateTo('/career');
 };
+
+// 초기 데이터 로드
+onMounted(() => {
+  loadAchievementData();
+});
 </script>
 
 <style lang="scss" scoped>

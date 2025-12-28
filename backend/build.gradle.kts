@@ -101,6 +101,14 @@ sourceSets {
     }
 }
 
+tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
+    mainClass.set("com.hsryuuu.careerbuilder.CareerBuilderApplicationKt")
+}
+
+tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
+    mainClass.set("com.hsryuuu.careerbuilder.CareerBuilderApplicationKt")
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
