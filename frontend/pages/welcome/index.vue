@@ -133,7 +133,7 @@ import Button from '@/components/atoms/Button/Button.vue';
 
 // 9. Ref/Reactive 선언
 definePageMeta({
-  layout: 'welcome',
+  layout: 'full-page',
 });
 const authStore = useAuthStore();
 const heroImage = '/_brain/05a4fea0-0f76-4197-9ed4-d36d0556e1bd/welcome_hero_v1_1766916077856.png';
