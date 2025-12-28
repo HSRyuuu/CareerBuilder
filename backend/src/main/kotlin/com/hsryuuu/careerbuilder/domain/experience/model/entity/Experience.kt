@@ -44,7 +44,7 @@ class Experience(
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    var status: ExperienceStatus = ExperienceStatus.DRAFT,
+    var status: ExperienceStatus = ExperienceStatus.INCOMPLETE,
 
     @Column(name = "role_title")
     var roleTitle: String? = null,
@@ -127,10 +127,18 @@ class Experience(
 }
 
 
-enum class ExperienceStatus {
-    DRAFT,
-    PUBLISHED,
-    ARCHIVED
+enum class ExperienceStatus(val description: String) {
+    // 1. 작성 중 (필수 정보가 누락되었거나 사용자가 임시 저장한 상태)
+    INCOMPLETE("보완 필요"),
+
+    // 2. 작성 완료 (필수 정보가 모두 입력되어 AI 분석 대기 중)
+    COMPLETED("작성 완료"),
+
+    // 3. 분석 중 (AI가 키워드 및 역량 추출을 진행 중인 상태)
+    ANALYZING("AI 분석 중"),
+
+    // 4. 분석 완료 (AI 분석이 끝나고 대시보드에 완전히 반영된 상태)
+    ANALYZED("분석 완료")
 }
 
 enum class WorkType {

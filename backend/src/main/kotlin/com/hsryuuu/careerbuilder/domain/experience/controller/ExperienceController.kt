@@ -50,6 +50,7 @@ class ExperienceController(
 
     @Operation(summary = "경험 조회", description = "특정 경험을 조회합니다.")
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     fun getExperience(@PathVariable id: UUID): ExperienceResponse {
         val userId = authManager.getCurrentUserIdOrElseThrow()
         return experienceService.getExperience(id, userId)
@@ -57,6 +58,7 @@ class ExperienceController(
 
     @Operation(summary = "상태별 경험 목록 조회", description = "특정 상태의 경험 목록을 조회합니다.")
     @GetMapping("/status/{status}")
+    @ResponseStatus(HttpStatus.OK)
     fun getExperiencesByStatus(
         @PathVariable status: ExperienceStatus
     ): List<ExperienceResponse> {
@@ -66,6 +68,7 @@ class ExperienceController(
 
     @Operation(summary = "경험 수정", description = "기존 경험을 수정합니다.")
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     fun updateExperience(
         @PathVariable id: UUID,
         @Valid @RequestBody request: UpdateExperienceRequest

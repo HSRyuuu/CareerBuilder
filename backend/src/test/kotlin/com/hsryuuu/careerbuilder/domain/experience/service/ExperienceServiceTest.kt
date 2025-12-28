@@ -75,7 +75,7 @@ class ExperienceServiceTest {
             durationEnd = LocalDate.of(2024, 12, 31),
             impactSummary = "영향 요약",
             goalSummary = "목표 요약",
-            status = ExperienceStatus.DRAFT,
+            status = ExperienceStatus.INCOMPLETE,
             roleTitle = "개발자",
             workType = WorkType.PROJECT,
             contributionLevel = ContributionLevel.OWNER,
@@ -114,7 +114,7 @@ class ExperienceServiceTest {
         assertThat(response.durationEnd).isEqualTo(LocalDate.of(2024, 12, 31))
         assertThat(response.impactSummary).isEqualTo("영향 요약")
         assertThat(response.goalSummary).isEqualTo("목표 요약")
-        assertThat(response.status).isEqualTo(ExperienceStatus.DRAFT)
+        assertThat(response.status).isEqualTo(ExperienceStatus.INCOMPLETE)
         assertThat(response.roleTitle).isEqualTo("개발자")
         assertThat(response.workType).isEqualTo(WorkType.PROJECT)
         assertThat(response.contributionLevel).isEqualTo(ContributionLevel.OWNER)
@@ -133,7 +133,7 @@ class ExperienceServiceTest {
             durationEnd = LocalDate.of(2024, 12, 31),
             impactSummary = "영향 요약",
             goalSummary = "목표 요약",
-            status = ExperienceStatus.DRAFT,
+            status = ExperienceStatus.INCOMPLETE,
             roleTitle = "개발자",
             workType = WorkType.PROJECT,
             contributionLevel = ContributionLevel.OWNER,
@@ -153,7 +153,7 @@ class ExperienceServiceTest {
         assertThat(response.durationEnd).isEqualTo(LocalDate.of(2024, 12, 31))
         assertThat(response.impactSummary).isEqualTo("영향 요약")
         assertThat(response.goalSummary).isEqualTo("목표 요약")
-        assertThat(response.status).isEqualTo(ExperienceStatus.DRAFT)
+        assertThat(response.status).isEqualTo(ExperienceStatus.INCOMPLETE)
         assertThat(response.roleTitle).isEqualTo("개발자")
         assertThat(response.workType).isEqualTo(WorkType.PROJECT)
         assertThat(response.contributionLevel).isEqualTo(ContributionLevel.OWNER)

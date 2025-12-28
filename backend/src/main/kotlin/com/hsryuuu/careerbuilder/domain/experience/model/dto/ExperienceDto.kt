@@ -14,7 +14,7 @@ data class CreateExperienceRequest(
     val durationEnd: LocalDate? = null,
     val impactSummary: String? = null,
     val goalSummary: String? = null,
-    val status: ExperienceStatus = ExperienceStatus.DRAFT,
+    val status: ExperienceStatus = ExperienceStatus.INCOMPLETE,
     val roleTitle: String? = null,
     val workType: WorkType? = null,
     val contributionLevel: ContributionLevel? = null,

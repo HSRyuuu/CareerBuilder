@@ -85,14 +85,6 @@ class ExperienceService(
     }
 
     @Transactional(readOnly = true)
-    fun getAllExperiences(userId: UUID): List<ExperienceResponse> {
-        val experiences = experienceRepository.findByUserId(userId)
-        return experiences.map { experience ->
-            ExperienceResponse.fromEntityWithoutSections(experience)
-        }
-    }
-
-    @Transactional(readOnly = true)
     fun getExperiencesByStatus(userId: UUID, status: ExperienceStatus): List<ExperienceResponse> {
         val experiences = experienceRepository.findByUserIdAndStatus(userId, status)
         return experiences.map { experience ->
