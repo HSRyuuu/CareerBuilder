@@ -49,7 +49,7 @@ class SwaggerConfig {
     fun jwtToken(): String {
         val userInfo = UserInfo(
             id = UUID.fromString("e5185f5b-a92b-4dd1-a8a2-4319a4244aa5"),
-            username = "hsruuuu",
+            username = "hsryuuu",
             email = "happyhsryu@gmail.com",
             role = UserRole.ROLE_USER
         )

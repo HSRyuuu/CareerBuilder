@@ -1,5 +1,7 @@
 package com.hsryuuu.careerbuilder.application.security
 
+import com.hsryuuu.careerbuilder.application.exception.ErrorCode
+import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import java.util.*
@@ -30,5 +32,5 @@ class AuthManager {
 
     fun getCurrentUserIdOrElseThrow(): UUID =
         getCurrentUserId()
-            ?: UUID.fromString("e5185f5b-a92b-4dd1-a8a2-4319a4244aa5")//throw GlobalException(ErrorCode.UNAUTHORIZED)
+            ?: throw GlobalException(ErrorCode.UNAUTHORIZED) //UUID.fromString("e5185f5b-a92b-4dd1-a8a2-4319a4244aa5")
 }
