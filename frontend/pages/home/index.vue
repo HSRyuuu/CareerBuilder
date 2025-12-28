@@ -151,9 +151,7 @@ import { fetchExperiences, fetchExperienceStats } from '~/api/experience/api';
 // 4. Type import
 import type { TExperience, TExperienceStats } from '~/api/experience/types';
 
-// 5. 로컬 컴포넌트 import
-import Button from '@/components/atoms/Button/Button.vue';
-import Card from '@/components/molecules/Card/Card.vue';
+
 
 // 9. Ref/Reactive 선언
 definePageMeta({
