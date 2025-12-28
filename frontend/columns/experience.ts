@@ -19,11 +19,38 @@ export const formatDate = (date?: string | null) => {
 };
 
 /**
+ * 날짜 시간 포맷팅
+ */
+export const formatDateTime = (date?: string | null) => {
+  if (!date) return '-';
+  const d = new Date(date);
+  return `${d.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  })} ${d.toLocaleTimeString('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })}`;
+};
+
+/**
  * 업무 유형 표시 텍스트 반환
  */
 export const getWorkTypeDisplay = (workType?: string | null) => {
   if (!workType) return '-';
   return WORK_TYPE_INFO[workType as WorkType]?.display || workType;
+};
+
+/**
+ * 제목 말줄임 처리
+ */
+export const truncateTitle = (title: string, maxLength: number = 30) => {
+  if (title.length > maxLength) {
+    return title.substring(0, maxLength) + '...';
+  }
+  return title;
 };
 
 /**
@@ -33,7 +60,7 @@ export const experienceColumns: TTableColumn<TExperience>[] = [
   {
     field: 'durationStart',
     headerName: '시작일',
-    flex: 1.5,
+    flex: 1.2,
     align: 'center',
     cellClass: 'career-list-table-date',
     valueFormatter: (value) => formatDate(value),
@@ -41,7 +68,7 @@ export const experienceColumns: TTableColumn<TExperience>[] = [
   {
     field: 'durationEnd',
     headerName: '종료일',
-    flex: 1.5,
+    flex: 1.2,
     align: 'center',
     cellClass: 'career-list-table-date',
     valueFormatter: (value) => formatDate(value),
@@ -50,13 +77,14 @@ export const experienceColumns: TTableColumn<TExperience>[] = [
     field: 'title',
     headerName: '제목',
     flex: 3,
-    align: 'center',
+    align: 'left',
     cellClass: 'career-list-table-title',
+    valueFormatter: (value) => truncateTitle(value || ''),
   },
   {
     field: 'workType',
     headerName: '업무 유형',
-    flex: 1.5,
+    flex: 1.2,
     align: 'center',
     cellClass: 'career-list-table-work-type',
     valueFormatter: (value) => getWorkTypeDisplay(value),
@@ -67,5 +95,13 @@ export const experienceColumns: TTableColumn<TExperience>[] = [
     flex: 1,
     align: 'center',
     // 커스텀 렌더링은 slot으로 처리
+  },
+  {
+    field: 'updatedAt',
+    headerName: '최종 수정일시',
+    flex: 1.5,
+    align: 'center',
+    cellClass: 'career-list-table-date',
+    valueFormatter: (value) => formatDateTime(value),
   },
 ];
