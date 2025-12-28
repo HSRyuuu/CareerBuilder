@@ -35,7 +35,13 @@
               <h4 class="setting-item-title">알림 설정</h4>
               <p class="setting-item-desc">새로운 AI 분석 결과가 나오면 알림을 받습니다.</p>
             </div>
-            <v-switch color="primary" hide-details inset></v-switch>
+            <v-switch
+              v-model="isNotify"
+              color="primary"
+              hide-details
+              inset
+              @update:model-value="handleToggleNotify"
+            ></v-switch>
           </div>
           <div class="setting-divider"></div>
           <div class="setting-item">
@@ -87,7 +93,7 @@
 
 <script setup lang="ts">
 // 1. 외부 라이브러리 import
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 // 2. 프로젝트 내부 import
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
@@ -110,6 +116,8 @@ const authStore = useAuthStore();
 const toast = useToast();
 const colorMode = useColorMode();
 
+const isNotify = ref(false);
+
 const isDark = computed({
   get: () => colorMode.value === 'dark',
   set: (val) => {
@@ -118,6 +126,16 @@ const isDark = computed({
 });
 
 // 11. 함수 선언
+const handleToggleNotify = (val: boolean | null) => {
+  if (val) {
+    toast.info('준비중입니다.');
+    // 준비 중이므로 다시 꺼둠
+    nextTick(() => {
+      isNotify.value = false;
+    });
+  }
+};
+
 const handleEditProfile = () => {
   toast.info('프로필 수정 기능은 개발 중입니다.');
 };

@@ -37,7 +37,7 @@
 
 1. **외부 라이브러리 import** (Vue, Vuetify 등)
 2. **프로젝트 내부 import** (constants, enums, utils 등)
-3. **API/Composables import**
+3. **API import**
 4. **Type import** (type 키워드 사용)
 5. **로컬 컴포넌트 import**
 6. **Type 선언** (Props, Emits용 타입)
@@ -62,8 +62,8 @@ import { DacConstants } from '@/constants/enums/dac-enum';
 import { defaultCollectSpec } from '@/utils/dac-utils';
 import { PATH_DATA_RESOURCE } from '@/routes/path';
 
-// 3. API/Composables import
-import { useCreateDataSource } from '@/api/resource/composables';
+// 3. API import
+import { createDataSource } from '@/api/resource/api';
 
 // 4. Type import (type 키워드 사용)
 import type { TDataResourceCommon, TDataResourceDetail } from '@/api/resource/types';
@@ -170,7 +170,7 @@ const handleSave = async () => {
   };
 
   // 생성 요청
-  const { error } = await useCreateDataSource(body);
+  const { error } = await createDataSource(body);
   if (error) {
     return;
   }
@@ -332,7 +332,7 @@ const count = ref(0); // 타입 추론되지만 명시적이지 않음
 
 ## 2. API 호출 구조
 
-API 관련 코드는 `/api/{도메인}/` 폴더에 4개 파일로 구성됩니다.
+API 관련 코드는 `/api/{도메인}/` 폴더에 2개 파일(`api.ts`, `types.ts`)로 구성됩니다.
 
 ### 2.1 디렉터리 구조
 
@@ -341,17 +341,12 @@ api/
 ├── resource/              # 도메인별 폴더
 │   ├── api.ts            # 순수 API 호출 함수
 │   ├── types.ts          # 타입 정의
-│   └── keys.ts           # 쿼리 키 상수
 ├── category/
 │   ├── api.ts
-│   ├── composables.ts
-│   ├── types.ts
-│   └── keys.ts
+│   └── types.ts
 └── license/
     ├── api.ts
-    ├── composables.ts
-    ├── types.ts
-    └── keys.ts
+    └── types.ts
 ```
 
 ### 2.2 파일별 역할 및 작성 규칙
@@ -529,29 +524,6 @@ export type TGroup = {
 - Request/Response 구분
   - Response: 기본 타입명
   - Request: `{Type}Common`, `{Type}Create`, `{Type}Update`
-
-#### **keys.ts - 쿼리 키 상수**
-
-```typescript
-// 정적 키 (단순 문자열)
-export const DATA_RESOURCE_LIST_KEY = 'data-resource-list';
-export const DATA_GROUP_LIST_KEY = 'data-group-list';
-export const DATA_CATEGORY_LIST_KEY = 'data-category-list';
-
-// 동적 키 (함수형 - ID 포함)
-export const DATA_RESOURCE_DETAIL_KEY = (id: string) => `data-resource-detail-${id}`;
-
-export const DATA_DISTRIBUTION_LIST_KEY = (id: string) => `data-distribution-list-${id}`;
-
-export const DATA_DIST_LOG_KEY = (id: string) => `data-dist-log-${id}`;
-```
-
-**작성 규칙:**
-
-- 상수명: `SCREAMING_SNAKE_CASE` + `_KEY` suffix
-- 동적 키: 함수로 선언 (파라미터 받아서 생성)
-- 키 네이밍 패턴: `{domain}-{action}-{type}`
-  - 예: `data-resource-list`, `user-profile-detail-${id}`
 
 ---
 
@@ -1063,7 +1035,7 @@ export const useClientFetch = async <T>(fetch: () => Promise<T>): TClientFetch<T
 
 ```vue
 <script setup lang="ts">
-import { useCreateDataSource } from '@/api/resource/composables';
+import { createDataSource } from '@/api/resource/api';
 import type { TDataResourceDetail } from '@/api/resource/types';
 
 const handleSave = async () => {
@@ -1071,10 +1043,10 @@ const handleSave = async () => {
     // ... 데이터
   };
 
-  const { data, error } = await useCreateDataSource(body);
+  const { data, error } = await createDataSource(body);
 
   if (error) {
-    // 에러는 useClientFetch 내부에서 처리됨
+    // 에러는 useApi 내부에서 처리됨
     return;
   }
 

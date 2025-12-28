@@ -8,7 +8,7 @@ import type {
   TExperienceUpdate,
   TExperienceListParams,
   TPageResponse,
-  TExperienceStats,
+  TExperienceStatsSummary,
 } from './types';
 
 /**
@@ -65,21 +65,11 @@ export const deleteExperience = (id: string) => {
 };
 
 /**
- * 경험 통계 조회
- * TODO: 백엔드 API 구현 필요 (현재 Mock 데이터 반환)
+ * 경험 통계 요약 조회
  */
-export const fetchExperienceStats = () => {
-  // return useApi<TExperienceStats>({
-  //   url: '/api/experiences/stats',
-  //   method: HttpMethod.GET,
-  // });
-  return Promise.resolve({
-    data: {
-      total: 0,
-      completed: 0,
-      needsImprovement: 0,
-      aiAnalyzed: 0,
-    },
-    error: null,
+export const fetchExperienceStatsSummary = () => {
+  return useApi<TExperienceStatsSummary>({
+    url: '/api/experiences/stats/summary',
+    method: HttpMethod.GET,
   });
 };

@@ -150,9 +150,9 @@
           </div>
         </Card>
 
-        <!-- 핵심 경험 블록 -->
+        <!-- 핵심 성과 블록 -->
         <Card
-          title="핵심 경험"
+          title="핵심 성과"
           icon="mdi-star-circle"
           icon-color="linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
         >
@@ -160,7 +160,7 @@
             <div class="form-field full-width">
               <TextArea
                 v-model="formData.impactSummary"
-                placeholder="이 경험을 통해 얻은 경험와 영향을 간략히 설명하세요"
+                placeholder="이 경험을 통해 얻은 성과와 영향을 간략히 설명하세요"
                 :rows="3"
               />
             </div>
@@ -275,7 +275,7 @@
               <TextArea
                 v-model="section.content"
                 placeholder="Help 버튼을 눌러서 작성 가이드를 확인하세요"
-                :rows="8"
+                :rows="5"
               />
             </div>
           </div>

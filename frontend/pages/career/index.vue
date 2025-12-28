@@ -41,16 +41,16 @@
       <div class="career-list-stat-divider" />
       <div class="career-list-stat-item">
         <div class="career-list-stat-number">{{ stats.completed }}</div>
-        <div class="career-list-stat-label">완료</div>
+        <div class="career-list-stat-label">작성 완료</div>
       </div>
       <div class="career-list-stat-divider" />
       <div class="career-list-stat-item">
-        <div class="career-list-stat-number">{{ stats.needsImprovement }}</div>
+        <div class="career-list-stat-number">{{ stats.incomplete }}</div>
         <div class="career-list-stat-label">보완 필요</div>
       </div>
       <div class="career-list-stat-divider" />
       <div class="career-list-stat-item">
-        <div class="career-list-stat-number">{{ stats.aiAnalyzed }}</div>
+        <div class="career-list-stat-number">{{ stats.analyzed }}</div>
         <div class="career-list-stat-label">AI 분석 완료</div>
       </div>
     </div>
@@ -69,24 +69,38 @@
           경험 등록
         </Button>
       </div>
-      <div class="career-list-sort-wrapper">
-        <label class="career-list-sort-label">정렬:</label>
-        <Select
-          v-model="sortOption"
-          :items="sortOptions"
-          :size="FormSize.Compact"
-          :variant="FormVariant.Outlined"
-          class="career-list-sort-select-component"
-        />
-        <button
-          :title="sortDirection === 'DESC' ? '내림차순' : '오름차순'"
-          class="career-list-sort-direction-button"
-          @click="toggleSortDirection"
-        >
-          <v-icon>
-            {{ sortDirection === 'DESC' ? 'mdi-sort-descending' : 'mdi-sort-ascending' }}
-          </v-icon>
-        </button>
+      
+      <div class="career-list-filter-bar">
+        <div class="career-list-filter-item">
+          <label class="career-list-filter-label">상태:</label>
+          <Select
+            v-model="statusFilter"
+            :items="statusOptions"
+            :size="FormSize.Compact"
+            :variant="FormVariant.Outlined"
+            class="career-list-status-select"
+          />
+        </div>
+
+        <div class="career-list-sort-wrapper">
+          <label class="career-list-sort-label">정렬:</label>
+          <Select
+            v-model="sortOption"
+            :items="sortOptions"
+            :size="FormSize.Compact"
+            :variant="FormVariant.Outlined"
+            class="career-list-sort-select-component"
+          />
+          <button
+            :title="sortDirection === 'DESC' ? '내림차순' : '오름차순'"
+            class="career-list-sort-direction-button"
+            @click="toggleSortDirection"
+          >
+            <v-icon>
+              {{ sortDirection === 'DESC' ? 'mdi-sort-descending' : 'mdi-sort-ascending' }}
+            </v-icon>
+          </button>
+        </div>
       </div>
 
       <Table
@@ -109,14 +123,15 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { ExperienceStatus } from '@/types/experience-types';
+import { ExperienceStatus, STATUS_INFO } from '@/types/experience-types';
+import type { TExperienceStatsSummary } from '@/types/experience-types';
 import type {
   TExperience,
   TExperienceListParams,
   SortDirection,
   ExperienceSortKey,
 } from '~/api/experience/types';
-import { fetchExperiences } from '~/api/experience/api';
+import { fetchExperiences, fetchExperienceStatsSummary } from '~/api/experience/api';
 import Table from '@/components/organisms/Table/Table.vue';
 import Select from '@/components/atoms/Select/Select.vue';
 import type { TSelectItem } from '@/components/atoms/Select/Select.vue';
@@ -128,19 +143,29 @@ definePageMeta({
   layout: 'default',
 });
 
-// 통계 데이터 (하드코딩)
-const stats = ref({
+// 통계 데이터
+const stats = ref<TExperienceStatsSummary>({
   total: 0,
-  completed: 2,
-  needsImprovement: 5,
-  aiAnalyzed: 1,
+  incomplete: 0,
+  completed: 0,
+  analyzing: 0,
+  analyzed: 0,
 });
 
-// Sort 옵션
+// Filter & Sort 옵션
+const statusFilter = ref<ExperienceStatus | 'ALL'>('ALL');
 const sortOption = ref<ExperienceSortKey>('UPDATED_AT');
 const sortDirection = ref<SortDirection>('DESC');
 
 // Select 옵션 목록
+const statusOptions: TSelectItem[] = [
+  { title: '전체', value: 'ALL' },
+  { title: '보완 필요', value: ExperienceStatus.INCOMPLETE },
+  { title: '작성 완료', value: ExperienceStatus.COMPLETED },
+  { title: 'AI 분석 중', value: ExperienceStatus.ANALYZING },
+  { title: '분석 완료', value: ExperienceStatus.ANALYZED },
+];
+
 const sortOptions: TSelectItem[] = [
   { title: '수정일', value: 'UPDATED_AT' },
   { title: '프로젝트 기간', value: 'DURATION_START' },
@@ -155,7 +180,8 @@ const apiParams = computed<TExperienceListParams>(() => {
   return {
     p: 1,
     size: 100, // 전체 조회
-    sortKey: sortOption.value, // Java enum 값 직접 사용
+    status: statusFilter.value === 'ALL' ? undefined : statusFilter.value as ExperienceStatus,
+    sortKey: sortOption.value,
     sortDir: sortDirection.value,
   };
 });
@@ -163,6 +189,14 @@ const apiParams = computed<TExperienceListParams>(() => {
 // 정렬 순서 토글
 const toggleSortDirection = () => {
   sortDirection.value = sortDirection.value === 'DESC' ? 'ASC' : 'DESC';
+};
+
+// 통계 조회
+const loadStats = async () => {
+  const { data, error } = await fetchExperienceStatsSummary();
+  if (!error && data) {
+    stats.value = data;
+  }
 };
 
 // 경험 목록 조회
@@ -178,7 +212,6 @@ const loadExperiences = async () => {
 
     if (data) {
       experiences.value = data.list;
-      stats.value.total = data.total;
     }
   } finally {
     isLoading.value = false;
@@ -186,10 +219,11 @@ const loadExperiences = async () => {
 };
 
 // 초기 로드
+loadStats();
 loadExperiences();
 
-// sortOption, sortDirection 변경 시 재조회
-watch([sortOption, sortDirection], () => {
+// 파라미터 변경 시 재조회
+watch([statusFilter, sortOption, sortDirection], () => {
   loadExperiences();
 });
 
@@ -199,36 +233,27 @@ const handleRegister = () => {
 
 const handleAiAnalysis = () => {
   console.log('AI 커리어 분석 클릭');
-  // TODO: AI 분석 페이지로 이동
 };
 
 const handleDashboard = () => {
   console.log('현재 분석 결과 대시보드 클릭');
-  // TODO: 대시보드 페이지로 이동
 };
 
 const handleExport = () => {
   console.log('내 전체 커리어 Export 클릭');
-  // TODO: Export 기능 구현
 };
 
-// Part3 테이블 관련 함수
+// 테이블 관련 함수
 const handleRowClick = (row: TExperience) => {
   navigateTo(`/career/${row.id}`);
 };
 
-const getStatusDisplay = (status: string) => {
-  if (status === ExperienceStatus.DRAFT) return '작성중';
-  if (status === ExperienceStatus.PUBLISHED) return '완료';
-  if (status === ExperienceStatus.ARCHIVED) return '보관';
-  return status;
+const getStatusDisplay = (status: any) => {
+  return STATUS_INFO[status as ExperienceStatus]?.display || status;
 };
 
-const getStatusClass = (status: string) => {
-  if (status === ExperienceStatus.DRAFT) return 'status-draft';
-  if (status === ExperienceStatus.PUBLISHED) return 'status-published';
-  if (status === ExperienceStatus.ARCHIVED) return 'status-archived';
-  return '';
+const getStatusClass = (status: any) => {
+  return STATUS_INFO[status as ExperienceStatus]?.color || '';
 };
 </script>
 

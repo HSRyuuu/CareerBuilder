@@ -6,6 +6,7 @@ import type {
   ExperienceStatus,
   WorkType,
   ContributionLevel,
+  TExperienceStatsSummary,
 } from '@/types/experience-types';
 
 /**
@@ -115,6 +116,7 @@ export type SortDirection = 'ASC' | 'DESC';
  */
 export type TExperienceListParams = {
   q?: string; // 검색 키워드
+  status?: ExperienceStatus; // 상태 필터
   p?: number; // 페이지 번호 (1부터 시작)
   size?: number; // 페이지 크기
   sortKey?: ExperienceSortKey; // 정렬 키
@@ -133,11 +135,7 @@ export type TPageResponse<T> = {
 };
 
 /**
- * 경험 통계 응답 타입
+ * 경험 통계 응답 타입 (Alias for TExperienceStatsSummary)
  */
-export type TExperienceStats = {
-  total: number;
-  completed: number;
-  needsImprovement: number;
-  aiAnalyzed: number;
-};
+export type { TExperienceStatsSummary };
+export type TExperienceStats = TExperienceStatsSummary;

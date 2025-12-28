@@ -185,7 +185,7 @@ com.hsryuuu.careerbuilder/
 
 작업 시작 전:
 - [ ] `frontend/convention.md` 파일을 확인했는가?
-- [ ] API 구조 4개 파일 (api.ts, composables.ts, types.ts, keys.ts)를 생성했는가?
+- [ ] API 구조 3개 파일 (api.ts, types.ts, keys.ts)를 생성했는가?
 - [ ] Type 이름은 T prefix를 사용했는가?
 - [ ] Composable 함수는 use prefix를 사용했는가?
 

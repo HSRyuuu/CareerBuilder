@@ -55,7 +55,7 @@
         </div>
         <div class="stat-info">
           <span class="stat-label">보완 필요</span>
-          <h2 class="stat-value">{{ stats?.needsImprovement || 0 }}</h2>
+          <h2 class="stat-value">{{ stats?.incomplete || 0 }}</h2>
         </div>
       </Card>
       <Card class="stat-card">
@@ -64,7 +64,7 @@
         </div>
         <div class="stat-info">
           <span class="stat-label">AI 분석 완료</span>
-          <h2 class="stat-value">{{ stats?.aiAnalyzed || 0 }}</h2>
+          <h2 class="stat-value">{{ stats?.analyzed || 0 }}</h2>
         </div>
       </Card>
     </div>
@@ -145,11 +145,11 @@ import { ref, onMounted } from 'vue';
 // 2. 프로젝트 내부 import
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
 
-// 3. API/Composables import
-import { fetchExperiences, fetchExperienceStats } from '~/api/experience/api';
+// 3. API import
+import { fetchExperiences, fetchExperienceStatsSummary } from '~/api/experience/api';
 
 // 4. Type import
-import type { TExperience, TExperienceStats } from '~/api/experience/types';
+import type { TExperience, TExperienceStatsSummary } from '~/api/experience/types';
 // 5. 로컬 컴포넌트 import
 import Button from '@/components/atoms/Button/Button.vue';
 import Card from '@/components/molecules/Card/Card.vue';
@@ -159,13 +159,13 @@ definePageMeta({
   layout: 'default',
 });
 
-const stats = ref<TExperienceStats | null>(null);
+const stats = ref<TExperienceStatsSummary | null>(null);
 const recentExperiences = ref<TExperience[]>([]);
 
 // 11. 함수 선언
 const loadDashboardData = async () => {
   const [statsRes, listRes] = await Promise.all([
-    fetchExperienceStats(),
+    fetchExperienceStatsSummary(),
     fetchExperiences({ size: 5, sortKey: 'UPDATED_AT', sortDir: 'DESC' }),
   ]);
 
