@@ -9,7 +9,7 @@ import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceSectio
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
 import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
 import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceRepository
-import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceSectionRepository
+import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import com.hsryuuu.careerbuilder.domain.user.appuser.repository.AppUserRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
@@ -20,14 +20,12 @@ import java.util.*
 @Service
 class ExperienceService(
     private val experienceRepository: ExperienceRepository,
-    private val experienceSectionRepository: ExperienceSectionRepository,
-    private val appUserRepository: AppUserRepository
+    private val userRepository: AppUserRepository
 ) {
 
     @Transactional
     fun createExperience(userId: UUID, request: CreateExperienceRequest): ExperienceResponse {
-        val user = appUserRepository.findByIdOrNull(userId)
-            ?: throw GlobalException(ErrorCode.MEMBER_NOT_FOUND)
+        val user = getReferenceUser(userId)
 
         val experience = CreateExperienceRequest.createEntity(user, request)
         request.sections.forEach { sectionRequest ->
@@ -50,14 +48,12 @@ class ExperienceService(
         sort: ExperienceSortKey,
         sortDirection: SortDirection? = SortDirection.DESC
     ): CommonPageResponse<ExperienceResponse> {
-        val user = appUserRepository.findByIdOrNull(userId)
-            ?: throw GlobalException(ErrorCode.MEMBER_NOT_FOUND)
 
         val pageRequest = PageRequest.of(page, pageSize)
 
         // QueryDSL 기반 검색 실행
         val experiencePage =
-            experienceRepository.searchExperience(user, searchKeyword, status, sort, sortDirection, pageRequest)
+            experienceRepository.searchExperience(userId, searchKeyword, status, sort, sortDirection, pageRequest)
 
         // Entity를 Response로 변환
         return CommonPageResponse.from(experiencePage) { experience ->
@@ -67,16 +63,16 @@ class ExperienceService(
 
 
     @Transactional(readOnly = true)
-    fun getExperience(id: UUID, userId: UUID): ExperienceResponse {
-        val experience = experienceRepository.findByIdOrNull(id)
+    fun getExperience(experienceId: UUID, userId: UUID): ExperienceResponse {
+        val experience = experienceRepository.findByIdOrNull(experienceId)
             ?: throw GlobalException(ErrorCode.EXPERIENCE_NOT_FOUND)
 
+        // 권한 체크
         if (experience.user.id != userId) {
             throw GlobalException(ErrorCode.FORBIDDEN)
         }
 
-        val sections = experienceSectionRepository.findByExperienceIdOrderBySortOrderAsc(id)
-        return ExperienceResponse.fromEntity(experience, sections)
+        return ExperienceResponse.fromEntity(experience, experience.sections)
     }
 
     @Transactional(readOnly = true)
@@ -85,14 +81,6 @@ class ExperienceService(
         val result = experienceRepository.getExperienceWithAnalysis(experienceId, userId)
         if (result != null) {
             return result
-        }
-
-        // 결과가 없을 경우, 에러 원인 파악을 위해 추가 조회
-        val experience = experienceRepository.findByIdOrNull(experienceId)
-            ?: throw GlobalException(ErrorCode.EXPERIENCE_NOT_FOUND)
-
-        if (experience.user.id != userId) {
-            throw GlobalException(ErrorCode.FORBIDDEN)
         }
 
         throw GlobalException(ErrorCode.EXPERIENCE_NOT_FOUND)
@@ -104,6 +92,7 @@ class ExperienceService(
         val experience = experienceRepository.findByIdOrNull(id)
             ?: throw GlobalException(ErrorCode.EXPERIENCE_NOT_FOUND)
 
+        // 권한 체크
         if (experience.user.id != userId) {
             throw GlobalException(ErrorCode.FORBIDDEN)
         }
@@ -173,10 +162,13 @@ class ExperienceService(
 
     @Transactional(readOnly = true)
     fun getStatsSummary(userId: UUID): ExperienceStatsSummary {
-        val user = appUserRepository.findByIdOrNull(userId)
+        val user = userRepository.findByIdOrNull(userId)
             ?: throw GlobalException(ErrorCode.MEMBER_NOT_FOUND)
 
         return experienceRepository.getStatsSummary(user)
     }
+
+    fun getReferenceUser(userId: UUID): AppUser = userRepository.getReferenceById(userId)
+
 
 }

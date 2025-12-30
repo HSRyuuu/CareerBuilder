@@ -28,7 +28,7 @@ class CustomExperienceRepositoryImpl(
     private val experience = QExperience.experience
 
     override fun searchExperience(
-        user: AppUser,
+        userId: UUID,
         searchKeyword: String?,
         status: ExperienceStatus?,
         sortKey: ExperienceSortKey,
@@ -43,7 +43,7 @@ class CustomExperienceRepositoryImpl(
         // 데이터 조회
         val results = queryFactory
             .selectFrom(experience)
-            .where(experience.user.eq(user), searchCondition, statusCondition)
+            .where(experience.user.id.eq(userId), searchCondition, statusCondition)
             .orderBy(*orderSpecifiers.toTypedArray())
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())

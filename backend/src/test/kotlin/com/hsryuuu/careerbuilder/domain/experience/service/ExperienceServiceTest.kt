@@ -19,7 +19,6 @@ import com.hsryuuu.careerbuilder.domain.experience.model.entity.SectionKind
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.WorkCategory
 import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
 import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceRepository
-import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceSectionRepository
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import com.hsryuuu.careerbuilder.domain.user.appuser.repository.AppUserRepository
 import com.hsryuuu.careerbuilder.generator.TestDataGenerator
@@ -43,9 +42,6 @@ class ExperienceServiceTest {
 
     @Autowired
     private lateinit var experienceRepository: ExperienceRepository
-
-    @Autowired
-    private lateinit var experienceSectionRepository: ExperienceSectionRepository
 
     @Autowired
     private lateinit var aiExperienceAnalysisRepository: AiExperienceAnalysisRepository
@@ -176,23 +172,6 @@ class ExperienceServiceTest {
         assertThat(response.sections).isEmpty()
     }
 
-    @Test
-    @DisplayName("[FAIL] 경험 생성 - 존재하지 않는 사용자로 실패")
-    fun createExperience_존재하지_않는_사용자로_실패() {
-        // Arrange
-        val nonExistentUserId = UUID.randomUUID()
-        val request = CreateExperienceRequest(
-            title = "테스트 경험",
-            periodStart = "2024-01",
-        )
-
-        // Act & Assert
-        assertThatThrownBy {
-            experienceService.createExperience(nonExistentUserId, request)
-        }
-            .isInstanceOf(GlobalException::class.java)
-            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.MEMBER_NOT_FOUND)
-    }
 
     @Test
     @DisplayName("[FAIL] 경험 생성 - 기간 순서가 잘못되어 실패")
@@ -247,27 +226,6 @@ class ExperienceServiceTest {
     }
 
     @Test
-    @DisplayName("[FAIL] 경험 검색 - 존재하지 않는 사용자로 실패")
-    fun searchExperience_사용자_없음_실패() {
-        // Arrange
-        val nonExistentUserId = UUID.randomUUID()
-
-        // Act & Assert
-        assertThatThrownBy {
-            experienceService.searchExperience(
-                userId = nonExistentUserId,
-                searchKeyword = null,
-                status = null,
-                page = 0,
-                pageSize = 10,
-                sort = ExperienceSortKey.UPDATED_AT
-            )
-        }
-            .isInstanceOf(GlobalException::class.java)
-            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.MEMBER_NOT_FOUND)
-    }
-
-    @Test
     @DisplayName("[SUCCESS] 경험 조회 - 본인 경험 조회 성공")
     fun getExperience_조회_성공() {
         // Arrange
@@ -311,15 +269,17 @@ class ExperienceServiceTest {
         )
 
         // 3. 이전 AI Analysis 생성
-        aiExperienceAnalysisRepository.save(AiExperienceAnalysis(
-            requestId = aiRequest.id,
-            experienceId = createdExp.id,
-            totalScore = 50,
-            scoreMetrics = ScoreMetrics(50, 50, 50, 50),
-            overallSummary = "Old summary",
-            overallFeedback = "Old feedback"
-        ))
-        
+        aiExperienceAnalysisRepository.save(
+            AiExperienceAnalysis(
+                requestId = aiRequest.id,
+                experienceId = createdExp.id,
+                totalScore = 50,
+                scoreMetrics = ScoreMetrics(50, 50, 50, 50),
+                overallSummary = "Old summary",
+                overallFeedback = "Old feedback"
+            )
+        )
+
         Thread.sleep(10) // 시간차를 두기 위함
 
         // 4. 최신 AI Analysis 생성
@@ -351,7 +311,7 @@ class ExperienceServiceTest {
         assertThat(result.analysis).isNotNull
         assertThat(result.analysis?.totalScore).isEqualTo(85) // 최신 점수여야 함
         assertThat(result.analysis?.overallSummary).isEqualTo("New summary")
-        
+
         // Sections 확인
         assertThat(result.sections).hasSize(1)
         assertThat(result.sections[0].section.id).isEqualTo(sectionId)

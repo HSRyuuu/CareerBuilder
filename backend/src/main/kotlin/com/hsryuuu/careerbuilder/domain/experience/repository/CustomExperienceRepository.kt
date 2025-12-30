@@ -20,7 +20,7 @@ interface CustomExperienceRepository {
      * @return Page<Experience>
      */
     fun searchExperience(
-        user: AppUser,
+        userId: UUID,
         searchKeyword: String?,
         status: ExperienceStatus?,
         sortKey: ExperienceSortKey,
