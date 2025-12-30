@@ -2,15 +2,14 @@ package com.hsryuuu.careerbuilder.domain.experience.service
 
 import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
-import com.hsryuuu.careerbuilder.common.dto.type.SortDirection
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateExperienceRequest
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateSectionRequest
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.UpdateExperienceRequest
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.UpdateSectionRequest
-import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.ContributionLevel
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.SectionKind
-import com.hsryuuu.careerbuilder.domain.experience.model.entity.WorkType
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.WorkCategory
 import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
 import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceRepository
 import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceSectionRepository
@@ -25,7 +24,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 import java.util.*
 
 @SpringBootTest
@@ -74,14 +72,14 @@ class ExperienceServiceTest {
         // Arrange
         val request = CreateExperienceRequest(
             title = "테스트 경험",
-            orgName = "테스트 조직",
-            durationStart = LocalDate.of(2024, 1, 1),
-            durationEnd = LocalDate.of(2024, 12, 31),
-            impactSummary = "영향 요약",
+            background = "테스트 조직",
+            periodStart = "2024-01",
+            periodEnd = "2024-12",
+            keyAchievements = "영향 요약",
             goalSummary = "목표 요약",
             status = ExperienceStatus.INCOMPLETE,
-            roleTitle = "개발자",
-            workType = WorkType.PROJECT,
+            role = "개발자",
+            category = WorkCategory.PROJECT,
             contributionLevel = ContributionLevel.OWNER,
             skills = "Kotlin, Spring Boot",
             sections = listOf(
@@ -113,14 +111,14 @@ class ExperienceServiceTest {
         assertThat(response.id).isNotNull
         assertThat(response.userId).isEqualTo(testUser.id)
         assertThat(response.title).isEqualTo("테스트 경험")
-        assertThat(response.orgName).isEqualTo("테스트 조직")
-        assertThat(response.durationStart).isEqualTo(LocalDate.of(2024, 1, 1))
-        assertThat(response.durationEnd).isEqualTo(LocalDate.of(2024, 12, 31))
-        assertThat(response.impactSummary).isEqualTo("영향 요약")
+        assertThat(response.background).isEqualTo("테스트 조직")
+        assertThat(response.periodStart).isEqualTo("2024-01")
+        assertThat(response.periodEnd).isEqualTo("2024-12")
+        assertThat(response.keyAchievements).isEqualTo("영향 요약")
         assertThat(response.goalSummary).isEqualTo("목표 요약")
         assertThat(response.status).isEqualTo(ExperienceStatus.INCOMPLETE)
-        assertThat(response.roleTitle).isEqualTo("개발자")
-        assertThat(response.workType).isEqualTo(WorkType.PROJECT)
+        assertThat(response.role).isEqualTo("개발자")
+        assertThat(response.category).isEqualTo(WorkCategory.PROJECT)
         assertThat(response.contributionLevel).isEqualTo(ContributionLevel.OWNER)
         assertThat(response.skills).isEqualTo("Kotlin, Spring Boot")
         assertThat(response.sections.size).isEqualTo(3)
@@ -132,14 +130,14 @@ class ExperienceServiceTest {
         // Arrange
         val request = CreateExperienceRequest(
             title = "테스트 경험",
-            orgName = "테스트 조직",
-            durationStart = LocalDate.of(2024, 1, 1),
-            durationEnd = LocalDate.of(2024, 12, 31),
-            impactSummary = "영향 요약",
+            background = "테스트 조직",
+            periodStart = "2024-01",
+            periodEnd = "2024-12",
+            keyAchievements = "영향 요약",
             goalSummary = "목표 요약",
             status = ExperienceStatus.INCOMPLETE,
-            roleTitle = "개발자",
-            workType = WorkType.PROJECT,
+            role = "개발자",
+            category = WorkCategory.PROJECT,
             contributionLevel = ContributionLevel.OWNER,
             skills = "Kotlin, Spring Boot",
             sections = emptyList()
@@ -152,14 +150,14 @@ class ExperienceServiceTest {
         assertThat(response.id).isNotNull
         assertThat(response.userId).isEqualTo(testUser.id)
         assertThat(response.title).isEqualTo("테스트 경험")
-        assertThat(response.orgName).isEqualTo("테스트 조직")
-        assertThat(response.durationStart).isEqualTo(LocalDate.of(2024, 1, 1))
-        assertThat(response.durationEnd).isEqualTo(LocalDate.of(2024, 12, 31))
-        assertThat(response.impactSummary).isEqualTo("영향 요약")
+        assertThat(response.background).isEqualTo("테스트 조직")
+        assertThat(response.periodStart).isEqualTo("2024-01")
+        assertThat(response.periodEnd).isEqualTo("2024-12")
+        assertThat(response.keyAchievements).isEqualTo("영향 요약")
         assertThat(response.goalSummary).isEqualTo("목표 요약")
         assertThat(response.status).isEqualTo(ExperienceStatus.INCOMPLETE)
-        assertThat(response.roleTitle).isEqualTo("개발자")
-        assertThat(response.workType).isEqualTo(WorkType.PROJECT)
+        assertThat(response.role).isEqualTo("개발자")
+        assertThat(response.category).isEqualTo(WorkCategory.PROJECT)
         assertThat(response.contributionLevel).isEqualTo(ContributionLevel.OWNER)
         assertThat(response.skills).isEqualTo("Kotlin, Spring Boot")
         assertThat(response.sections).isEmpty()
@@ -172,7 +170,7 @@ class ExperienceServiceTest {
         val nonExistentUserId = UUID.randomUUID()
         val request = CreateExperienceRequest(
             title = "테스트 경험",
-            durationStart = LocalDate.of(2024, 1, 1)
+            periodStart = "2024-01",
         )
 
         // Act & Assert
@@ -189,8 +187,8 @@ class ExperienceServiceTest {
         // Arrange
         val request = CreateExperienceRequest(
             title = "테스트 경험",
-            durationStart = LocalDate.of(2024, 12, 1),
-            durationEnd = LocalDate.of(2024, 1, 1)
+            periodStart = "2024-12",
+            periodEnd = "2024-01",
         )
 
         // Act & Assert
@@ -208,14 +206,14 @@ class ExperienceServiceTest {
         val experience1 = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "Backend Development",
-                durationStart = LocalDate.of(2023, 1, 1),
+                periodStart = "2023-01",
                 status = ExperienceStatus.COMPLETED
             )
         )
         val experience2 = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "Frontend Development",
-                durationStart = LocalDate.of(2023, 6, 1),
+                periodStart = "2023-06",
                 status = ExperienceStatus.INCOMPLETE
             )
         )
@@ -263,7 +261,7 @@ class ExperienceServiceTest {
         val created = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "My Experience",
-                durationStart = LocalDate.of(2023, 1, 1)
+                periodStart = "2023-01",
             )
         )
 
@@ -296,7 +294,7 @@ class ExperienceServiceTest {
         val created = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "User1 Experience",
-                durationStart = LocalDate.of(2023, 1, 1)
+                periodStart = "2023-01",
             )
         )
 
@@ -315,7 +313,7 @@ class ExperienceServiceTest {
         val created = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "Old Title",
-                durationStart = LocalDate.of(2023, 1, 1),
+                periodStart = "2023-01",
                 sections = listOf(
                     CreateSectionRequest(title = "Old Section", content = "Old Content")
                 )
@@ -325,7 +323,7 @@ class ExperienceServiceTest {
 
         val updateRequest = UpdateExperienceRequest(
             title = "New Title",
-            durationStart = LocalDate.of(2023, 1, 1),
+            periodStart = "2023-01",
             sections = listOf(
                 UpdateSectionRequest(
                     id = sectionId,
@@ -358,7 +356,7 @@ class ExperienceServiceTest {
         val nonExistentId = UUID.randomUUID()
         val updateRequest = UpdateExperienceRequest(
             title = "New Title",
-            durationStart = LocalDate.of(2023, 1, 1)
+            periodStart = "2023-01",
         )
 
         // Act & Assert
@@ -376,12 +374,12 @@ class ExperienceServiceTest {
         val created = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "My Experience",
-                durationStart = LocalDate.of(2023, 1, 1)
+                periodStart = "2023-01",
             )
         )
         val updateRequest = UpdateExperienceRequest(
             title = "Hacked Title",
-            durationStart = LocalDate.of(2023, 1, 1)
+            periodStart = "2023-01",
         )
 
         // Act & Assert
@@ -399,13 +397,13 @@ class ExperienceServiceTest {
         val created = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "My Experience",
-                durationStart = LocalDate.of(2023, 1, 1)
+                periodStart = "2023-01",
             )
         )
         val updateRequest = UpdateExperienceRequest(
             title = "My Experience",
-            durationStart = LocalDate.of(2023, 12, 1),
-            durationEnd = LocalDate.of(2023, 1, 1)
+            periodStart = "2023-12",
+            periodEnd = "2023-01",
         )
 
         // Act & Assert
@@ -423,7 +421,7 @@ class ExperienceServiceTest {
         val created = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "To be deleted",
-                durationStart = LocalDate.of(2023, 1, 1)
+                periodStart = "2023-01",
             )
         )
 
@@ -459,7 +457,7 @@ class ExperienceServiceTest {
         val created = experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "My Experience",
-                durationStart = LocalDate.of(2023, 1, 1)
+                periodStart = "2023-01",
             )
         )
 
@@ -478,14 +476,14 @@ class ExperienceServiceTest {
         experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "Exp 1",
-                durationStart = LocalDate.of(2023, 1, 1),
+                periodStart = "2023-01",
                 status = ExperienceStatus.INCOMPLETE
             )
         )
         experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "Exp 2",
-                durationStart = LocalDate.of(2023, 1, 1),
+                periodStart = "2023-01",
                 status = ExperienceStatus.COMPLETED
             )
         )

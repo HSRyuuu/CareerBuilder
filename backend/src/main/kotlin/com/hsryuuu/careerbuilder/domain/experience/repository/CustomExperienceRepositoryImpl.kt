@@ -103,7 +103,7 @@ class CustomExperienceRepositoryImpl(
 
         val keyword = searchKeyword.lowercase()
         return experience.title.lower().contains(keyword)
-            .or(experience.orgName.lower().contains(keyword))
+            .or(experience.background.lower().contains(keyword))
     }
 
     /**
@@ -122,7 +122,7 @@ class CustomExperienceRepositoryImpl(
 
         // 1차 정렬 기준: sortKey 에 따라 createdAt / updatedAt
         val primary = when (sortKey) {
-            ExperienceSortKey.DURATION_START -> OrderSpecifier(direction, experience.durationStart)
+            ExperienceSortKey.DURATION_START -> OrderSpecifier(direction, experience.periodStart)
             ExperienceSortKey.UPDATED_AT -> OrderSpecifier(direction, experience.updatedAt)
         }
 

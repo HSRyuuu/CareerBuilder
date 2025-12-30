@@ -8,7 +8,6 @@ import org.hibernate.annotations.UuidGenerator
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -27,31 +26,31 @@ class Experience(
     @Column(nullable = false, columnDefinition = "TEXT")
     var title: String,
 
-    @Column(name = "org_name", columnDefinition = "TEXT")
-    var orgName: String? = null,
+    @Column(name = "background", columnDefinition = "TEXT")
+    var background: String? = null, // 배경, 환경
 
-    @Column(name = "duration_start", nullable = false)
-    var durationStart: LocalDate,
+    @Column(name = "period_start", nullable = false)
+    var periodStart: String,
 
-    @Column(name = "duration_end")
-    var durationEnd: LocalDate? = null,
+    @Column(name = "period_end")
+    var periodEnd: String? = null,
 
-    @Column(name = "impact_summary", columnDefinition = "TEXT")
-    var impactSummary: String? = null,
+    @Column(name = "key_achievements", columnDefinition = "TEXT")
+    var keyAchievements: String? = null, // 핵심 성과
 
     @Column(name = "goal_summary", columnDefinition = "TEXT")
-    var goalSummary: String? = null,
+    var goalSummary: String? = null, // 목표
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     var status: ExperienceStatus = ExperienceStatus.INCOMPLETE,
 
-    @Column(name = "role_title")
-    var roleTitle: String? = null,
+    @Column(name = "role")
+    var role: String? = null,
 
     @Column(name = "work_type")
     @Enumerated(EnumType.STRING)
-    var workType: WorkType? = null,
+    var category: WorkCategory? = null,
 
     @Column(name = "contribution_level")
     @Enumerated(EnumType.STRING)
@@ -89,29 +88,29 @@ class Experience(
      */
     fun update(
         title: String,
-        orgName: String?,
-        durationStart: LocalDate,
-        durationEnd: LocalDate?,
-        impactSummary: String?,
+        background: String?,
+        periodStart: String,
+        periodEnd: String?,
+        keyAchievements: String?,
         goalSummary: String?,
-        roleTitle: String?,
-        workType: WorkType?,
+        role: String?,
+        category: WorkCategory?,
         contributionLevel: ContributionLevel?,
         skills: String?
     ) {
-        // durationStart는 durationEnd보다 앞서야 함
-        if (durationEnd != null && !durationStart.isBefore(durationEnd)) {
+        // periodStart는 periodEnd보다 앞서야 함
+        if (periodEnd != null && periodStart > periodEnd) {
             throw GlobalException(ErrorCode.VALIDATION_ERROR_DURATION_SEQUENCE)
         }
 
         this.title = title
-        this.orgName = orgName
-        this.durationStart = durationStart
-        this.durationEnd = durationEnd
-        this.impactSummary = impactSummary
+        this.background = background
+        this.periodStart = periodStart
+        this.periodEnd = periodEnd
+        this.keyAchievements = keyAchievements
         this.goalSummary = goalSummary
-        this.roleTitle = roleTitle
-        this.workType = workType
+        this.role = role
+        this.category = category
         this.contributionLevel = contributionLevel
         this.skills = skills
     }
@@ -141,7 +140,7 @@ enum class ExperienceStatus(val description: String) {
     ANALYZED("분석 완료")
 }
 
-enum class WorkType {
+enum class WorkCategory {
     PROJECT, // 3개월짜리 프로젝트
     OPERATION, // 상시 업무 개선
     INCIDENT, // 장애 대응

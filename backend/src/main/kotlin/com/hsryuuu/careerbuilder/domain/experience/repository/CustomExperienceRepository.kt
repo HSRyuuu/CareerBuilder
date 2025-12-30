@@ -13,7 +13,7 @@ interface CustomExperienceRepository {
     /**
      * 경험 검색 (QueryDSL 기반)
      *
-     * @param searchKeyword 검색어 (title 또는 orgName)
+     * @param searchKeyword 검색어 (title 또는 background)
      * @param pageable 페이징 및 정렬 정보
      * @return Page<Experience>
      */

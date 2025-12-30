@@ -4,7 +4,7 @@
 import type {
   ExperienceSectionKind,
   ExperienceStatus,
-  WorkType,
+  category,
   ContributionLevel,
   TExperienceStatsSummary,
 } from '@/types/experience-types';
@@ -48,14 +48,14 @@ export type TExperienceSection = {
  */
 export type TExperienceCreate = {
   title: string;
-  orgName?: string;
-  roleTitle?: string;
-  durationStart: string;
-  durationEnd?: string;
-  workType?: WorkType | string;
+  background?: string;
+  role?: string;
+  periodStart: string;
+  periodEnd?: string;
+  category?: category | string;
   contributionLevel?: ContributionLevel | string;
   goalSummary?: string;
-  impactSummary?: string;
+  keyAchievements?: string;
   skills?: string;
   status?: ExperienceStatus | string;
   sections: TExperienceSectionCreate[];
@@ -66,14 +66,14 @@ export type TExperienceCreate = {
  */
 export type TExperienceUpdate = {
   title: string;
-  orgName?: string;
-  roleTitle?: string;
-  durationStart: string;
-  durationEnd?: string;
-  workType?: WorkType | string;
+  background?: string;
+  role?: string;
+  periodStart: string;
+  periodEnd?: string;
+  category?: category | string;
   contributionLevel?: ContributionLevel | string;
   goalSummary?: string;
-  impactSummary?: string;
+  keyAchievements?: string;
   skills?: string;
   status?: ExperienceStatus | string;
   sections: TExperienceSectionUpdate[];
@@ -86,14 +86,14 @@ export type TExperience = {
   id: string;
   userId: string;
   title: string;
-  orgName?: string;
-  roleTitle?: string;
-  durationStart: string;
-  durationEnd?: string;
-  workType?: WorkType | string;
+  background?: string;
+  role?: string;
+  periodStart: string;
+  periodEnd?: string;
+  category?: category | string;
   contributionLevel?: ContributionLevel | string;
   goalSummary?: string;
-  impactSummary?: string;
+  keyAchievements?: string;
   skills?: string;
   status: ExperienceStatus | string;
   createdAt: string;

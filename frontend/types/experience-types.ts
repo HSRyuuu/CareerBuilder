@@ -171,7 +171,7 @@ export type TExperienceStatsSummary = {
 /**
  * 업무 유형
  */
-export enum WorkType {
+export enum category {
   PROJECT = 'PROJECT',
   OPERATION = 'OPERATION',
   INCIDENT = 'INCIDENT',
@@ -183,28 +183,28 @@ export enum WorkType {
 /**
  * 업무 유형별 표시 정보
  */
-export const WORK_TYPE_INFO: Record<WorkType, { display: string; description: string }> = {
-  [WorkType.PROJECT]: {
+export const WORK_TYPE_INFO: Record<category, { display: string; description: string }> = {
+  [category.PROJECT]: {
     display: '프로젝트',
     description: '3개월 이상의 프로젝트성 업무',
   },
-  [WorkType.OPERATION]: {
+  [category.OPERATION]: {
     display: '운영/개선',
     description: '상시 업무 개선 및 운영',
   },
-  [WorkType.INCIDENT]: {
+  [category.INCIDENT]: {
     display: '장애 대응',
     description: '긴급 장애 대응 및 해결',
   },
-  [WorkType.PERSONAL]: {
+  [category.PERSONAL]: {
     display: '개인 프로젝트',
     description: '사이드 프로젝트, 토이 프로젝트',
   },
-  [WorkType.LEARNING]: {
+  [category.LEARNING]: {
     display: '학습/교육',
     description: '스터디, 교육, 자기계발',
   },
-  [WorkType.OTHER]: {
+  [category.OTHER]: {
     display: '기타',
     description: '기타 업무 유형',
   },
@@ -265,10 +265,10 @@ export interface Experience {
   id?: string;
   userId?: string;
   title: string;
-  orgName?: string;
-  durationStart: string;
-  durationEnd?: string;
-  impactSummary?: string;
+  background?: string;
+  periodStart: string;
+  periodEnd?: string;
+  keyAchievements?: string;
   status?: ExperienceStatus | string;
   tags?: string;
   createdAt?: string;
@@ -281,10 +281,10 @@ export interface Experience {
  */
 export interface ExperienceFormData {
   title: string;
-  orgName: string;
-  durationStart: string;
-  durationEnd: string;
-  impactSummary: string;
+  background: string;
+  periodStart: string;
+  periodEnd: string;
+  keyAchievements: string;
   tags: string;
   sections: ExperienceSection[];
 }

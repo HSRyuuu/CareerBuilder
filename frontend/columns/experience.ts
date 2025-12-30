@@ -2,7 +2,7 @@
  * Experience(경험) 테이블 컬럼 정의
  */
 import { WORK_TYPE_INFO } from '@/types/experience-types';
-import type { WorkType } from '@/types/experience-types';
+import type { category } from '@/types/experience-types';
 import type { TExperience } from '~/api/experience/types';
 import type { TTableColumn } from '@/components/organisms/Table/Table.vue';
 
@@ -38,9 +38,9 @@ export const formatDateTime = (date?: string | null) => {
 /**
  * 업무 유형 표시 텍스트 반환
  */
-export const getWorkTypeDisplay = (workType?: string | null) => {
-  if (!workType) return '-';
-  return WORK_TYPE_INFO[workType as WorkType]?.display || workType;
+export const getcategoryDisplay = (category?: string | null) => {
+  if (!category) return '-';
+  return WORK_TYPE_INFO[category as category]?.display || category;
 };
 
 /**
@@ -58,7 +58,7 @@ export const truncateTitle = (title: string, maxLength: number = 30) => {
  */
 export const experienceColumns: TTableColumn<TExperience>[] = [
   {
-    field: 'durationStart',
+    field: 'periodStart',
     headerName: '시작일',
     flex: 1.2,
     align: 'center',
@@ -66,7 +66,7 @@ export const experienceColumns: TTableColumn<TExperience>[] = [
     valueFormatter: (value) => formatDate(value),
   },
   {
-    field: 'durationEnd',
+    field: 'periodEnd',
     headerName: '종료일',
     flex: 1.2,
     align: 'center',
@@ -82,12 +82,12 @@ export const experienceColumns: TTableColumn<TExperience>[] = [
     valueFormatter: (value) => truncateTitle(value || ''),
   },
   {
-    field: 'workType',
+    field: 'category',
     headerName: '업무 유형',
     flex: 1.2,
     align: 'center',
     cellClass: 'career-list-table-work-type',
-    valueFormatter: (value) => getWorkTypeDisplay(value),
+    valueFormatter: (value) => getcategoryDisplay(value),
   },
   {
     field: 'status',

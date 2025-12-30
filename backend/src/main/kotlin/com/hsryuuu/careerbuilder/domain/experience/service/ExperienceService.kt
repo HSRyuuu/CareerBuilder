@@ -4,11 +4,7 @@ import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import com.hsryuuu.careerbuilder.common.dto.CommonPageResponse
 import com.hsryuuu.careerbuilder.common.dto.type.SortDirection
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.ExperienceStatsSummary
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.ExperienceResponse
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateExperienceRequest
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateSectionRequest
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.UpdateExperienceRequest
+import com.hsryuuu.careerbuilder.domain.experience.model.dto.*
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceSection
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
 import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
@@ -32,9 +28,6 @@ class ExperienceService(
     fun createExperience(userId: UUID, request: CreateExperienceRequest): ExperienceResponse {
         val user = appUserRepository.findByIdOrNull(userId)
             ?: throw GlobalException(ErrorCode.MEMBER_NOT_FOUND)
-
-        if (request.durationEnd != null && !request.durationStart.isBefore(request.durationEnd))
-            throw GlobalException(ErrorCode.VALIDATION_ERROR_DURATION_SEQUENCE)
 
         val experience = CreateExperienceRequest.createEntity(user, request)
         request.sections.forEach { sectionRequest ->
@@ -64,7 +57,7 @@ class ExperienceService(
 
         // QueryDSL 기반 검색 실행
         val experiencePage =
-            experienceRepository.searchExperience(user, searchKeyword, status,sort, sortDirection, pageRequest)
+            experienceRepository.searchExperience(user, searchKeyword, status, sort, sortDirection, pageRequest)
 
         // Entity를 Response로 변환
         return CommonPageResponse.from(experiencePage) { experience ->
@@ -96,36 +89,31 @@ class ExperienceService(
             throw GlobalException(ErrorCode.FORBIDDEN)
         }
 
-        // 2. 비즈니스 규칙 검증
-        if (request.durationEnd != null && !request.durationStart.isBefore(request.durationEnd)) {
-            throw GlobalException(ErrorCode.VALIDATION_ERROR_DURATION_SEQUENCE)
-        }
-
-        // 3. Experience 정보 업데이트
+        // 2. Experience 정보 업데이트
         experience.update(
             title = request.title,
-            orgName = request.orgName,
-            durationStart = request.durationStart,
-            durationEnd = request.durationEnd,
-            impactSummary = request.impactSummary,
+            background = request.background,
+            periodStart = request.periodStart,
+            periodEnd = request.periodEnd,
+            keyAchievements = request.keyAchievements,
             goalSummary = request.goalSummary,
-            roleTitle = request.roleTitle,
-            workType = request.workType,
+            role = request.role,
+            category = request.category,
             contributionLevel = request.contributionLevel,
             skills = request.skills
         )
 
-        // 4. Sections 업데이트 (ID 기반 Merge 전략)
+        // 3. Sections 업데이트 (ID 기반 Merge 전략)
         val requestSectionIds = request.sections.mapNotNull { it.id }.toSet()
         val existingSections = experience.sections.associateBy { it.id }
 
-        // 4-1. 요청에 없는 기존 섹션 삭제
+        // 3-1. 요청에 없는 기존 섹션 삭제
         val sectionsToRemove = experience.sections.filter { section ->
             section.id !in requestSectionIds
         }
         sectionsToRemove.forEach { experience.sections.remove(it) }
 
-        // 4-2. 섹션 수정 또는 추가
+        // 3-2. 섹션 수정 또는 추가
         request.sections.forEach { sectionRequest ->
             if (sectionRequest.id != null && existingSections.containsKey(sectionRequest.id)) {
                 // 기존 섹션 업데이트

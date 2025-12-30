@@ -48,7 +48,7 @@
                 <div class="form-field-inline">
                   <label class="field-label">시작일 *</label>
                   <DatePicker
-                    v-model="formData.durationStart"
+                    v-model="formData.periodStart"
                     type="date"
                     placeholder="시작일을 선택해주세요."
                   />
@@ -56,7 +56,7 @@
                 <div class="form-field-inline">
                   <label class="field-label">종료일</label>
                   <DatePicker
-                    v-model="formData.durationEnd"
+                    v-model="formData.periodEnd"
                     type="date"
                     placeholder="종료일은 선택하지 않아도 괜찮아요."
                   />
@@ -69,7 +69,7 @@
                 <div class="form-field-inline">
                   <label class="field-label">소속</label>
                   <Input
-                    v-model="formData.orgName"
+                    v-model="formData.background"
                     placeholder="회사명, 조직명 또는 개인"
                     :size="CommonSize.Medium"
                   />
@@ -77,7 +77,7 @@
                 <div class="form-field-inline">
                   <label class="field-label">역할/직책</label>
                   <Input
-                    v-model="formData.roleTitle"
+                    v-model="formData.role"
                     placeholder="담당한 역할이나 직책 또는 직무"
                     :size="CommonSize.Medium"
                   />
@@ -98,15 +98,15 @@
               <label class="field-label">업무 유형</label>
               <div class="select-with-description">
                 <Select
-                  v-model="formData.workType"
-                  :items="workTypeOptions"
+                  v-model="formData.category"
+                  :items="categoryOptions"
                   placeholder="선택"
                   :size="FormSize.Compact"
                 />
                 <DescriptionBox
                   :text="
-                    formData.workType
-                      ? getWorkTypeDescription(formData.workType)
+                    formData.category
+                      ? getcategoryDescription(formData.category)
                       : '업무 유형을 선택해주세요'
                   "
                 />
@@ -159,7 +159,7 @@
           <div class="form-grid">
             <div class="form-field full-width">
               <TextArea
-                v-model="formData.impactSummary"
+                v-model="formData.keyAchievements"
                 placeholder="이 경험을 통해 얻은 성과와 영향을 간략히 설명하세요"
                 :rows="3"
               />
@@ -448,7 +448,7 @@ const sectionKindOptions = computed<TSelectItem[]>(() => {
 });
 
 // 업무 유형 옵션 생성
-const workTypeOptions = computed<TSelectItem[]>(() => {
+const categoryOptions = computed<TSelectItem[]>(() => {
   return Object.entries(WORK_TYPE_INFO).map(([key, value]) => ({
     title: value.display,
     value: key,
@@ -465,28 +465,28 @@ const contributionLevelOptions = computed<TSelectItem[]>(() => {
 
 interface FormData {
   title: string;
-  orgName: string;
-  durationStart: string;
-  durationEnd: string;
-  roleTitle: string;
-  workType: string | null;
+  background: string;
+  periodStart: string;
+  periodEnd: string;
+  role: string;
+  category: string | null;
   contributionLevel: string | null;
   goalSummary: string;
-  impactSummary: string;
+  keyAchievements: string;
   skills: string;
   sections: FormSection[];
 }
 
 const formData = ref<FormData>({
   title: '',
-  orgName: '',
-  durationStart: '',
-  durationEnd: '',
-  roleTitle: '',
-  workType: null,
+  background: '',
+  periodStart: '',
+  periodEnd: '',
+  role: '',
+  category: null,
   contributionLevel: null,
   goalSummary: '',
-  impactSummary: '',
+  keyAchievements: '',
   skills: '',
   sections: [],
 });
@@ -519,9 +519,9 @@ const getSectionDescription = (kind: string): string => {
 };
 
 // 업무 유형에 따른 description 가져오기
-const getWorkTypeDescription = (workType: string | null): string => {
-  if (!workType) return '';
-  return WORK_TYPE_INFO[workType as keyof typeof WORK_TYPE_INFO]?.description || '';
+const getcategoryDescription = (category: string | null): string => {
+  if (!category) return '';
+  return WORK_TYPE_INFO[category as keyof typeof WORK_TYPE_INFO]?.description || '';
 };
 
 // 기여도에 따른 description 가져오기
@@ -587,7 +587,7 @@ const handleSave = async () => {
     toast.error('제목을 입력해주세요.');
     return;
   }
-  if (!formData.value.durationStart) {
+  if (!formData.value.periodStart) {
     toast.error('시작일을 입력해주세요.');
     return;
   }
@@ -595,14 +595,14 @@ const handleSave = async () => {
   // API 요청 데이터 변환
   const requestBody: TExperienceCreate = {
     title: formData.value.title,
-    orgName: formData.value.orgName || undefined,
-    roleTitle: formData.value.roleTitle || undefined,
-    durationStart: formData.value.durationStart,
-    durationEnd: formData.value.durationEnd || undefined,
-    workType: formData.value.workType || undefined,
+    background: formData.value.background || undefined,
+    role: formData.value.role || undefined,
+    periodStart: formData.value.periodStart,
+    periodEnd: formData.value.periodEnd || undefined,
+    category: formData.value.category || undefined,
     contributionLevel: formData.value.contributionLevel || undefined,
     goalSummary: formData.value.goalSummary || undefined,
-    impactSummary: formData.value.impactSummary || undefined,
+    keyAchievements: formData.value.keyAchievements || undefined,
     skills: formData.value.skills || undefined,
     sections: formData.value.sections.map((section, index) => ({
       kind: section.kind,

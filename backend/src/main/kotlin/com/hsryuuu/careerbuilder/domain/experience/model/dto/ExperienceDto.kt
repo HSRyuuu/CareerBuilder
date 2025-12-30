@@ -1,22 +1,23 @@
 package com.hsryuuu.careerbuilder.domain.experience.model.dto
 
+import com.hsryuuu.careerbuilder.application.exception.ErrorCode
+import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.*
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
 // Request DTOs
 data class CreateExperienceRequest(
     val title: String,
-    val orgName: String? = null,
-    val durationStart: LocalDate,
-    val durationEnd: LocalDate? = null,
-    val impactSummary: String? = null,
+    val background: String? = null,
+    val periodStart: String,
+    val periodEnd: String? = null,
+    val keyAchievements: String? = null,
     val goalSummary: String? = null,
     val status: ExperienceStatus = ExperienceStatus.INCOMPLETE,
-    val roleTitle: String? = null,
-    val workType: WorkType? = null,
+    val role: String? = null,
+    val category: WorkCategory? = null,
     val contributionLevel: ContributionLevel? = null,
     val skills: String? = null,
     val sections: List<CreateSectionRequest> = emptyList()
@@ -25,20 +26,27 @@ data class CreateExperienceRequest(
         fun createEntity(
             user: AppUser,
             request: CreateExperienceRequest
-        ): Experience = Experience(
-            user = user,
-            title = request.title,
-            orgName = request.orgName,
-            durationStart = request.durationStart,
-            durationEnd = request.durationEnd,
-            impactSummary = request.impactSummary,
-            goalSummary = request.goalSummary,
-            status = request.status,
-            roleTitle = request.roleTitle,
-            workType = request.workType,
-            contributionLevel = request.contributionLevel,
-            skills = request.skills
-        )
+        ): Experience {
+            // periodStart는 periodEnd보다 앞서야 함
+            if (request.periodEnd != null && request.periodStart > request.periodEnd) {
+                throw GlobalException(ErrorCode.VALIDATION_ERROR_DURATION_SEQUENCE)
+            }
+
+            return Experience(
+                user = user,
+                title = request.title,
+                background = request.background,
+                periodStart = request.periodStart,
+                periodEnd = request.periodEnd,
+                keyAchievements = request.keyAchievements,
+                goalSummary = request.goalSummary,
+                status = request.status,
+                role = request.role,
+                category = request.category,
+                contributionLevel = request.contributionLevel,
+                skills = request.skills
+            )
+        }
     }
 }
 
@@ -63,13 +71,13 @@ data class CreateSectionRequest(
 
 data class UpdateExperienceRequest(
     val title: String,
-    val orgName: String? = null,
-    val durationStart: LocalDate,
-    val durationEnd: LocalDate? = null,
-    val impactSummary: String? = null,
+    val background: String? = null,
+    val periodStart: String,
+    val periodEnd: String? = null,
+    val keyAchievements: String? = null,
     val goalSummary: String? = null,
-    val roleTitle: String? = null,
-    val workType: WorkType? = null,
+    val role: String? = null,
+    val category: WorkCategory? = null,
     val contributionLevel: ContributionLevel? = null,
     val skills: String? = null,
     val sections: List<UpdateSectionRequest> = emptyList()
@@ -88,14 +96,14 @@ data class ExperienceResponse(
     val id: UUID,
     val userId: UUID,
     val title: String,
-    val orgName: String?,
-    val durationStart: LocalDate,
-    val durationEnd: LocalDate?,
-    val impactSummary: String?,
+    val background: String?,
+    val periodStart: String,
+    val periodEnd: String?,
+    val keyAchievements: String?,
     val goalSummary: String?,
     val status: ExperienceStatus,
-    val roleTitle: String?,
-    val workType: WorkType?,
+    val role: String?,
+    val category: WorkCategory?,
     val contributionLevel: ContributionLevel?,
     val skills: String?,
     val sections: List<SectionResponse>,
@@ -109,14 +117,14 @@ data class ExperienceResponse(
                 id = experience.id!!,
                 userId = experience.user.id!!,
                 title = experience.title,
-                orgName = experience.orgName,
-                durationStart = experience.durationStart,
-                durationEnd = experience.durationEnd,
-                impactSummary = experience.impactSummary,
+                background = experience.background,
+                periodStart = experience.periodStart,
+                periodEnd = experience.periodEnd,
+                keyAchievements = experience.keyAchievements,
                 goalSummary = experience.goalSummary,
                 status = experience.status,
-                roleTitle = experience.roleTitle,
-                workType = experience.workType,
+                role = experience.role,
+                category = experience.category,
                 contributionLevel = experience.contributionLevel,
                 skills = experience.skills,
                 sections = emptyList(),
@@ -130,14 +138,14 @@ data class ExperienceResponse(
                 id = experience.id!!,
                 userId = experience.user.id!!,
                 title = experience.title,
-                orgName = experience.orgName,
-                durationStart = experience.durationStart,
-                durationEnd = experience.durationEnd,
-                impactSummary = experience.impactSummary,
+                background = experience.background,
+                periodStart = experience.periodStart,
+                periodEnd = experience.periodEnd,
+                keyAchievements = experience.keyAchievements,
                 goalSummary = experience.goalSummary,
                 status = experience.status,
-                roleTitle = experience.roleTitle,
-                workType = experience.workType,
+                role = experience.role,
+                category = experience.category,
                 contributionLevel = experience.contributionLevel,
                 skills = experience.skills,
                 sections = sections.map { SectionResponse.from(it) },
@@ -165,13 +173,13 @@ data class SectionResponse(
                 title = section.title,
                 content = section.content,
                 sortOrder = section.sortOrder,
-                                createdAt = section.createdAt,
-                                updatedAt = section.updatedAt
-                            )
-                        }
-                    }
-                }
-                
+                createdAt = section.createdAt,
+                updatedAt = section.updatedAt
+            )
+        }
+    }
+}
+
 data class ExperienceStatsSummary(
     val total: Long,
     val incomplete: Long,

@@ -31,7 +31,7 @@ create table experiences
     created_at         timestamp   default now()                      not null,
     updated_at         timestamp   default now()                      not null,
     skills             text,
-    role_title         varchar(255),
+    role         varchar(255),
     work_type          varchar(20),
     contribution_level varchar(20),
     goal_summary       text
@@ -51,7 +51,7 @@ comment on column experiences.status is '상태';
 
 comment on column experiences.skills is '기술 목록';
 
-comment on column experiences.role_title is '역할';
+comment on column experiences.role is '역할';
 
 comment on column experiences.work_type is '일의 유형';
 

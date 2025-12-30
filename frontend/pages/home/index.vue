@@ -86,7 +86,7 @@
             <div class="activity-date">{{ formatDate(item.updatedAt) }}</div>
             <div class="activity-content">
               <h4 class="activity-title">{{ item.title }}</h4>
-              <p class="activity-org">{{ item.orgName || '소속 없음' }}</p>
+              <p class="activity-org">{{ item.background || '소속 없음' }}</p>
             </div>
             <v-icon size="small" color="#9ca3af">mdi-chevron-right</v-icon>
           </div>

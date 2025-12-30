@@ -131,7 +131,7 @@ const handleLogin = async () => {
         userName: data.userInfo.username,
         email: data.userInfo.email,
       });
-      toast.success(`${data.userInfo.username}님, 환영합니다!`);
+      //toast.success(`${data.userInfo.username}님, 환영합니다!`);
       navigateTo('/home');
     }
   } catch (e) {
