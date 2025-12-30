@@ -8,7 +8,7 @@ object ExperiencePrompts {
             - PAR: Problem/Challenge(문제 또는 도전과제), Action(행동), Result(결과)
             
             경험 제목: {title}
-            핵심 성과: {impactSummary}
+            핵심 성과: {keyAchievements}
             목표: {goalSummary}
             
             추가 섹션: 
