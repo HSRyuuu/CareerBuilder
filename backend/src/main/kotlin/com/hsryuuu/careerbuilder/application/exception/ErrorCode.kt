@@ -32,5 +32,12 @@ enum class ErrorCode(
         HttpStatus.BAD_REQUEST,
         "VALIDATION_ERROR_DURATION_SEQUENCE",
         "시작일은 종료일보다 빨라야합니다."
+    ),
+
+    // AI
+    AI_EXPERIENCE_ANALYSIS_NOT_FOUND(
+        HttpStatus.NOT_FOUND,
+        "AI_EXPERIENCE_ANALYSIS_NOT_FOUND",
+        "AI 경험 분석 결과가 존재하지 않습니다."
     )
 }

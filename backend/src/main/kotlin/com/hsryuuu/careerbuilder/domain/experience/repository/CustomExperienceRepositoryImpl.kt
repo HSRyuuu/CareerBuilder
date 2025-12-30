@@ -1,5 +1,7 @@
 package com.hsryuuu.careerbuilder.domain.experience.repository
 
+import com.hsryuuu.careerbuilder.application.exception.ErrorCode
+import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import com.hsryuuu.careerbuilder.common.dto.type.SortDirection
 import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceAnalysis
 import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceSectionAnalysis
@@ -109,6 +111,10 @@ class CustomExperienceRepositoryImpl(
             .orderBy(analysis.createdAt.desc())
             .limit(1)
             .fetchOne()
+
+        if (latestAnalysisId == null) {
+            throw GlobalException(ErrorCode.AI_EXPERIENCE_ANALYSIS_NOT_FOUND)
+        }
 
         // 2. Tuple로 필요한 엔티티들을 모두 조회
         // Experience -(OneToMany)-> Section

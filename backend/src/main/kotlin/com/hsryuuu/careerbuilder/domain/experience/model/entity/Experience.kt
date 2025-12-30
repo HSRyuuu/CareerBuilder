@@ -148,7 +148,7 @@ enum class ExperienceStatus(val description: String) {
 
 enum class WorkCategory(val description: String) {
     PROJECT("목표 달성을 위해 초기 기획부터 실행까지 참여한 주요 과업"),
-    MANAGEMENT("지속적인 업무 운영과 프로세스 개선 및 품질 향상 활동"),
+    MAINTENANCE("지속적인 업무 운영과 프로세스 개선 및 품질 향상 활동"),
     TROUBLESHOOTING("예기치 못한 문제 상황 대응 및 병목 구간 해결 경험"),
     R_AND_D("신규 도입을 위한 조사, 타당성 검토 및 모델링/프로토타이핑"),
     LEARNING("전문성 강화를 위한 새로운 지식 습득 및 교육 참여"),
