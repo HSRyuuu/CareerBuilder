@@ -11,6 +11,22 @@
       <div class="layout-header-right">
         <div class="header-actions">
           <Button
+            v-if="!authStore.isAuthenticated"
+            :variant="ButtonVariant.Primary"
+            :size="CommonSize.Medium"
+            @click="handleMockLogin"
+          >
+            임시 로그인
+          </Button>
+          <Button
+            v-if="authStore.isAuthenticated"
+            :variant="ButtonVariant.Secondary"
+            :size="CommonSize.Medium"
+            @click="handleMockLogout"
+          >
+            로그아웃
+          </Button>
+          <Button
             :variant="ButtonVariant.Secondary"
             :size="CommonSize.Medium"
             icon-only
@@ -118,6 +134,21 @@ watch(
 
 const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
+};
+
+const handleMockLogin = () => {
+  authStore.setAccessToken('mock-token');
+  authStore.setUserInfo({
+    userId: 'test',
+    userName: '임시유저',
+    email: 'test@careerbuilder.com',
+  });
+  navigateTo('/home');
+};
+
+const handleMockLogout = () => {
+  authStore.clearAuth();
+  navigateTo('/welcome');
 };
 </script>
 

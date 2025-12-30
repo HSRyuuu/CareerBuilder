@@ -8,6 +8,16 @@
           <span class="layout-logo-text">CareerBuilder</span>
         </div>
       </div>
+      <div class="layout-header-right">
+        <Button
+          v-if="!authStore.isAuthenticated"
+          :variant="ButtonVariant.Primary"
+          :size="CommonSize.Medium"
+          @click="handleMockLogin"
+        >
+          임시 로그인
+        </Button>
+      </div>
     </header>
 
     <main class="layout-main-full">
@@ -17,7 +27,21 @@
 </template>
 
 <script setup lang="ts">
-// Welcome 레이아웃은 사이드바가 없음
+import Button from '@/components/atoms/Button/Button.vue';
+import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+
+const handleMockLogin = () => {
+  authStore.setAccessToken('mock-token');
+  authStore.setUserInfo({
+    userId: 'admin',
+    userName: '임시유저',
+    email: 'admin@careerbuilder.com',
+  });
+  navigateTo('/home');
+};
 </script>
 
 <style lang="scss" scoped>
