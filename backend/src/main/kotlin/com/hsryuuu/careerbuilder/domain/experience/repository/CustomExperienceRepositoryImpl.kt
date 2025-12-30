@@ -1,10 +1,12 @@
 package com.hsryuuu.careerbuilder.domain.experience.repository
 
 import com.hsryuuu.careerbuilder.common.dto.type.SortDirection
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.ExperienceStatsSummary
-import com.hsryuuu.careerbuilder.domain.experience.model.entity.Experience
-import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
-import com.hsryuuu.careerbuilder.domain.experience.model.entity.QExperience
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceAnalysis
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceSectionAnalysis
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.QAiExperienceAnalysis
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.QAiExperienceSectionAnalysis
+import com.hsryuuu.careerbuilder.domain.experience.model.dto.*
+import com.hsryuuu.careerbuilder.domain.experience.model.entity.*
 import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import com.querydsl.core.Tuple
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 class CustomExperienceRepositoryImpl(
@@ -90,6 +93,91 @@ class CustomExperienceRepositoryImpl(
             completed = completed,
             analyzing = analyzing,
             analyzed = analyzed
+        )
+    }
+
+    override fun getExperienceWithAnalysis(experienceId: UUID, userId: UUID): ExperienceWithAnalysisResponse? {
+        val section = QExperienceSection.experienceSection
+        val analysis = QAiExperienceAnalysis.aiExperienceAnalysis
+        val sectionAnalysis = QAiExperienceSectionAnalysis.aiExperienceSectionAnalysis
+
+        // 1. 가장 최신의 AI 분석 ID 조회
+        val latestAnalysisId = queryFactory
+            .select(analysis.id)
+            .from(analysis)
+            .where(analysis.experienceId.eq(experienceId))
+            .orderBy(analysis.createdAt.desc())
+            .limit(1)
+            .fetchOne()
+
+        // 2. Tuple로 필요한 엔티티들을 모두 조회
+        // Experience -(OneToMany)-> Section
+        // Experience -(Logical OneToOne)-> Analysis (최신건만)
+        // Section -(Logical OneToOne)-> SectionAnalysis
+        val tuples = queryFactory
+            .select(experience, section, analysis, sectionAnalysis)
+            .from(experience)
+            .leftJoin(experience.sections, section)
+            .leftJoin(analysis).on(analysis.id.eq(latestAnalysisId))
+            .leftJoin(sectionAnalysis)
+            .on(sectionAnalysis.sectionId.eq(section.id).and(sectionAnalysis.analysis.id.eq(latestAnalysisId)))
+            .where(experience.id.eq(experienceId), experience.user.id.eq(userId))
+            .fetch()
+
+        if (tuples.isEmpty()) {
+            return null
+        }
+
+        // 데이터 조합
+        val expEntity = tuples.first().get(experience)!!
+        val sectionsMap = mutableMapOf<UUID, ExperienceSection>()
+        var analysisEntity: AiExperienceAnalysis? = null
+        val sectionAnalysisMap = mutableMapOf<UUID, AiExperienceSectionAnalysis>()
+
+        tuples.forEach { tuple ->
+            tuple.get(section)?.let { sectionsMap[it.id!!] = it }
+            if (analysisEntity == null) {
+                tuple.get(analysis)?.let { analysisEntity = it }
+            }
+            tuple.get(sectionAnalysis)?.let { sectionAnalysisMap[it.sectionId] = it }
+        }
+
+        // 1. ExperienceResponse (sections 제외)
+        val experienceResponse = ExperienceResponse.fromEntityWithoutSections(expEntity)
+
+        // 2. SectionsWithAnalysisDto 리스트 생성
+        val sortedSections = sectionsMap.values.sortedBy { it.sortOrder }
+        val sectionWithAnalysisList = sortedSections.map { section ->
+            val analysisDto = sectionAnalysisMap[section.id]?.let { AiExperienceSectionAnalysisDto.from(it) }
+            SectionWithAnalysisDto(
+                section = SectionResponse.from(section),
+                analysis = analysisDto
+            )
+        }
+
+        // 3. AiExperienceAnalysisDto 생성 (sectionAnalyses 제외)
+        val aiAnalysisDto = analysisEntity?.let { entity ->
+            AiExperienceAnalysisDto(
+                id = entity.id!!,
+                totalScore = entity.totalScore,
+                scoreMetrics = entity.scoreMetrics,
+                overallSummary = entity.overallSummary,
+                overallFeedback = entity.overallFeedback,
+                goalFeedback = entity.goalFeedback,
+                goalImprovedContent = entity.goalImprovedContent,
+                achievementFeedback = entity.achievementFeedback,
+                achievementImprovedContent = entity.achievementImprovedContent,
+                recommendedCategory = entity.recommendedCategory,
+                recommendedKeywords = entity.recommendedKeywords?.split(",")?.map { it.trim() }
+                    ?.filter { it.isNotEmpty() },
+                sectionAnalyses = emptyList() // 상세 분석은 별도 필드로 전달
+            )
+        }
+
+        return ExperienceWithAnalysisResponse(
+            experience = experienceResponse,
+            analysis = aiAnalysisDto,
+            sections = sectionWithAnalysisList
         )
     }
 

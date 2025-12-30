@@ -2,6 +2,13 @@ package com.hsryuuu.careerbuilder.domain.experience.service
 
 import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
+import com.hsryuuu.careerbuilder.domain.ai.model.ScoreMetrics
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceAnalysis
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceSectionAnalysis
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiRequest
+import com.hsryuuu.careerbuilder.domain.ai.model.type.AiRequestType
+import com.hsryuuu.careerbuilder.domain.ai.repository.AiExperienceAnalysisRepository
+import com.hsryuuu.careerbuilder.domain.ai.repository.AiRequestRepository
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateExperienceRequest
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateSectionRequest
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.UpdateExperienceRequest
@@ -39,6 +46,12 @@ class ExperienceServiceTest {
 
     @Autowired
     private lateinit var experienceSectionRepository: ExperienceSectionRepository
+
+    @Autowired
+    private lateinit var aiExperienceAnalysisRepository: AiExperienceAnalysisRepository
+
+    @Autowired
+    private lateinit var aiRequestRepository: AiRequestRepository
 
     @Autowired
     private lateinit var appUserRepository: AppUserRepository
@@ -203,14 +216,14 @@ class ExperienceServiceTest {
     @DisplayName("[SUCCESS] 경험 검색 - 조건 검색 성공")
     fun searchExperience_검색_성공() {
         // Arrange
-        val experience1 = experienceService.createExperience(
+        experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "Backend Development",
                 periodStart = "2023-01",
                 status = ExperienceStatus.COMPLETED
             )
         )
-        val experience2 = experienceService.createExperience(
+        experienceService.createExperience(
             testUser.id!!, CreateExperienceRequest(
                 title = "Frontend Development",
                 periodStart = "2023-06",
@@ -271,6 +284,79 @@ class ExperienceServiceTest {
         // Assert
         assertThat(result.id).isEqualTo(created.id)
         assertThat(result.title).isEqualTo("My Experience")
+    }
+
+    @Test
+    @DisplayName("[SUCCESS] 경험 및 AI 분석 결과 조회 성공 - 가장 최신 결과만 조회")
+    fun getExperienceWithAIAnalysisResult_조회_성공() {
+        // Arrange
+        // 1. Experience 생성
+        val createdExp = experienceService.createExperience(
+            testUser.id!!, CreateExperienceRequest(
+                title = "AI Analyzed Experience",
+                periodStart = "2023-01",
+                sections = listOf(
+                    CreateSectionRequest(title = "Section 1", content = "Content 1")
+                )
+            )
+        )
+        val sectionId = createdExp.sections[0].id
+
+        // 2. AiRequest 생성
+        val aiRequest = aiRequestRepository.save(
+            AiRequest(
+                userId = testUser.id!!,
+                requestType = AiRequestType.EXPERIENCE_ANALYSIS
+            )
+        )
+
+        // 3. 이전 AI Analysis 생성
+        aiExperienceAnalysisRepository.save(AiExperienceAnalysis(
+            requestId = aiRequest.id,
+            experienceId = createdExp.id,
+            totalScore = 50,
+            scoreMetrics = ScoreMetrics(50, 50, 50, 50),
+            overallSummary = "Old summary",
+            overallFeedback = "Old feedback"
+        ))
+        
+        Thread.sleep(10) // 시간차를 두기 위함
+
+        // 4. 최신 AI Analysis 생성
+        val newAnalysis = AiExperienceAnalysis(
+            requestId = aiRequest.id,
+            experienceId = createdExp.id,
+            totalScore = 85,
+            scoreMetrics = ScoreMetrics(80, 80, 90, 90),
+            overallSummary = "New summary",
+            overallFeedback = "New feedback"
+        )
+
+        // 5. Section Analysis 생성 (최신건에만)
+        val sectionAnalysis = AiExperienceSectionAnalysis(
+            analysis = newAnalysis,
+            sectionId = sectionId,
+            feedback = "Section feedback",
+            improvedContent = "Better content"
+        )
+        newAnalysis.addSection(sectionAnalysis)
+
+        aiExperienceAnalysisRepository.save(newAnalysis)
+
+        // Act
+        val result = experienceService.getExperienceWithAIAnalysisResult(createdExp.id, testUser.id!!)
+
+        // Assert
+        assertThat(result.experience.id).isEqualTo(createdExp.id)
+        assertThat(result.analysis).isNotNull
+        assertThat(result.analysis?.totalScore).isEqualTo(85) // 최신 점수여야 함
+        assertThat(result.analysis?.overallSummary).isEqualTo("New summary")
+        
+        // Sections 확인
+        assertThat(result.sections).hasSize(1)
+        assertThat(result.sections[0].section.id).isEqualTo(sectionId)
+        assertThat(result.sections[0].analysis).isNotNull
+        assertThat(result.sections[0].analysis?.feedback).isEqualTo("Section feedback")
     }
 
     @Test

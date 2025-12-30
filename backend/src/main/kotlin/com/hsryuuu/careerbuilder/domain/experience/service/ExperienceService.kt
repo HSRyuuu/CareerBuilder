@@ -79,6 +79,25 @@ class ExperienceService(
         return ExperienceResponse.fromEntity(experience, sections)
     }
 
+    @Transactional(readOnly = true)
+    fun getExperienceWithAIAnalysisResult(experienceId: UUID, userId: UUID): ExperienceWithAnalysisResponse {
+
+        val result = experienceRepository.getExperienceWithAnalysis(experienceId, userId)
+        if (result != null) {
+            return result
+        }
+
+        // 결과가 없을 경우, 에러 원인 파악을 위해 추가 조회
+        val experience = experienceRepository.findByIdOrNull(experienceId)
+            ?: throw GlobalException(ErrorCode.EXPERIENCE_NOT_FOUND)
+
+        if (experience.user.id != userId) {
+            throw GlobalException(ErrorCode.FORBIDDEN)
+        }
+
+        throw GlobalException(ErrorCode.EXPERIENCE_NOT_FOUND)
+    }
+
     @Transactional
     fun updateExperience(id: UUID, userId: UUID, request: UpdateExperienceRequest): ExperienceResponse {
         // 1. Experience 조회 및 권한 검증

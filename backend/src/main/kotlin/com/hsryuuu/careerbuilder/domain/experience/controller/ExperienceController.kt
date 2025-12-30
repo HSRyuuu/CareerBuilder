@@ -3,10 +3,7 @@ package com.hsryuuu.careerbuilder.domain.experience.controller
 import com.hsryuuu.careerbuilder.application.security.AuthManager
 import com.hsryuuu.careerbuilder.common.dto.CommonPageResponse
 import com.hsryuuu.careerbuilder.common.dto.type.SortDirection
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.CreateExperienceRequest
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.ExperienceResponse
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.ExperienceStatsSummary
-import com.hsryuuu.careerbuilder.domain.experience.model.dto.UpdateExperienceRequest
+import com.hsryuuu.careerbuilder.domain.experience.model.dto.*
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
 import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
 import com.hsryuuu.careerbuilder.domain.experience.service.ExperienceService
@@ -47,7 +44,15 @@ class ExperienceController(
         @RequestParam(required = false, name = "sortDir", defaultValue = "DESC") sortDirection: SortDirection?
     ): CommonPageResponse<ExperienceResponse> {
         val userId = authManager.getCurrentUserIdOrElseThrow()
-        return experienceService.searchExperience(userId, searchKeyword, status,page - 1, pageSize, sort, sortDirection);
+        return experienceService.searchExperience(
+            userId,
+            searchKeyword,
+            status,
+            page - 1,
+            pageSize,
+            sort,
+            sortDirection
+        );
     }
 
     @Operation(summary = "경험 조회", description = "특정 경험을 조회합니다.")
@@ -56,6 +61,14 @@ class ExperienceController(
     fun getExperience(@PathVariable id: UUID): ExperienceResponse {
         val userId = authManager.getCurrentUserIdOrElseThrow()
         return experienceService.getExperience(id, userId)
+    }
+
+    @Operation(summary = "경험 및 AI 분석 결과 조회", description = "특정 경험과 AI 분석 결과를 조회합니다.")
+    @GetMapping("/{id}/ai")
+    @ResponseStatus(HttpStatus.OK)
+    fun getExperienceWithAIAnalysisResult(@PathVariable id: UUID): ExperienceWithAnalysisResponse {
+        val userId = authManager.getCurrentUserIdOrElseThrow()
+        return experienceService.getExperienceWithAIAnalysisResult(id, userId)
     }
 
     @Operation(summary = "경험 수정", description = "기존 경험을 수정합니다.")

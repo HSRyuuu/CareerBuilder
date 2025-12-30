@@ -2,6 +2,10 @@ package com.hsryuuu.careerbuilder.domain.experience.model.dto
 
 import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
+import com.hsryuuu.careerbuilder.domain.ai.model.MethodBreakdown
+import com.hsryuuu.careerbuilder.domain.ai.model.ScoreMetrics
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceAnalysis
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceSectionAnalysis
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.*
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import java.time.LocalDateTime
@@ -187,4 +191,75 @@ data class ExperienceStatsSummary(
     val analyzing: Long,
     val analyzed: Long
 )
+
+data class ExperienceWithAnalysisResponse(
+    val experience: ExperienceResponse,
+    val analysis: AiExperienceAnalysisDto?,
+    val sections: List<SectionWithAnalysisDto>
+)
+
+data class SectionWithAnalysisDto(
+    val section: SectionResponse,
+    val analysis: AiExperienceSectionAnalysisDto?
+)
+
+data class AiExperienceAnalysisDto(
+    val id: UUID,
+    val totalScore: Int,
+    val scoreMetrics: ScoreMetrics?,
+    val overallSummary: String?,
+    val overallFeedback: String?,
+    val goalFeedback: String?,
+    val goalImprovedContent: String?,
+    val achievementFeedback: String?,
+    val achievementImprovedContent: String?,
+    val recommendedCategory: WorkCategory?,
+    val recommendedKeywords: List<String>?,
+    val sectionAnalyses: List<AiExperienceSectionAnalysisDto> = emptyList() // Default to empty if not used or explicit empty list passed
+) {
+    companion object {
+        fun from(analysis: AiExperienceAnalysis): AiExperienceAnalysisDto {
+            return AiExperienceAnalysisDto(
+                id = analysis.id!!,
+                totalScore = analysis.totalScore,
+                scoreMetrics = analysis.scoreMetrics,
+                overallSummary = analysis.overallSummary,
+                overallFeedback = analysis.overallFeedback,
+                goalFeedback = analysis.goalFeedback,
+                goalImprovedContent = analysis.goalImprovedContent,
+                achievementFeedback = analysis.achievementFeedback,
+                achievementImprovedContent = analysis.achievementImprovedContent,
+                recommendedCategory = analysis.recommendedCategory,
+                recommendedKeywords = analysis.recommendedKeywords?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() },
+                sectionAnalyses = analysis.sections.map { AiExperienceSectionAnalysisDto.from(it) }
+            )
+        }
+    }
+}
+
+data class AiExperienceSectionAnalysisDto(
+    val id: UUID,
+    val sectionId: UUID,
+    val suggestedKind: SectionKind?,
+    val method: String?,
+    val feedback: String?,
+    val improvedContent: String?,
+    val reasoning: String?,
+    val methodBreakdown: MethodBreakdown?
+) {
+    companion object {
+        fun from(sectionAnalysis: AiExperienceSectionAnalysis): AiExperienceSectionAnalysisDto {
+            return AiExperienceSectionAnalysisDto(
+                id = sectionAnalysis.id!!,
+                sectionId = sectionAnalysis.sectionId,
+                suggestedKind = sectionAnalysis.suggestedKind,
+                method = sectionAnalysis.method,
+                feedback = sectionAnalysis.feedback,
+                improvedContent = sectionAnalysis.improvedContent,
+                reasoning = sectionAnalysis.reasoning,
+                methodBreakdown = sectionAnalysis.methodBreakdown
+            )
+        }
+    }
+}
                 
