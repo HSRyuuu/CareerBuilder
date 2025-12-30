@@ -480,6 +480,7 @@ const emit = defineEmits<{
   'update:isEditMode': [boolean];
 }>();
 
+const toast = useToast();
 const localIsEditMode = computed(() => isEditMode);
 
 // 블록 유형 옵션 생성
@@ -509,6 +510,11 @@ const contributionLevelOptions = computed<TSelectItem[]>(() => {
 let sectionCounter = 0;
 
 const addSection = () => {
+  if (modelValue.sections.length >= 10) {
+    toast.error('추가 블록은 최대 10개까지만 등록 가능합니다.');
+    return;
+  }
+
   modelValue.sections.push({
     id: `new_section_${Date.now()}_${sectionCounter++}`,
     kind: ExperienceSectionKind.NONE,
