@@ -9,7 +9,17 @@
         </div>
       </div>
       <div class="layout-header-right">
-        <slot name="header-controls" />
+        <div class="header-actions">
+          <Button
+            :variant="ButtonVariant.Secondary"
+            :size="CommonSize.Medium"
+            icon-only
+            :icon="isDark ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+            class="theme-toggle-btn"
+            @click="toggleTheme"
+          />
+          <slot name="header-controls" />
+        </div>
       </div>
     </header>
 
@@ -88,7 +98,14 @@ import { useAuthStore } from '@/stores/auth';
 const route = useRoute();
 const menu = useMenu();
 const authStore = useAuthStore();
+const colorMode = useColorMode();
 const isSidebarCollapsed = ref(false);
+
+const isDark = computed(() => colorMode.value === 'dark');
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+};
 
 // 페이지 이동 시 메뉴 상태 동기화
 watch(

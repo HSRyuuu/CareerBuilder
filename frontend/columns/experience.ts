@@ -1,8 +1,8 @@
 /**
  * Experience(경험) 테이블 컬럼 정의
  */
-import { WORK_TYPE_INFO } from '@/types/experience-types';
-import type { category } from '@/types/experience-types';
+import { CATEGORY_INFO } from '@/types/experience-types';
+import type { Category } from '@/types/experience-types';
 import type { TExperience } from '~/api/experience/types';
 import type { TTableColumn } from '@/components/organisms/Table/Table.vue';
 
@@ -40,7 +40,7 @@ export const formatDateTime = (date?: string | null) => {
  */
 export const getcategoryDisplay = (category?: string | null) => {
   if (!category) return '-';
-  return WORK_TYPE_INFO[category as category]?.display || category;
+  return CATEGORY_INFO[category as Category]?.display || category;
 };
 
 /**

@@ -1,0 +1,631 @@
+<template>
+  <div class="experience-form-component">
+    <div class="page-layout">
+      <!-- 왼쪽: 메인 폼 영역 (4) -->
+      <div class="form-container">
+        <!-- 기본 정보 블록 -->
+        <Card
+          title="기본 정보"
+          icon="mdi-trophy"
+          icon-color="linear-gradient(135deg, #2563eb 0%, #1e40af 100%)"
+        >
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label class="field-label">제목 *</label>
+              <Input
+                v-model="modelValue.title"
+                placeholder="경험을 한마디로 정의해주세요."
+                :size="CommonSize.Medium"
+                :disabled="!localIsEditMode"
+              />
+            </div>
+
+            <div class="form-field full-width">
+              <div class="form-row">
+                <div class="form-field-inline">
+                  <label class="field-label">시작 시점*</label>
+                  <DatePicker
+                    v-model="modelValue.periodStart"
+                    type="month"
+                    placeholder="시작월을 선택해주세요."
+                    :disabled="!localIsEditMode"
+                  />
+                </div>
+                <div class="form-field-inline">
+                  <label class="field-label">종료 시점</label>
+                  <DatePicker
+                    v-model="modelValue.periodEnd"
+                    type="month"
+                    placeholder="종료월을 선택해주세요."
+                    :disabled="!localIsEditMode"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field full-width">
+              <div class="form-row">
+                <div class="form-field-inline">
+                  <label class="field-label">배경 / 소속 / 단체</label>
+                  <Input
+                    v-model="modelValue.background"
+                    placeholder="프로젝트명, 회사명, 학교, 소모임 등 활동 배경"
+                    :size="CommonSize.Medium"
+                    :disabled="!localIsEditMode"
+                  />
+                </div>
+                <div class="form-field-inline">
+                  <label class="field-label">주요 역할</label>
+                  <Input
+                    v-model="modelValue.role"
+                    placeholder="담당한 역할이나 직책 또는 직무"
+                    :size="CommonSize.Medium"
+                    :disabled="!localIsEditMode"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <!-- 업무 정보 블록 -->
+        <Card
+          title="업무 정보"
+          icon="mdi-briefcase-variant"
+          icon-color="linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)"
+        >
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label class="field-label">업무 유형</label>
+              <div class="select-with-description">
+                <Select
+                  v-model="modelValue.category"
+                  :items="categoryOptions"
+                  placeholder="선택"
+                  :size="FormSize.Compact"
+                  :disabled="!localIsEditMode"
+                />
+                <DescriptionBox
+                  :text="
+                    modelValue.category
+                      ? getcategoryDescription(modelValue.category)
+                      : '업무 유형을 선택해주세요'
+                  "
+                />
+              </div>
+            </div>
+            <div class="form-field full-width">
+              <label class="field-label">기여도/참여도</label>
+              <div class="select-with-description">
+                <Select
+                  v-model="modelValue.contributionLevel"
+                  :items="contributionLevelOptions"
+                  placeholder="선택"
+                  :size="FormSize.Compact"
+                  :disabled="!localIsEditMode"
+                />
+                <DescriptionBox
+                  :text="
+                    modelValue.contributionLevel
+                      ? getContributionLevelDescription(modelValue.contributionLevel)
+                      : '기여도를 선택해주세요'
+                  "
+                />
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <!-- 목표 블록 -->
+        <Card
+          title="목표"
+          icon="mdi-flag-checkered"
+          icon-color="linear-gradient(135deg, #10b981 0%, #059669 100%)"
+        >
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <TextArea
+                v-model="modelValue.goalSummary"
+                placeholder="달성하고자 했던 목표를 작성하세요"
+                :rows="3"
+                :disabled="!localIsEditMode"
+              />
+            </div>
+          </div>
+        </Card>
+
+        <!-- 핵심 성과 블록 -->
+        <Card
+          title="핵심 성과"
+          icon="mdi-star-circle"
+          icon-color="linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+        >
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <TextArea
+                v-model="modelValue.keyAchievements"
+                placeholder="이 경험을 통해 얻은 성과와 영향을 간략히 설명하세요"
+                :rows="3"
+                :disabled="!localIsEditMode"
+              />
+            </div>
+          </div>
+        </Card>
+
+        <!-- 스킬 블록 -->
+        <Card
+          title="스킬"
+          icon="mdi-code-tags"
+          icon-color="linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)"
+        >
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <Input
+                v-model="modelValue.skills"
+                placeholder="관련 스킬을 쉼표로 구분하여 입력하세요 (예: Vue.js, TypeScript, Node.js)"
+                :size="CommonSize.Medium"
+                :disabled="!localIsEditMode"
+              />
+            </div>
+          </div>
+        </Card>
+
+        <!-- 상세 블록들 (동적) -->
+        <Card
+          v-for="(section, index) in modelValue.sections"
+          :key="section.id"
+          icon="mdi-text-box-multiple"
+          icon-color="linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)"
+        >
+          <template #header>
+            <div class="card-custom-header">
+              <div
+                class="card-icon-wrapper"
+                style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)"
+              >
+                <v-icon color="white" size="20">mdi-text-box-multiple</v-icon>
+              </div>
+
+              <!-- 제목과 편집 버튼 그룹 -->
+              <div class="section-title-group">
+                <!-- 편집 모드가 아닐 때 -->
+                <template v-if="!section.isEditingTitle">
+                  <div class="section-title-wrapper">
+                    <div class="section-title-row">
+                      <h2 class="section-title">
+                        {{ section.title || `블록 ${index + 1}` }}
+                      </h2>
+                      <button
+                        v-if="localIsEditMode"
+                        class="edit-btn-header"
+                        @click="startEditSectionTitle(index)"
+                      >
+                        <v-icon size="small">mdi-pencil</v-icon>
+                      </button>
+                    </div>
+                    <div
+                      v-if="isDefaultTitle(section, index) && localIsEditMode"
+                      class="section-title-hint"
+                    >
+                      블록 이름을 입력해주세요
+                    </div>
+                  </div>
+                </template>
+
+                <!-- 편집 모드일 때 -->
+                <template v-else>
+                  <div class="section-title-edit">
+                    <Input
+                      v-model="section.tempTitle"
+                      placeholder="블록 제목을 입력하세요"
+                      :size="CommonSize.Small"
+                      class="section-title-input"
+                    />
+                    <button class="edit-action-btn apply" @click="applySectionTitle(index)">
+                      <v-icon size="small">mdi-check</v-icon>
+                    </button>
+                    <button class="edit-action-btn cancel" @click="cancelSectionTitleEdit(index)">
+                      <v-icon size="small">mdi-close</v-icon>
+                    </button>
+                  </div>
+                </template>
+              </div>
+
+              <button
+                v-if="localIsEditMode"
+                class="delete-btn-header"
+                @click="removeSection(index)"
+              >
+                <v-icon size="small">mdi-delete</v-icon>
+              </button>
+            </div>
+          </template>
+
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <div class="section-kind-group">
+                <Select
+                  v-model="section.kind"
+                  :items="sectionKindOptions"
+                  placeholder="블록 유형을 선택하세요"
+                  :size="FormSize.Compact"
+                  :disabled="!localIsEditMode"
+                  @update:model-value="onSectionKindChange(index)"
+                />
+                <button
+                  v-if="localIsEditMode"
+                  class="section-help-btn"
+                  :class="{ active: section.showHelp }"
+                  @click="toggleSectionHelp(index)"
+                >
+                  <v-icon size="small">mdi-help-circle-outline</v-icon>
+                  <span class="help-btn-text">Help</span>
+                </button>
+                <DescriptionBox :text="getSectionDescription(section.kind)" />
+              </div>
+              <Transition name="fade">
+                <div v-if="section.showHelp && localIsEditMode" class="section-help-detail">
+                  <div class="help-detail-icon">
+                    <v-icon size="18">mdi-lightbulb-on-outline</v-icon>
+                  </div>
+                  <div class="help-detail-content">
+                    {{ getSectionHelp(section.kind) }}
+                  </div>
+                </div>
+              </Transition>
+            </div>
+
+            <div class="form-field full-width">
+              <TextArea
+                v-model="section.content"
+                placeholder="Help 버튼을 눌러서 작성 가이드를 확인하세요"
+                :rows="5"
+                :disabled="!localIsEditMode"
+              />
+            </div>
+          </div>
+        </Card>
+
+        <!-- 빈 상태 -->
+        <div
+          v-if="modelValue.sections.length === 0 && localIsEditMode"
+          class="empty-state-standalone"
+        >
+          <v-icon size="large" color="#9ca3af">mdi-text-box-plus</v-icon>
+          <p class="empty-state-text">블록을 추가하여 구체적인 내용을 추가해주세요.</p>
+          <Button
+            :variant="ButtonVariant.Primary"
+            :size="CommonSize.Medium"
+            :round="true"
+            class="empty-state-add-btn"
+            @click="addSection"
+          >
+            <v-icon size="small">mdi-plus</v-icon>
+            블록 추가
+          </Button>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 액션 사이드바 (1) -->
+      <aside class="action-sidebar">
+        <!-- 블록 관리 영역 -->
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <h3 class="sidebar-title">{{ localIsEditMode ? '편집' : '목차' }}</h3>
+          </div>
+
+          <!-- 블록 추가 버튼 -->
+          <Button
+            v-if="localIsEditMode"
+            :variant="ButtonVariant.Primary"
+            :size="CommonSize.Medium"
+            :round="true"
+            class="sidebar-add-btn"
+            @click="addSection"
+          >
+            <v-icon size="small">mdi-plus</v-icon>
+            블록 추가
+          </Button>
+
+          <!-- 블록 목록 -->
+          <div class="sidebar-sections-list">
+            <!-- 고정 블록 (수정 불가) -->
+            <div class="sidebar-section-item sidebar-section-fixed">
+              <div class="sidebar-section-info">
+                <v-icon size="small" color="#2563eb">mdi-trophy</v-icon>
+                <span class="sidebar-section-title">기본 정보</span>
+              </div>
+            </div>
+
+            <div class="sidebar-section-item sidebar-section-fixed">
+              <div class="sidebar-section-info">
+                <v-icon size="small" color="#8b5cf6">mdi-briefcase-variant</v-icon>
+                <span class="sidebar-section-title">업무 정보</span>
+              </div>
+            </div>
+
+            <div class="sidebar-section-item sidebar-section-fixed">
+              <div class="sidebar-section-info">
+                <v-icon size="small" color="#10b981">mdi-flag-checkered</v-icon>
+                <span class="sidebar-section-title">목표</span>
+              </div>
+            </div>
+
+            <div class="sidebar-section-item sidebar-section-fixed">
+              <div class="sidebar-section-info">
+                <v-icon size="small" color="#f59e0b">mdi-star-circle</v-icon>
+                <span class="sidebar-section-title">핵심 성과</span>
+              </div>
+            </div>
+
+            <div class="sidebar-section-item sidebar-section-fixed">
+              <div class="sidebar-section-info">
+                <v-icon size="small" color="#3b82f6">mdi-code-tags</v-icon>
+                <span class="sidebar-section-title">스킬</span>
+              </div>
+            </div>
+
+            <!-- 구분선 -->
+            <div v-if="modelValue.sections.length > 0" class="sidebar-divider" />
+
+            <!-- 동적 블록 (순서 변경 가능) -->
+            <VueDraggableNext
+              v-if="localIsEditMode"
+              v-model="modelValue.sections"
+              tag="div"
+              handle=".sidebar-section-drag-handle"
+              :animation="200"
+              ghost-class="sidebar-section-ghost"
+              chosen-class="sidebar-section-chosen"
+              drag-class="sidebar-section-drag"
+              @end="updateSortOrder"
+            >
+              <div
+                v-for="(section, index) in modelValue.sections"
+                :key="section.id"
+                class="sidebar-section-item"
+              >
+                <div class="sidebar-section-drag-handle">
+                  <v-icon size="small" color="#6b7280">mdi-drag-vertical</v-icon>
+                </div>
+                <div class="sidebar-section-info">
+                  <span class="sidebar-section-number">{{ index + 1 }}</span>
+                  <span class="sidebar-section-title">
+                    {{ section.title || `블록 ${index + 1}` }}
+                  </span>
+                </div>
+                <button class="sidebar-section-delete" @click="removeSection(index)">
+                  <v-icon size="small">mdi-delete-outline</v-icon>
+                </button>
+              </div>
+            </VueDraggableNext>
+
+            <!-- 상세 모드일 때는 드래그/삭제 없이 목차만 표시 -->
+            <template v-else>
+              <div
+                v-for="(section, index) in modelValue.sections"
+                :key="section.id"
+                class="sidebar-section-item sidebar-section-readonly"
+              >
+                <div class="sidebar-section-info">
+                  <span class="sidebar-section-number">{{ index + 1 }}</span>
+                  <span class="sidebar-section-title">
+                    {{ section.title || `블록 ${index + 1}` }}
+                  </span>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import { VueDraggableNext } from 'vue-draggable-next';
+import Card from '@/components/molecules/Card/Card.vue';
+import Button from '@/components/atoms/Button/Button.vue';
+import Input from '@/components/atoms/Input/Input.vue';
+import TextArea from '@/components/atoms/TextArea/TextArea.vue';
+import DatePicker from '@/components/atoms/DatePicker/DatePicker.vue';
+import Select from '@/components/atoms/Select/Select.vue';
+import type { TSelectItem } from '@/components/atoms/Select/Select.vue';
+import DescriptionBox from '@/components/atoms/DescriptionBox/DescriptionBox.vue';
+import { ButtonVariant, CommonSize, FormSize } from '@/constants/enums/style-enum';
+import {
+  ExperienceSectionKind,
+  SECTION_KIND_INFO,
+  CATEGORY_INFO,
+  CONTRIBUTION_LEVEL_INFO,
+} from '@/types/experience-types';
+import type { ExperienceSection } from '@/types/experience-types';
+
+export interface TExperienceFormSection extends ExperienceSection {
+  isEditingTitle?: boolean;
+  tempTitle: string;
+  showHelp?: boolean;
+}
+
+export interface TExperienceFormData {
+  id?: string;
+  title: string;
+  background: string;
+  periodStart: string;
+  periodEnd: string;
+  role: string;
+  category: string | null;
+  contributionLevel: string | null;
+  goalSummary: string;
+  keyAchievements: string;
+  skills: string;
+  sections: TExperienceFormSection[];
+}
+
+interface Props {
+  modelValue: TExperienceFormData;
+  isEditMode?: boolean;
+  isNew?: boolean;
+}
+
+const {
+  modelValue,
+  isEditMode = true,
+  isNew = false,
+} = defineProps<Props>();
+
+const emit = defineEmits<{
+  'update:modelValue': [TExperienceFormData];
+  'update:isEditMode': [boolean];
+}>();
+
+const localIsEditMode = computed(() => isEditMode);
+
+// 블록 유형 옵션 생성
+const sectionKindOptions = computed<TSelectItem[]>(() => {
+  return Object.entries(SECTION_KIND_INFO).map(([key, value]) => ({
+    title: value.display,
+    value: key,
+  }));
+});
+
+// 업무 유형 옵션 생성
+const categoryOptions = computed<TSelectItem[]>(() => {
+  return Object.entries(CATEGORY_INFO).map(([key, value]) => ({
+    title: value.display,
+    value: key,
+  }));
+});
+
+// 기여도 옵션 생성
+const contributionLevelOptions = computed<TSelectItem[]>(() => {
+  return Object.entries(CONTRIBUTION_LEVEL_INFO).map(([key, value]) => ({
+    title: value.display,
+    value: key,
+  }));
+});
+
+let sectionCounter = 0;
+
+const addSection = () => {
+  modelValue.sections.push({
+    id: `new_section_${Date.now()}_${sectionCounter++}`,
+    kind: ExperienceSectionKind.NONE,
+    title: '',
+    content: '',
+    sortOrder: modelValue.sections.length,
+    isEditingTitle: false,
+    tempTitle: '',
+    showHelp: false,
+  });
+};
+
+const removeSection = (index: number) => {
+  modelValue.sections.splice(index, 1);
+  updateSortOrder();
+};
+
+const updateSortOrder = () => {
+  modelValue.sections.forEach((section, index) => {
+    section.sortOrder = index;
+  });
+};
+
+const getSectionHelp = (kind: string): string => {
+  const kindKey = kind as ExperienceSectionKind;
+  return SECTION_KIND_INFO[kindKey]?.help || '내용을 입력하세요';
+};
+
+const getSectionDescription = (kind: string): string => {
+  const kindKey = kind as ExperienceSectionKind;
+  return SECTION_KIND_INFO[kindKey]?.description || '';
+};
+
+const getcategoryDescription = (category: string | null): string => {
+  if (!category) return '';
+  return CATEGORY_INFO[category as keyof typeof CATEGORY_INFO]?.description || '';
+};
+
+const getContributionLevelDescription = (level: string | null): string => {
+  if (!level) return '';
+  return CONTRIBUTION_LEVEL_INFO[level as keyof typeof CONTRIBUTION_LEVEL_INFO]?.description || '';
+};
+
+const toggleSectionHelp = (index: number) => {
+  modelValue.sections[index].showHelp = !modelValue.sections[index].showHelp;
+};
+
+const onSectionKindChange = (index: number) => {
+  // logic can be added here if needed
+};
+
+const isDefaultTitle = (section: TExperienceFormSection, index: number): boolean => {
+  return !section.title || section.title === `블록 ${index + 1}`;
+};
+
+const startEditSectionTitle = (index: number) => {
+  const section = modelValue.sections[index];
+  section.tempTitle = section.title || `블록 ${index + 1}`;
+  section.isEditingTitle = true;
+};
+
+const applySectionTitle = (index: number) => {
+  const section = modelValue.sections[index];
+  section.title = section.tempTitle || '';
+  section.tempTitle = '';
+  section.isEditingTitle = false;
+};
+
+const cancelSectionTitleEdit = (index: number) => {
+  const section = modelValue.sections[index];
+  section.tempTitle = '';
+  section.isEditingTitle = false;
+};
+</script>
+
+<style lang="scss" scoped>
+.experience-form-component {
+  min-height: 100vh;
+  margin: -32px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-layout {
+  padding: 40px 48px;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  gap: 24px;
+  align-items: start;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    padding: 24px;
+    grid-template-columns: 1fr;
+  }
+}
+
+// 동적 블록의 커스텀 헤더
+.card-custom-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.card-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+</style>
+<style lang="scss">
+@use '@/styles/pages/career-register-page.scss';
+</style>

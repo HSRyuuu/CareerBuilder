@@ -3,249 +3,6 @@
  */
 
 /**
- * 경험 블록 종류
- */
-export enum ExperienceSectionKind {
-  NONE = 'NONE',
-  CONTEXT = 'CONTEXT',
-  GOAL = 'GOAL',
-  ACTION = 'ACTION',
-  RESULT = 'RESULT',
-  CHALLENGE = 'CHALLENGE',
-  LEARNING = 'LEARNING',
-  FEEDBACK = 'FEEDBACK',
-  ARTIFACT = 'ARTIFACT',
-}
-
-/**
- * 경험 블록 종류별 표시 정보
- */
-export const SECTION_KIND_INFO: Record<
-  ExperienceSectionKind,
-  { display: string; description: string; help: string }
-> = {
-  [ExperienceSectionKind.NONE]: {
-    display: '유형 선택',
-    description: '✨ 아직 블록 종류를 선택하지 않은 상태예요',
-    help: `아직 블록 종류를 선택하지 않았어요.
-위에서 블록 종류를 선택한 후, 해당하는 내용을 채워주세요.
-
-예를 들어,
-• 🧩 "배경/상황" 섹션이라면: 이 일을 시작한 이유와 그때의 상황을 적어요.
-• 🧑‍🔧 "실행 내용" 섹션이라면: 당신이 한 주요 행동과 기여를 적어요.
-• 📊 "결과 및 경험" 섹션이라면: 결과를 숫자나 변화를 위주로 적으면 좋아요.`,
-  },
-  [ExperienceSectionKind.GOAL]: {
-    display: '목표/문제',
-    description:
-      '🎯 해결하려던 문제는 무엇이고, 달성하려던 목표와 성공 기준은 무엇인지 명확히 정리해요',
-    help: `이 일을 통해 해결하고 싶었던 문제와 이루고자 했던 목표를 적어주세요.
-
-- 🚨 어떤 문제가 있었나요? (불편함, 병목, 오류, 리소스 낭비 등)
-• ✅ 구체적으로 어떤 상태가 되면 "성공"이라고 볼 수 있었나요?
-• 📏 가능하면 목표를 숫자나 명확한 기준으로 표현해보면 좋아요.
-
-예) "회원 가입 완료율을 기존 45%에서 55% 이상으로 끌어올리는 것을 목표로 했습니다. 특히 모바일 환경에서의 이탈률을 줄이는 데 초점을 두었고, 사용자가 1분 안에 가입을 완료할 수 있도록 하는 것을 성공 기준으로 삼았습니다."`,
-  },
-  [ExperienceSectionKind.ACTION]: {
-    display: '실행 내용',
-    description: '🛠️ 목표를 이루기 위해 당신이 한 주요 행동과 기여를 정리해요',
-    help: `이 목표를 위해 당신이 직접 한 일을 위주로 적어주세요.
-
-- 📌 '내가 한 일'을 2~5줄로, 3~5개의 포인트로 나눠 정리해보세요.
-• 💡 설계, 구현, 커뮤니케이션, 조율, 의사결정 등에서 본인이 기여한 부분을 강조하면 좋아요.
-
-예)
-• 📉 가입 플로우의 주요 이탈 구간를 분석하기 위해 로그 이벤트 설계를 주도하고, 기존 데이터도 함께 수집·정리했습니다.
-• 🤝 분석 결과를 바탕으로 UI/UX 디자이너와 협업해 가입 단계를 4단계에서 2단계로 줄이는 개선안을 제안했습니다.
-• ⚙️ 백엔드 API 응답 구조를 단순화하고, 중복된 검증 로직을 통합하여 전체 응답 시간을 단축했습니다.
-• 📈 변경된 가입 플로우에 대한 A/B 테스트 환경을 구성하고, 실험 결과를 정리하여 팀에 공유했습니다.`,
-  },
-  [ExperienceSectionKind.RESULT]: {
-    display: '결과 및 경험',
-    description: '📊 당신이 한 일로 생긴 변화나 경험를, 가능하면 숫자로 표현해요',
-    help: `이 일을 통해 어떤 결과와 변화가 있었는지 적어주세요.
-
-- 🔁 이전과 비교해 어떤 지표나 상태가 어떻게 달라졌나요?
-• 💼 사용자, 팀, 회사 입장에서 어떤 이득이 있었나요?
-• 🧮 가능하다면 숫자, 비율, 기간 등 객관적인 표현을 써보세요.
-
-예)
-• 📈 가입 완료율을 45%에서 58%로 약 13%p 증가시켰습니다.
-• ⏱️ 모바일 가입 플로우의 평균 소요 시간을 1분 30초에서 50초로 약 40% 단축했습니다.
-• ☎️ 멤버십 가입 관련 CS 문의를 월 120건에서 70건으로 줄였습니다.
-• 📊 A/B 테스트 결과, 변경된 플로우의 전환율이 기존 대비 통계적으로 유의미하게 높았습니다.`,
-  },
-    [ExperienceSectionKind.CONTEXT]: {
-    display: '배경/상황',
-    description: '📍 이 일을 시작하게 된 이유와 그때의 팀·회사·고객 상황을 정리해요',
-    help: `이 일을 시작하게 된 배경과 당시 상황을 자유롭게 적어주세요.
-
-- ❓ 왜 이 일을 시작하게 되었나요? (지시, 문제 발생, 아이디어 제안 등)
-• 🧑‍🤝‍🧑 당시 팀/회사/고객은 어떤 상태였나요?
-• 🛠️ 관련된 시스템이나 프로세스는 어떤 상황이었나요?
-
-예) "신규 회원 가입률이 몇 달째 정체되어 있어, 마케팅 팀과 함께 가입 플로우를 점검하기로 했습니다. 당시 우리 서비스는 모바일 유입은 늘고 있었지만, 가입 완료율은 40% 중반에 머물러 있었고, 가입 과정에서 이탈하는 사용자가 많다는 의견이 지속적으로 들어오고 있었습니다."`,
-  },
-  [ExperienceSectionKind.CHALLENGE]: {
-    display: '어려웠던 점',
-    description: '🚧 이 일을 진행하면서 겪은 어려움이나 제약, 갈등을 정리해요',
-    help: `이 일을 진행하면서 가장 어려웠던 점이 무엇이었는지 적어주세요.
-
-- ⏰ 기술적인 제약, 촉박한 일정, 자원 부족, 팀 간 의견 충돌 같은 어려움이 있었나요?
-• 🔍 그 문제를 어떻게 파악했고, 어떤 방법으로 해결하거나 완화했나요?
-
-예) "기존 가입 플로우는 여러 팀의 이해관계가 얽혀 있어 단계 축소에 대한 반대가 많았습니다. 특히 마케팅 팀은 추가 정보 수집을, 보안 팀은 추가 인증 단계를 요구했습니다. 각 팀의 우려를 정리한 뒤, 필수 정보와 선택 정보를 분리하고 단계 내 노출 방식을 바꾸는 절충안을 제안했습니다. 또한, 보안 요구사항을 충족하면서도 사용자 경험을 해치지 않는 인증 방식을 찾기 위해 여러 옵션을 비교 테스트했습니다."`,
-  },
-  [ExperienceSectionKind.LEARNING]: {
-    display: '배운 점',
-    description: '📚 이 경험을 통해 배운 점과 다음에 비슷한 상황에서 다르게 할 점을 돌아봐요',
-    help: `이 경험을 통해 무엇을 배웠고, 다음에 비슷한 일을 할 때는 무엇을 다르게 할지 적어주세요.
-
-- 🧠 일하는 방식, 소통, 기술 선택, 우선순위 결정 등에서 느낀 점은 무엇인가요?
-• 🔄 다음에 비슷한 일을 한다면, 무엇을 더 잘하거나 다르게 하고 싶나요?
-
-예) "여러 팀의 이해관계가 얽힌 문제에서는 처음부터 각 팀의 목표와 우려를 빠르게 공유하고 정리하는 것이 중요하다는 걸 배웠습니다. 이번에는 설계가 어느 정도 진행된 뒤에야 논의를 시작해서, 몇 번이나 방향을 수정해야 했습니다. 다음에는 킥오프 단계에서 주요 팀과 함께 공통 목표와 최소·최대 요구사항을 먼저 정리하고, 그 바탕 위에 설계를 시작하는 방식을 시도해보고 싶습니다."`,
-  },
-  [ExperienceSectionKind.FEEDBACK]: {
-    display: '피드백/평가',
-    description: '💬 이 일에 대해 받은 평가나 피드백을 기록해요',
-    help: `이 일과 관련해 상사, 동료, 타 팀 또는 고객에게서 받은 피드백을 적어주세요.
-
-- 🗣️ 경험 평가나 회고 시간에 들은 말, 칭찬 메일이나 채팅 기록 등 기억나는 내용을 적어보세요.
-• ✍️ 받은 말을 그대로 인용해도 좋고, 요약해서 적어도 괜찮아요.
-
-예)
-• "분석부터 A/B 테스트까지 전체 플로우를 주도적으로 끌고 가줘서 고맙다"는 피드백을 팀 리드에게 받았습니다.
-• 분기 경험 평가에서 '사용자 데이터 기반으로 문제를 정의하고 개선안을 도출하는 역량' 블록에서 상위 평가를 받았습니다.
-• CS 팀에서 "가입 관련 문의가 눈에 띄게 줄었다"는 이야기를 들었고, 실제로 문의 통계에도 반영되었습니다.`,
-  },
-  [ExperienceSectionKind.ARTIFACT]: {
-    display: '증빙 자료/링크',
-    description: '📎 나중에 참고할 수 있도록 관련 문서, PR, 대시보드 등의 링크를 모아둬요',
-    help: `이 경험와 관련된 증빙 자료나 참고 링크를 적어주세요.
-
-- 🔗 Git/PR 링크, Notion/Confluence 문서, 설계서, 회의록, 발표 자료
-• 📊 대시보드, BI 리포트, Figma 링크 등
-• 📁 파일이 있다면, 어디에 저장되어 있는지도 함께 적어두면 좋아요.
-
-예)
-• PR: [https://github.com/…](https://github.com/%E2%80%A6)
-• 설계 문서(Notion): [https://www.notion.so/…](https://www.notion.so/%E2%80%A6)
-• A/B 테스트 결과 대시보드: [https://looker/…](https://looker/%E2%80%A6)
-• 발표 자료(Google Slides): /drive/…`,
-  },
-};
-
-/**
- * 경험 상태
- */
-export enum ExperienceStatus {
-  INCOMPLETE = 'INCOMPLETE', // 보완 필요
-  COMPLETED = 'COMPLETED', // 작성 완료
-  ANALYZING = 'ANALYZING', // AI 분석 중
-  ANALYZED = 'ANALYZED', // 분석 완료
-}
-
-/**
- * 경험 상태별 표시 정보
- */
-export const STATUS_INFO: Record<ExperienceStatus, { display: string; color: string }> = {
-  [ExperienceStatus.INCOMPLETE]: { display: '보완 필요', color: 'status-incomplete' },
-  [ExperienceStatus.COMPLETED]: { display: '작성 완료', color: 'status-completed' },
-  [ExperienceStatus.ANALYZING]: { display: 'AI 분석 중', color: 'status-analyzing' },
-  [ExperienceStatus.ANALYZED]: { display: '분석 완료', color: 'status-analyzed' },
-};
-
-/**
- * 경험 통계 요약 타입
- */
-export type TExperienceStatsSummary = {
-  total: number;
-  incomplete: number;
-  completed: number;
-  analyzing: number;
-  analyzed: number;
-};
-
-/**
- * 업무 유형
- */
-export enum category {
-  PROJECT = 'PROJECT',
-  OPERATION = 'OPERATION',
-  INCIDENT = 'INCIDENT',
-  PERSONAL = 'PERSONAL',
-  LEARNING = 'LEARNING',
-  OTHER = 'OTHER',
-}
-
-/**
- * 업무 유형별 표시 정보
- */
-export const WORK_TYPE_INFO: Record<category, { display: string; description: string }> = {
-  [category.PROJECT]: {
-    display: '프로젝트',
-    description: '3개월 이상의 프로젝트성 업무',
-  },
-  [category.OPERATION]: {
-    display: '운영/개선',
-    description: '상시 업무 개선 및 운영',
-  },
-  [category.INCIDENT]: {
-    display: '장애 대응',
-    description: '긴급 장애 대응 및 해결',
-  },
-  [category.PERSONAL]: {
-    display: '개인 프로젝트',
-    description: '사이드 프로젝트, 토이 프로젝트',
-  },
-  [category.LEARNING]: {
-    display: '학습/교육',
-    description: '스터디, 교육, 자기계발',
-  },
-  [category.OTHER]: {
-    display: '기타',
-    description: '기타 업무 유형',
-  },
-};
-
-/**
- * 기여도/참여도
- */
-export enum ContributionLevel {
-  OWNER = 'OWNER',
-  LEAD = 'LEAD',
-  MEMBER = 'MEMBER',
-  SUPPORT = 'SUPPORT',
-}
-
-/**
- * 기여도별 표시 정보
- */
-export const CONTRIBUTION_LEVEL_INFO: Record<
-  ContributionLevel,
-  { display: string; description: string }
-> = {
-  [ContributionLevel.OWNER]: {
-    display: '오너',
-    description: '처음부터 끝까지 책임지고 리드',
-  },
-  [ContributionLevel.LEAD]: {
-    display: '리드',
-    description: '팀 리드, 기술 리드',
-  },
-  [ContributionLevel.MEMBER]: {
-    display: '멤버',
-    description: '팀의 한 구성원으로 기여',
-  },
-  [ContributionLevel.SUPPORT]: {
-    display: '서포트',
-    description: '서포트 및 보조 역할',
-  },
-};
-
-/**
  * 경험 블록 (experience_sections 테이블)
  */
 export interface ExperienceSection {
@@ -288,3 +45,215 @@ export interface ExperienceFormData {
   tags: string;
   sections: ExperienceSection[];
 }
+
+/**
+ * 경험 상태
+ */
+export enum ExperienceStatus {
+  INCOMPLETE = 'INCOMPLETE', // 보완 필요
+  COMPLETED = 'COMPLETED', // 작성 완료
+  ANALYZING = 'ANALYZING', // AI 분석 중
+  ANALYZED = 'ANALYZED', // 분석 완료
+}
+
+/**
+ * 경험 상태별 표시 정보
+ */
+export const STATUS_INFO: Record<ExperienceStatus, { display: string; color: string }> = {
+  [ExperienceStatus.INCOMPLETE]: { display: '보완 필요', color: 'status-incomplete' },
+  [ExperienceStatus.COMPLETED]: { display: '작성 완료', color: 'status-completed' },
+  [ExperienceStatus.ANALYZING]: { display: 'AI 분석 중', color: 'status-analyzing' },
+  [ExperienceStatus.ANALYZED]: { display: '분석 완료', color: 'status-analyzed' },
+};
+
+/**
+ * 경험 통계 요약 타입
+ */
+export type TExperienceStatsSummary = {
+  total: number;
+  incomplete: number;
+  completed: number;
+  analyzing: number;
+  analyzed: number;
+};
+
+/**
+ * 업무 유형
+ */
+export enum Category {
+  PROJECT = 'PROJECT',
+  MAINTENANCE = 'MAINTENANCE',
+  TROUBLESHOOTING = 'TROUBLESHOOTING',
+  R_AND_D = 'R_AND_D',
+  LEARNING = 'LEARNING',
+  OTHER = 'OTHER',
+}
+
+/**
+ * 경험 유형별 표시 정보 (IT 직군 공통)
+ */
+export const CATEGORY_INFO: Record<Category, { display: string; description: string }> = {
+  [Category.PROJECT]: {
+    display: '프로젝트',
+    description: '목표 달성을 위해 초기 기획부터 실행까지 참여한 주요 과업',
+  },
+  [Category.MAINTENANCE]: {
+    display: '운영 및 효율화',
+    description: '지속적인 업무 운영과 프로세스 개선 및 품질 향상 활동',
+  },
+  [Category.TROUBLESHOOTING]: {
+    display: '이슈 해결',
+    description: '예기치 못한 문제 상황 대응 및 병목 구간 해결 경험',
+  },
+  [Category.R_AND_D]: {
+    display: '리서치 및 설계',
+    description: '신규 도입을 위한 조사, 타당성 검토 및 모델링/프로토타이핑',
+  },
+  [Category.LEARNING]: {
+    display: '자기계발 및 교육',
+    description: '전문성 강화를 위한 새로운 지식 습득 및 교육 참여',
+  },
+  [Category.OTHER]: {
+    display: '기타',
+    description: '기타 활동',
+  },
+};
+
+/**
+ * 기여도/참여도
+ */
+export enum ContributionLevel {
+  OWNER = 'OWNER',
+  LEAD = 'LEAD',
+  MEMBER = 'MEMBER',
+  SUPPORT = 'SUPPORT',
+}
+
+/**
+ * 기여도별 표시 정보
+ */
+export const CONTRIBUTION_LEVEL_INFO: Record<
+  ContributionLevel,
+  { display: string; description: string }
+> = {
+  [ContributionLevel.OWNER]: {
+    display: '오너',
+    description: '처음부터 끝까지 책임지고 리드',
+  },
+  [ContributionLevel.LEAD]: {
+    display: '리드',
+    description: '팀 리드, 기술 리드',
+  },
+  [ContributionLevel.MEMBER]: {
+    display: '멤버',
+    description: '팀의 한 구성원으로 기여',
+  },
+  [ContributionLevel.SUPPORT]: {
+    display: '서포트',
+    description: '서포트 및 보조 역할',
+  },
+};
+
+/**
+ * 경험 블록 종류
+ */
+
+export enum ExperienceSectionKind {
+  NONE = 'NONE',
+  SITUATION = 'SITUATION',
+  TASK = 'TASK',
+  DECISION = 'DECISION',
+  TROUBLESHOOTING = 'TROUBLESHOOTING',
+  ACHIEVEMENT = 'ACHIEVEMENT',
+  LEARNING = 'LEARNING',
+  ARTIFACT = 'ARTIFACT',
+}
+/**
+ * 경험 블록 종류별 표시 정보
+ */
+export const SECTION_KIND_INFO: Record<
+  ExperienceSectionKind,
+  { display: string; description: string; help: string }
+> = {
+  [ExperienceSectionKind.NONE]: {
+    display: '유형 선택',
+    description: '✨ 아직 블록 종류를 선택하지 않은 상태예요',
+    help: `블록 종류를 선택하여 경험을 구체화해보세요.
+    
+추천하는 흐름:
+• 🧩 시작할 땐: "배경 및 목표"로 시작해요.
+• 🛠️ 구체적인 작업은: "수행 내용"이나 "의사결정"을 활용해요.
+• 📊 마무리는: "성과 및 결과"와 "회고"로 정리하면 완벽해요.`,
+  },
+  [ExperienceSectionKind.SITUATION]: {
+    display: '배경 및 목표',
+    description: '📍 이 일이 시작된 계기와 해결하려던 과제, 최종 목적지를 정의해요',
+    help: `당시의 상황과 도달하고 싶었던 목표를 한 번에 정리해주세요.
+
+• ❓ 왜 이 일을 시작하게 되었나요? (문제 발생, 기획 제안 등)
+• 🎯 구체적으로 어떤 상태가 되는 것이 목표였나요?
+• 📏 성공을 판단하는 기준은 무엇이었나요?
+
+예) "가입 전환율이 정체된 상황에서 모바일 이탈률 10% 감소를 목표로 프로세스 개편을 시작했습니다."`,
+  },
+  [ExperienceSectionKind.TASK]: {
+    display: '수행 내용',
+    description: '🛠️ 목표 달성을 위해 본인이 담당한 핵심 업무와 실행 과정을 정리해요',
+    help: `구체적으로 어떤 실무를 진행했는지 적어주세요.
+
+• 📌 본인이 직접 설계하거나 실행한 부분을 강조하세요.
+• ⚙️ 활용한 도구(Stack)나 방법론을 포함하면 좋습니다.
+
+예) 
+• 가입 단계 축소를 위한 API 신규 설계 및 개발
+• 기존 레거시 코드 리팩토링 및 테스트 코드 작성`,
+  },
+  [ExperienceSectionKind.DECISION]: {
+    display: '의사결정 및 근거',
+    description: '💡 여러 대안 중 왜 그 방식을 택했는지, 본인의 판단 근거를 기록해요',
+    help: `전문성은 '선택의 이유'에서 드러납니다.
+
+• ⚖️ 후보군 중 왜 이 기술/정책을 선택했나요?
+• 📅 일정, 비용, 성능 등 어떤 제약 사항을 고려했나요?
+
+예) "실시간성보다 데이터 정합성이 중요했기에 Kafka 대신 RabbitMQ를 선택하여 메시지 유실 없는 안정적인 구조를 택했습니다."`,
+  },
+  [ExperienceSectionKind.TROUBLESHOOTING]: {
+    display: '문제 해결 과정',
+    description: '🚧 예상치 못한 난관을 어떻게 분석하고 극복했는지 기록해요',
+    help: `문제 해결 역량을 보여줄 수 있는 가장 중요한 섹션입니다.
+
+• 🔍 문제의 근본 원인을 어떻게 파악했나요?
+• ✅ 시도했던 방법들과 최종 해결책은 무엇인가요?
+
+예) "배포 후 응답 지연 현상을 발견하여 로컬 캐시 적용 및 DB 인덱스 최적화를 통해 응답 시간을 200ms에서 50ms로 단축했습니다."`,
+  },
+  [ExperienceSectionKind.ACHIEVEMENT]: {
+    display: '성과 및 결과',
+    description: '📊 수행 결과로 얻은 수치적 성과나 정성적인 변화를 기록해요',
+    help: `이 경험이 팀이나 서비스에 어떤 가치를 주었는지 적어주세요.
+
+• 📈 이전 대비 개선된 지표를 숫자(%)로 표현해보세요.
+• 🌟 조직 내부의 긍정적인 평가나 효율화 사례도 좋습니다.
+
+예) "개편 후 가입 완료율 15% 상승, 월평균 CS 유입량 20% 감소라는 성과를 거두었습니다."`,
+  },
+  [ExperienceSectionKind.LEARNING]: {
+    display: '회고 및 성장',
+    description: '🧠 경험을 통해 얻은 교훈과 동료의 피드백을 정리하며 마무리해요',
+    help: `다음 프로젝트에서 더 잘할 수 있는 인사이트를 기록하세요.
+
+• 🎓 새롭게 배운 기술이나 협업 방식은 무엇인가요?
+• 💬 동료나 상사에게 받은 긍정적인 피드백이나 개선점은 무엇인가요?
+
+예) "유관 부서와 초기 요구사항 공유가 늦어 설계 수정이 잦았습니다. 다음엔 킥오프 단계에서 싱크를 맞추는 과정을 필수로 넣으려 합니다."`,
+  },
+  [ExperienceSectionKind.ARTIFACT]: {
+    display: '증빙 자료/링크',
+    description: '📎 결과물이나 참고할 수 있는 링크(PR, 문서, 디자인)를 모아둬요',
+    help: `경험의 실체를 증명할 수 있는 자료를 기록하세요.
+
+• 🔗 GitHub PR, Notion 기획서, Figma 디자인 링크
+• 📁 발표 자료, 기술 블로그 포스팅 링크`,
+  },
+};

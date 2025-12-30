@@ -4,7 +4,7 @@
 import type {
   ExperienceSectionKind,
   ExperienceStatus,
-  category,
+  Category,
   ContributionLevel,
   TExperienceStatsSummary,
 } from '@/types/experience-types';
@@ -52,7 +52,7 @@ export type TExperienceCreate = {
   role?: string;
   periodStart: string;
   periodEnd?: string;
-  category?: category | string;
+  category?: Category | string;
   contributionLevel?: ContributionLevel | string;
   goalSummary?: string;
   keyAchievements?: string;
@@ -70,7 +70,7 @@ export type TExperienceUpdate = {
   role?: string;
   periodStart: string;
   periodEnd?: string;
-  category?: category | string;
+  category?: Category | string;
   contributionLevel?: ContributionLevel | string;
   goalSummary?: string;
   keyAchievements?: string;
@@ -90,7 +90,7 @@ export type TExperience = {
   role?: string;
   periodStart: string;
   periodEnd?: string;
-  category?: category | string;
+  category?: Category | string;
   contributionLevel?: ContributionLevel | string;
   goalSummary?: string;
   keyAchievements?: string;

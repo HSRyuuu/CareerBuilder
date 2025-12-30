@@ -48,7 +48,7 @@ class Experience(
     @Column(name = "role")
     var role: String? = null,
 
-    @Column(name = "work_type")
+    @Column(name = "category")
     @Enumerated(EnumType.STRING)
     var category: WorkCategory? = null,
 
@@ -137,16 +137,16 @@ enum class ExperienceStatus(val description: String) {
     ANALYZING("AI 분석 중"),
 
     // 4. 분석 완료 (AI 분석이 끝나고 대시보드에 완전히 반영된 상태)
-    ANALYZED("분석 완료")
+    ANALYZED("AI 분석 완료")
 }
 
-enum class WorkCategory {
-    PROJECT, // 3개월짜리 프로젝트
-    OPERATION, // 상시 업무 개선
-    INCIDENT, // 장애 대응
-    PERSONAL, // 개인 프로젝트
-    LEARNING, // 스터디 교육 등
-    OTHER; // 기타
+enum class WorkCategory(val description: String) {
+    PROJECT("목표 달성을 위해 초기 기획부터 실행까지 참여한 주요 과업"),
+    MANAGEMENT("지속적인 업무 운영과 프로세스 개선 및 품질 향상 활동"),
+    TROUBLESHOOTING("예기치 못한 문제 상황 대응 및 병목 구간 해결 경험"),
+    R_AND_D("신규 도입을 위한 조사, 타당성 검토 및 모델링/프로토타이핑"),
+    LEARNING("전문성 강화를 위한 새로운 지식 습득 및 교육 참여"),
+    OTHER("기타 활동");
 }
 
 enum class ContributionLevel {

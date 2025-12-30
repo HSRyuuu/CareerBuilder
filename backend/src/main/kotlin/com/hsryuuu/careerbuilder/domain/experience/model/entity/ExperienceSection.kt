@@ -60,13 +60,12 @@ class ExperienceSection(
 enum class SectionKind(
     val display: String
 ) {
-    NONE("미정"),         // 아직 정하지 않음
-    GOAL("목표/문제"),      // 목표/문제 정의
-    ACTION("실행 내용"),        // 내가 실제로 한 일
-    RESULT("결과 및 성과"),            // 결과, 성과 (숫자)
-    CONTEXT("배경/상황"),   // 일을 하게 된 배경 / 상황
-    CHALLENGE("어려웠던 점"),   // 어려웠던 점
-    LEARNING("배운 점"),    // 배운 점 / 성장
-    FEEDBACK("피드백/평가"), // 받은 피드백, 평가
+    NONE("미정"),
+    SITUATION("배경 및 목표"),       // Context + Goal 통합
+    TASK("수행 내용"),              // 단순 실행 내역
+    DECISION("의사결정 및 근거"),     // 왜 그렇게 했는지 (전문성)
+    TROUBLESHOOTING("문제 해결 과정"), // 위기 극복 (역량)
+    ACHIEVEMENT("성과 및 결과"),     // Result -> Achievement
+    LEARNING("회고 및 성장"),       // Learning + Feedback 통합
     ARTIFACT("증빙 자료/링크");
 }

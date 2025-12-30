@@ -1,39 +1,132 @@
 @use '@/styles/variables' as *;
 
 .description-box {
-  flex: 1;
-  font-size: 13px;
-  line-height: 1.5;
-  padding: 8px 12px;
-  border-radius: 6px;
-  min-height: 36px;
+  position: relative;
   display: flex;
-  align-items: center;
-  transition: all 0.2s ease;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
-  // Info variant (기본 - 파란색)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .description-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    opacity: 0.9;
+  }
+
+  .description-content {
+    flex: 1;
+    color: var(--text-secondary);
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+
+  // Variants
   &--info {
-    border-left: 4px solid var(--primary-color);
+    background: rgba(37, 99, 235, 0.04);
+    border-color: rgba(37, 99, 235, 0.1);
+    
+    &::before {
+      background: linear-gradient(to bottom, #3b82f6, #2563eb);
+    }
+    
+    .description-icon {
+      color: #3b82f6;
+    }
   }
 
-  // Warning variant (주황색)
   &--warning {
-    border-left: 4px solid #f59e0b;
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(245, 158, 11, 0.04);
+    border-color: rgba(245, 158, 11, 0.1);
+    
+    &::before {
+      background: linear-gradient(to bottom, #fbbf24, #f59e0b);
+    }
+    
+    .description-icon {
+      color: #f59e0b;
+    }
   }
 
-  // Success variant (초록색)
   &--success {
-    border-left: 4px solid #10b981;
-    background: rgba(16, 185, 129, 0.1);
+    background: rgba(16, 185, 129, 0.04);
+    border-color: rgba(16, 185, 129, 0.1);
+    
+    &::before {
+      background: linear-gradient(to bottom, #34d399, #10b981);
+    }
+    
+    .description-icon {
+      color: #10b981;
+    }
   }
 
-  // Neutral variant (회색)
   &--neutral {
-    border-left: 4px solid var(--text-tertiary);
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    
+    &::before {
+      background: var(--text-tertiary);
+    }
+    
+    .description-icon {
+      color: var(--text-tertiary);
+    }
+  }
+
+  &--gradient {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%);
+    border-color: rgba(139, 92, 246, 0.15);
+    
+    &::before {
+      background: linear-gradient(to bottom, #8b5cf6, #3b82f6);
+    }
+    
+    .description-icon {
+      color: #8b5cf6;
+    }
+
+    .description-content {
+      color: var(--text-primary);
+    }
+  }
+
+  // Hover effect
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
   }
 }
 
+// Dark mode specific adjustments
+.dark-mode {
+  .description-box {
+    &--neutral {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    
+    &:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+  }
+}

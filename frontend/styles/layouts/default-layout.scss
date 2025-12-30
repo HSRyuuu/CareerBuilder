@@ -61,7 +61,23 @@
 .layout-header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.theme-toggle-btn {
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: var(--primary-color);
+    background: var(--bg-tertiary);
+    transform: rotate(15deg);
+  }
 }
 
 /* 사이드바 */

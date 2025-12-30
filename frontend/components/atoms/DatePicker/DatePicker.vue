@@ -13,9 +13,10 @@
     :cancel-text="customLocale.cancel"
     :select-text="customLocale.select"
     :now-button-label="customLocale.today"
-    :format="format"
+    :format="computedFormat"
     :placeholder="placeholder"
     :dark="isDark"
+    :month-picker="type === 'month' || monthPicker"
     auto-apply
     @update:model-value="handleUpdate"
   />
@@ -27,7 +28,7 @@ import DatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
 export type TDatePickerProps = {
-  modelValue: string | string[] | Date | Date[] | null;
+  modelValue: string | string[] | Date | Date[] | any | null;
   locale?: string;
   customLocale?: {
     cancel: string;
@@ -44,6 +45,7 @@ export type TDatePickerProps = {
   placeholder?: string;
   useTimePicker?: boolean;
   useTimePickerInline?: boolean;
+  monthPicker?: boolean;
 };
 
 const colorMode = useColorMode();
@@ -67,20 +69,35 @@ const {
   placeholder = '',
   useTimePicker = false,
   useTimePickerInline = false,
+  monthPicker = false,
 } = defineProps<TDatePickerProps>();
 
+const computedFormat = computed(() => {
+  if (format !== 'yyyy-MM-dd') return format;
+  if (type === 'month' || monthPicker) return 'yyyy-MM';
+  return format;
+});
+
 const emit = defineEmits<{
-  'update:modelValue': [string | string[] | Date | Date[]];
+  'update:modelValue': [any];
 }>();
 
-const handleUpdate = (value: string | string[] | Date | Date[]) => {
+const handleUpdate = (value: any) => {
   if (!value) {
     emit('update:modelValue', '');
     return;
   }
 
-  const formatDate = (date: Date | string) => {
+  const formatDate = (date: any) => {
+    // month-picker가 켜져있을 때 { month: 1, year: 2025 } 형태의 객체가 올 수 있음
+    if (date && typeof date === 'object' && 'month' in date && 'year' in date) {
+      return `${date.year}-${String(date.month + 1).padStart(2, '0')}`;
+    }
+
     if (date instanceof Date) {
+      if (type === 'month' || monthPicker) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      }
       if (useTimePicker) {
         return date.toISOString().slice(0, 16); // YYYY-MM-ddTHH:mm 형식
       }
