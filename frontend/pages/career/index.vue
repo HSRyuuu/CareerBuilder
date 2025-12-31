@@ -84,9 +84,9 @@
             :variant="ButtonVariant.Primary"
             :size="CommonSize.Medium"
             :round="true"
+            icon="mdi-plus"
             @click="handleRegister"
           >
-            <v-icon size="small">mdi-plus</v-icon>
             경험 등록
           </Button>
         </div>

@@ -23,10 +23,10 @@
               :variant="ButtonVariant.Primary"
               :size="CommonSize.Medium"
               :round="true"
+              icon="mdi-rocket-launch"
               @click="navigateTo('/career/register')"
               class="pulse-btn"
             >
-              <v-icon start>mdi-rocket-launch</v-icon>
               지금 시작하기
             </Button>
             <Button
