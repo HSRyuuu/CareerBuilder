@@ -176,9 +176,9 @@ class Experience(
         }
 
         if (this.sections.isNotEmpty()) {
-            score += 10;
+            score += 10  // 여기까지 70점 아래는 유연하게 조정
         }
-        // 여기까지 70점 아래는 유연하게 조정
+
 
         val remainScore = 100 - score; // 30점
         var sectionScore = 0;

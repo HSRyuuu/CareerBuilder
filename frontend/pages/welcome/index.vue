@@ -7,12 +7,14 @@
           <div class="hero-badge">AI Powered Career Assistant</div>
           <h1 class="hero-title">
             당신의 커리어를<br />
-            <span>AI로 자산화</span> 하세요
+            <span>AI로 자산화</span>하세요 
           </h1>
           <p class="hero-description">
-            파편화된 업무 경험을 체계적으로 관리하고, AI 분석을 통해 당신만의 핵심 경쟁력을
-            발견하세요. 단순한 나열을 넘어 성과 중심의 커리어로 만들어드립니다.
+            파편화된 업무 경험을 체계적으로 관리하고,
+            <br>AI 분석을 통해 당신만의 <b>핵심 경쟁력을 발견</b>하세요.
+            <br>단순한 나열을 넘어 <b>성과 중심의 커리어</b>로 만들어드립니다.
           </p>
+
           <div class="hero-actions">
             <Button
               :variant="ButtonVariant.Primary"

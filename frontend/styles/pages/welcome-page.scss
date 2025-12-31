@@ -87,6 +87,10 @@
       margin-bottom: 40px;
       max-width: 540px;
 
+      b {
+        color: white;
+      }
+
       @media (max-width: 960px) {
         margin-left: auto;
         margin-right: auto;

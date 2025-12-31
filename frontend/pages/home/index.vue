@@ -104,13 +104,13 @@
           </div>
           <div v-else class="empty-activities">
             <v-icon color="#e5e7eb" size="48">mdi-text-box-plus-outline</v-icon>
-            <p>아직 등록된 경험이 없습니다.</p>
+            <p>아직 등록된 경험이 없어요</p>
             <Button
               :size="CommonSize.Small"
               :variant="ButtonVariant.Ghost"
               @click="navigateTo('/career/register')"
             >
-              첫 경험 등록하기
+              첫번째 경험을 등록하고 AI 분석을 받아보세요 →
             </Button>
           </div>
         </div>
