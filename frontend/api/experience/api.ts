@@ -84,3 +84,22 @@ export const fetchExperienceAIAnalysis = (id: string) => {
     method: HttpMethod.GET,
   });
 };
+/**
+ * 경험 AI 분석 결과 존재 여부 확인
+ */
+export const fetchAIAnalysisExists = (id: string) => {
+  return useApi<boolean>({
+    url: `/api/experiences/${id}/ai/exists`,
+    method: HttpMethod.GET,
+  });
+};
+
+/**
+ * 경험 AI 분석 요청
+ */
+export const requestAIAnalysis = (id: string) => {
+  return useApi<null>({
+    url: `/api/v1/ai/experiences/${id}/analyze`,
+    method: HttpMethod.POST,
+  });
+};

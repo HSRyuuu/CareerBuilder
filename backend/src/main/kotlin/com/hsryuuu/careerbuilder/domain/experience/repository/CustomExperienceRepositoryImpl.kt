@@ -3,10 +3,7 @@ package com.hsryuuu.careerbuilder.domain.experience.repository
 import com.hsryuuu.careerbuilder.application.exception.ErrorCode
 import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import com.hsryuuu.careerbuilder.common.dto.type.SortDirection
-import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceAnalysis
-import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceSectionAnalysis
-import com.hsryuuu.careerbuilder.domain.ai.model.entity.QAiExperienceAnalysis
-import com.hsryuuu.careerbuilder.domain.ai.model.entity.QAiExperienceSectionAnalysis
+import com.hsryuuu.careerbuilder.domain.ai.model.entity.*
 import com.hsryuuu.careerbuilder.domain.experience.model.dto.*
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.*
 import com.hsryuuu.careerbuilder.domain.experience.model.type.ExperienceSortKey
@@ -28,6 +25,8 @@ class CustomExperienceRepositoryImpl(
 ) : CustomExperienceRepository {
 
     private val experience = QExperience.experience
+    private val aiAnalysis = QAiExperienceAnalysis.aiExperienceAnalysis
+    private val aiRequest = QAiRequest.aiRequest
 
     override fun searchExperience(
         userId: UUID,
@@ -184,6 +183,24 @@ class CustomExperienceRepositoryImpl(
             analysis = aiAnalysisDto,
             sections = sectionWithAnalysisList
         )
+    }
+
+    override fun existsAiAnalysisResultById(
+        experienceId: UUID,
+        userId: UUID
+    ): Boolean {
+
+        val fetchOne = queryFactory
+            .selectOne()
+            .from(aiAnalysis)
+            .join(aiRequest).on(aiAnalysis.requestId.eq(aiRequest.id))
+            .where(
+                aiAnalysis.experienceId.eq(experienceId),
+                aiRequest.userId.eq(userId) // 보안 및 데이터 무결성을 위해 userId 조건 추가 권장
+            )
+            .fetchFirst() // limit(1).fetchOne()과 동일
+
+        return fetchOne != null
     }
 
     /**

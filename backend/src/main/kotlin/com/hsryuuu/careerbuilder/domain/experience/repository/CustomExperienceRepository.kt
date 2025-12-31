@@ -37,4 +37,6 @@ interface CustomExperienceRepository {
      * 경험 및 AI 분석 결과 조회
      */
     fun getExperienceWithAnalysis(experienceId: UUID, userId: UUID): ExperienceWithAnalysisResponse?
+
+    fun existsAiAnalysisResultById(experienceId: UUID, userId: UUID): Boolean
 }

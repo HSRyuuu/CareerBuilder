@@ -71,6 +71,14 @@ class ExperienceController(
         return experienceService.getExperienceWithAIAnalysisResult(id, userId)
     }
 
+    @Operation(summary = "경험 및 AI 분석 결과 존재 여부", description = "AI 분석 결과가 존재하는지 확인합니다.")
+    @GetMapping("/{id}/ai/exists")
+    @ResponseStatus(HttpStatus.OK)
+    fun getAIAnalysisResultExists(@PathVariable id: UUID): Boolean {
+        val userId = authManager.getCurrentUserIdOrElseThrow()
+        return experienceService.aiAnalysisResultExists(id, userId)
+    }
+
     @Operation(summary = "경험 수정", description = "기존 경험을 수정합니다.")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

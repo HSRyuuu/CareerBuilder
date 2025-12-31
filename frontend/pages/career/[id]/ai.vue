@@ -2,8 +2,8 @@
   <div class="career-ai-edit-page">
     <PageHeader
       v-if="!isLoading"
-      :title="`AI와 함께 수정 [ ${pageTitle} ]`"
-      subtitle="AI의 제안을 참고하여 경험을 더 구체적으로 만들어보세요"
+      :title="`AI 분석 결과 [ ${pageTitle} ]`"
+      subtitle="AI의 제안을 참고하여 경험을 더 구체적으로 만들어보세요."
     >
       <template #actions>
         <Button
@@ -116,7 +116,8 @@ const loadInitialData = async () => {
         ...s,
         isEditingTitle: false,
         tempTitle: '',
-        showHelp: false
+        showHelp: false,
+        showMethodBreakdown: false
       })) || [],
     };
     pageTitle.value = expRes.data.title;

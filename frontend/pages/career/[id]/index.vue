@@ -41,11 +41,22 @@
             :variant="ButtonVariant.Secondary"
             :size="CommonSize.Medium"
             :round="true"
-            class="mr-2"
+            class="ai-special-btn mr-2"
             @click="handleNavigateToAiEdit"
           >
-            <v-icon size="small">mdi-robot</v-icon>
-            AI와 함께 수정
+            <v-icon size="small">mdi-robot-outline</v-icon>
+            AI 분석결과 확인
+          </Button>
+          <Button
+            v-else
+            :variant="ButtonVariant.Secondary"
+            :size="CommonSize.Medium"
+            :round="true"
+            class="ai-request-btn mr-2"
+            @click="handleRequestAiAnalysis"
+          >
+            <v-icon size="small">mdi-sparkles</v-icon>
+            AI 분석 요청
           </Button>
           <Button
             :variant="ButtonVariant.Primary"
@@ -81,7 +92,7 @@ import type { TExperienceFormData } from '@/types/experience-types';
 import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
-import { fetchExperience, updateExperience } from '~/api/experience/api';
+import { fetchExperience, updateExperience, fetchAIAnalysisExists, requestAIAnalysis } from '~/api/experience/api';
 import type { TExperienceUpdate } from '~/api/experience/types';
 
 const route = useRoute();
@@ -95,7 +106,7 @@ const experienceId = computed(() => route.params.id as string);
 const isEditMode = ref(false);
 const isLoading = ref(true);
 const pageTitle = ref('');
-const hasAiAnalysis = ref(true); // 하드코딩
+const hasAiAnalysis = ref(false);
 
 const currentMode = computed(() => {
   if (isEditMode.value) return ExperienceFormMode.EDIT;
@@ -151,6 +162,7 @@ const loadExperienceData = async () => {
           isEditingTitle: false,
           tempTitle: '',
           showHelp: false,
+          showMethodBreakdown: false,
         })) || [],
     };
     pageTitle.value = data.title;
@@ -208,12 +220,29 @@ const handleNavigateToAiEdit = () => {
   navigateTo(`/career/${experienceId.value}/ai`);
 };
 
+const checkAiAnalysisExists = async () => {
+  const { data } = await fetchAIAnalysisExists(experienceId.value);
+  if (typeof data === 'boolean') {
+    hasAiAnalysis.value = data;
+  }
+};
+
+const handleRequestAiAnalysis = async () => {
+  const { error } = await requestAIAnalysis(experienceId.value);
+  if (!error) {
+    toast.success('AI 분석 요청이 전송되었습니다. 잠시 후 상단에 결과가 표시됩니다.');
+    // 약 3초 후에 존재 여부를 다시 확인해봄 (데모용)
+    setTimeout(checkAiAnalysisExists, 3000);
+  }
+};
+
 const handleBack = () => {
   navigateTo('/career');
 };
 
 onMounted(() => {
   loadExperienceData();
+  checkAiAnalysisExists();
 });
 </script>
 
@@ -231,5 +260,57 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   min-height: 400px;
+}
+
+// AI 특수 버튼 스타일
+.ai-special-btn {
+  background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+  transition: all 0.3s ease !important;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
+    opacity: 0.9;
+  }
+
+  .v-icon {
+    color: white !important;
+    margin-right: 4px;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+  }
+}
+
+.ai-request-btn {
+  border: 1.5px solid transparent !important;
+  background-image: linear-gradient(white, white), 
+                    linear-gradient(135deg, #10b981 0%, #3b82f6 100%) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  color: #059669 !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease !important;
+
+  &:hover {
+    transform: translateY(-1px);
+    background-image: linear-gradient(rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.05)), 
+                      linear-gradient(135deg, #10b981 0%, #3b82f6 100%) !important;
+  }
+
+  .v-icon {
+    color: #10b981 !important;
+    margin-right: 4px;
+  }
+}
+
+.dark-mode {
+  .ai-request-btn {
+    background-image: linear-gradient(#1e293b, #1e293b), 
+                      linear-gradient(135deg, #10b981 0%, #3b82f6 100%) !important;
+    color: #34d399 !important;
+  }
 }
 </style>

@@ -86,6 +86,13 @@ class ExperienceService(
         throw GlobalException(ErrorCode.EXPERIENCE_NOT_FOUND)
     }
 
+    @Transactional(readOnly = true)
+    fun aiAnalysisResultExists(id: UUID, userId: UUID): Boolean {
+
+        return experienceRepository.existsAiAnalysisResultById(id, userId)
+    }
+
+
     @Transactional
     fun updateExperience(id: UUID, userId: UUID, request: UpdateExperienceRequest): ExperienceResponse {
         // 1. Experience 조회 및 권한 검증

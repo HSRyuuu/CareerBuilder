@@ -178,15 +178,6 @@
                 <div class="ai-badge">AI 제안</div>
                 <div class="ai-feedback-box">{{ aiAnalysis?.analysis.goalFeedback }}</div>
                 <div class="ai-improved-content highlight">{{ aiAnalysis?.analysis.goalImprovedContent }}</div>
-                <div v-if="localIsEditMode" class="ai-action-row">
-                  <Button
-                    :variant="ButtonVariant.Secondary"
-                    :size="CommonSize.Small"
-                    @click="applyAiImprovedContent('goal')"
-                  >
-                    이 내용으로 수정
-                  </Button>
-                </div>
               </div>
             </div>
 
@@ -196,7 +187,7 @@
                 <TextArea
                   v-model="modelValue.goalSummary"
                   placeholder="달성하고자 했던 목표를 작성하세요"
-                  :rows="3"
+                  :rows="10"
                   :disabled="!localIsEditMode"
                 />
               </div>
@@ -217,15 +208,6 @@
                 <div class="ai-badge">AI 제안</div>
                 <div class="ai-feedback-box">{{ aiAnalysis?.analysis.achievementFeedback }}</div>
                 <div class="ai-improved-content highlight">{{ aiAnalysis?.analysis.achievementImprovedContent }}</div>
-                <div v-if="localIsEditMode" class="ai-action-row">
-                  <Button
-                    :variant="ButtonVariant.Secondary"
-                    :size="CommonSize.Small"
-                    @click="applyAiImprovedContent('achievement')"
-                  >
-                    이 내용으로 수정
-                  </Button>
-                </div>
               </div>
             </div>
 
@@ -235,7 +217,7 @@
                 <TextArea
                   v-model="modelValue.keyAchievements"
                   placeholder="이 경험을 통해 얻은 성과와 영향을 간략히 설명하세요"
-                  :rows="3"
+                  :rows="10"
                   :disabled="!localIsEditMode"
                 />
               </div>
@@ -341,25 +323,31 @@
                 <div class="ai-improved-content highlight">{{ getAiSectionAnalysis(section.id)?.improvedContent }}</div>
                 
                 <!-- STAR/PAR Breakdown -->
-                <div class="method-breakdown" v-if="getAiSectionAnalysis(section.id)?.methodBreakdown">
-                  <div class="method-type">분석 기법: {{ getAiSectionAnalysis(section.id)?.method }}</div>
-                  <div v-for="(v, k) in getAiSectionAnalysis(section.id)?.methodBreakdown" :key="k">
-                    <div v-if="v" class="breakdown-item">
-                      <span class="breakdown-label">{{ k.toUpperCase() }}:</span>
-                      <span class="breakdown-value">{{ v }}</span>
+                <div
+                  class="method-breakdown-container"
+                  v-if="getAiSectionAnalysis(section.id)?.methodBreakdown"
+                >
+                  <button
+                    class="breakdown-toggle-btn"
+                    @click="toggleMethodBreakdown(index)"
+                  >
+                    <span>분석 항목 상세 보기</span>
+                    <v-icon size="x-small">
+                      {{ section.showMethodBreakdown ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                    </v-icon>
+                  </button>
+                  <Transition name="fade">
+                    <div class="method-breakdown" v-if="section.showMethodBreakdown">
+                      <div v-for="(v, k) in getAiSectionAnalysis(section.id)?.methodBreakdown" :key="k">
+                        <div v-if="v" class="breakdown-item">
+                          <span class="breakdown-label">{{ k.toUpperCase() }}:</span>
+                          <span class="breakdown-value">{{ v }}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </Transition>
                 </div>
 
-                <div v-if="localIsEditMode" class="ai-action-row">
-                  <Button
-                    :variant="ButtonVariant.Secondary"
-                    :size="CommonSize.Small"
-                    @click="applyAiImprovedContent(index)"
-                  >
-                    이 내용으로 수정
-                  </Button>
-                </div>
               </div>
             </div>
 
@@ -402,7 +390,7 @@
                 <TextArea
                   v-model="section.content"
                   placeholder="Help 버튼을 눌러서 작성 가이드를 확인하세요"
-                  :rows="5"
+                  :rows="10"
                   :disabled="!localIsEditMode"
                 />
               </div>
@@ -596,24 +584,6 @@ const getAiSectionAnalysis = (sectionId?: string) => {
 };
 
 
-// AI 개선 내용 적용 (Goal/Achievement/Section)
-const applyAiImprovedContent = (target: 'goal' | 'achievement' | number) => {
-  if (!aiAnalysis) return;
-
-  if (target === 'goal') {
-    modelValue.goalSummary = aiAnalysis.analysis.goalImprovedContent;
-  } else if (target === 'achievement') {
-    modelValue.keyAchievements = aiAnalysis.analysis.achievementImprovedContent;
-  } else if (typeof target === 'number') {
-    const section = modelValue.sections[target];
-    const analysis = getAiSectionAnalysis(section.id);
-    if (analysis) {
-      section.content = analysis.improvedContent;
-      section.kind = analysis.suggestedKind as ExperienceSectionKind;
-    }
-  }
-  toast.success('AI 개선 내용이 적용되었습니다.');
-};
 
 // 블록 유형 옵션 생성
 const sectionKindOptions = computed<TSelectItem[]>(() => {
@@ -692,6 +662,10 @@ const getContributionLevelDescription = (level: string | null): string => {
 
 const toggleSectionHelp = (index: number) => {
   modelValue.sections[index].showHelp = !modelValue.sections[index].showHelp;
+};
+
+const toggleMethodBreakdown = (index: number) => {
+  modelValue.sections[index].showMethodBreakdown = !modelValue.sections[index].showMethodBreakdown;
 };
 
 const onSectionKindChange = (index: number) => {

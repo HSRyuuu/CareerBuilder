@@ -53,6 +53,7 @@ export interface TExperienceFormSection extends ExperienceSection {
   isEditingTitle?: boolean;
   tempTitle: string;
   showHelp?: boolean;
+  showMethodBreakdown?: boolean;
 }
 
 /**
