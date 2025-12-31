@@ -3,10 +3,20 @@
     <div class="content-wrapper">
       <!-- 상단 환영 문구 및 퀵 액션 -->
       <div class="home-hero-section">
+        <div class="hero-bg-overlay">
+          <div class="glow-blob blob-1"></div>
+          <div class="glow-blob blob-2"></div>
+          <div class="grid-pattern"></div>
+        </div>
+        
         <div class="hero-content">
-          <h1 class="home-page-title">Career Builder 👋</h1>
+          <div class="hero-badge"># Build Your Career</div>
+          <h1 class="home-page-title">
+             <span class="gradient-text">Career Builder</span>
+             
+          </h1>
           <p class="home-page-subtitle">
-            당신의 커리어 경험을 자산으로 만드세요. AI가 당신의 성장을 돕습니다.
+            당신의 커리어 경험을 자산으로 만드세요. AI 가이드가 당신의 폭발적인 성장을 지원합니다.
           </p>
           <div class="hero-actions">
             <Button
@@ -14,9 +24,10 @@
               :size="CommonSize.Medium"
               :round="true"
               @click="navigateTo('/career/register')"
+              class="pulse-btn"
             >
-              <v-icon start>mdi-plus</v-icon>
-              새 경험 등록하기
+              <v-icon start>mdi-rocket-launch</v-icon>
+              지금 시작하기
             </Button>
             <Button
               :variant="ButtonVariant.Secondary"
@@ -24,10 +35,12 @@
               :round="true"
               @click="navigateTo('/career')"
             >
-              전체 목록 보기
+              경험 둘러보기
             </Button>
           </div>
         </div>
+
+      
       </div>
 
       <!-- 대시보드 통계 섹션 -->
