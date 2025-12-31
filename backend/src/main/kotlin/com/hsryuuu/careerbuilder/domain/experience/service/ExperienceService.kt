@@ -34,7 +34,7 @@ class ExperienceService(
 
         experience.validateRequiredValue() // 필수값 검증
         experience.calculateProgressScore() // 점수 계산
-        experience.setStatusByProgressScore(isEdit = false) // 상태 세팅
+        experience.setStatusByProgressScore() // 상태 세팅
 
 
         val savedExperience = experienceRepository.save(experience)
@@ -126,7 +126,7 @@ class ExperienceService(
 
         experience.validateRequiredValue() // 필수값 검증
         experience.calculateProgressScore() // 점수 계산
-        experience.setStatusByProgressScore(isEdit = true) // 상태 세팅
+        experience.setStatusByProgressScore() // 상태 세팅
 
         experienceRepository.save(experience)
 

@@ -56,7 +56,7 @@
           </div>
           <div class="stat-info">
             <span class="stat-label">완성된 경험</span>
-            <h2 class="stat-value">{{ stats.completed }}</h2>
+            <h2 class="stat-value">{{ stats.completed + stats.modified }}</h2>
           </div>
         </Card>
         <Card class="stat-card">
@@ -68,15 +68,31 @@
             <h2 class="stat-value">{{ stats.incomplete }}</h2>
           </div>
         </Card>
-        <Card class="stat-card">
-          <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1)">
-            <v-icon color="#8b5cf6">mdi-auto-fix</v-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">AI 분석 완료</span>
-            <h2 class="stat-value">{{ stats.analyzed }}</h2>
-          </div>
+        <Card 
+          class="stat-card" 
+          :class="{ 'ai-cta-card': stats.aiAnalyzed === 0 }"
+          @click="stats.aiAnalyzed === 0 ? handleAiAnalysisRequest() : null"
+        >
+          <template v-if="stats.aiAnalyzed > 0">
+            <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1)">
+              <v-icon color="#8b5cf6">mdi-auto-fix</v-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">AI 분석 완료</span>
+              <h2 class="stat-value">{{ stats.aiAnalyzed }}</h2>
+            </div>
+          </template>
+          <template v-else>
+            <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1)">
+              <v-icon color="#8b5cf6">mdi-brain</v-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-cta-text">AI 분석 시작하기</span>
+              <span class="stat-cta-sub">당신의 커리어 강점을 발견해보세요</span>
+            </div>
+          </template>
         </Card>
+    
       </div>
 
       <!-- Part3: 경험 목록 테이블 -->
@@ -125,7 +141,7 @@ const stats = ref<TExperienceStatsSummary>({
   incomplete: 0,
   completed: 0,
   modified: 0,
-  analyzed: 0,
+  aiAnalyzed: 0,
 });
 
 // Filter & Sort 옵션

@@ -140,8 +140,7 @@ const statusOptions: TSelectItem[] = [
   { title: '전체', value: 'ALL' },
   { title: '보완 필요', value: ExperienceStatus.INCOMPLETE },
   { title: '작성 완료', value: ExperienceStatus.COMPLETED },
-  { title: '수정 완료', value: ExperienceStatus.MODIFIED },
-  { title: '분석 완료', value: ExperienceStatus.ANALYZED },
+  { title: 'AI 분석 완료', value: ExperienceStatus.AI_ANALYZED },
 ];
 
 const sortOptions: TSelectItem[] = [

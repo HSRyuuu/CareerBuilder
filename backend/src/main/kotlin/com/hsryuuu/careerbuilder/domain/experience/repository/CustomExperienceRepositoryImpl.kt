@@ -72,7 +72,7 @@ class CustomExperienceRepositoryImpl(
         var incomplete: Long = 0
         var completed: Long = 0
         var modified: Long = 0
-        var analyzed: Long = 0
+        var aiAnalyzed: Long = 0
 
         results.forEach { tuple ->
             val status = tuple.get(experience.status)
@@ -82,7 +82,7 @@ class CustomExperienceRepositoryImpl(
             when (status) {
                 ExperienceStatus.INCOMPLETE -> incomplete = count
                 ExperienceStatus.COMPLETED -> completed = count
-                ExperienceStatus.ANALYZED -> analyzed = count
+                ExperienceStatus.AI_ANALYZED -> aiAnalyzed = count
                 ExperienceStatus.MODIFIED -> modified = count
                 else -> {}
             }
@@ -93,7 +93,7 @@ class CustomExperienceRepositoryImpl(
             incomplete = incomplete,
             completed = completed,
             modified = modified,
-            analyzed = analyzed
+            aiAnalyzed = aiAnalyzed
         )
     }
 

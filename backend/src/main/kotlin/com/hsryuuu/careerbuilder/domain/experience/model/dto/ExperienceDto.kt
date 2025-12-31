@@ -189,7 +189,7 @@ data class ExperienceStatsSummary(
     val incomplete: Long,
     val completed: Long,
     val modified: Long,
-    val analyzed: Long
+    val aiAnalyzed: Long
 )
 
 data class ExperienceWithAnalysisResponse(

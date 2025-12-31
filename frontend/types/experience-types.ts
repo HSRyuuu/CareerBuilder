@@ -93,7 +93,7 @@ export enum ExperienceStatus {
   MODIFIED = 'MODIFIED', // 수정 완료
   AI_REQUEST = 'AI_REQUEST', // AI 요청
   ANALYZING = 'ANALYZING', // AI 분석 중
-  ANALYZED = 'ANALYZED', // 분석 완료
+  AI_ANALYZED = 'AI_ANALYZED', // 분석 완료
 }
 
 /**
@@ -105,7 +105,7 @@ export const STATUS_INFO: Record<ExperienceStatus, { display: string; color: str
   [ExperienceStatus.MODIFIED]: { display: '수정 완료', color: 'status-completed' },
   [ExperienceStatus.AI_REQUEST]: { display: '분석 요청됨', color: 'status-completed' },
   [ExperienceStatus.ANALYZING]: { display: 'AI 분석 중', color: 'status-analyzing' },
-  [ExperienceStatus.ANALYZED]: { display: '분석 완료', color: 'status-analyzed' },
+  [ExperienceStatus.AI_ANALYZED]: { display: '분석 완료', color: 'status-analyzed' },
 };
 
 /**
@@ -116,7 +116,7 @@ export type TExperienceStatsSummary = {
   incomplete: number;
   completed: number;
   modified: number;
-  analyzed: number;
+  aiAnalyzed: number;
 };
 
 /**
@@ -124,7 +124,7 @@ export type TExperienceStatsSummary = {
  */
 export enum Category {
   PROJECT = 'PROJECT',
-  MAINTENANCE = 'MAINTENANCE',
+  IMPROVEMENT = 'IMPROVEMENT',
   TROUBLESHOOTING = 'TROUBLESHOOTING',
   R_AND_D = 'R_AND_D',
   LEARNING = 'LEARNING',
@@ -139,9 +139,9 @@ export const CATEGORY_INFO: Record<Category, { display: string; description: str
     display: '프로젝트',
     description: '목표 달성을 위해 초기 기획부터 실행까지 참여한 주요 과업',
   },
-  [Category.MAINTENANCE]: {
-    display: '운영 및 개선',
-    description: '지속적인 업무 운영과 프로세스 개선 및 품질 향상 활동',
+  [Category.IMPROVEMENT]: {
+    display: '개선',
+    description: '프로세스 개선 및 품질 향상 활동',
   },
   [Category.TROUBLESHOOTING]: {
     display: '이슈 해결',

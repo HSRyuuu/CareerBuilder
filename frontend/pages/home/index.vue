@@ -8,39 +8,36 @@
           <div class="glow-blob blob-2"></div>
           <div class="grid-pattern"></div>
         </div>
-        
+
         <div class="hero-content">
           <div class="hero-badge"># Build Your Career</div>
           <h1 class="home-page-title">
-             <span class="gradient-text">Career Builder</span>
-             
+            <span class="gradient-text">Career Builder</span>
           </h1>
           <p class="home-page-subtitle">
             당신의 커리어 경험을 자산으로 만드세요. AI 가이드가 당신의 폭발적인 성장을 지원합니다.
           </p>
           <div class="hero-actions">
             <Button
-              :variant="ButtonVariant.Primary"
-              :size="CommonSize.Medium"
               :round="true"
+              :size="CommonSize.Medium"
+              :variant="ButtonVariant.Primary"
+              class="pulse-btn"
               icon="mdi-rocket-launch"
               @click="navigateTo('/career/register')"
-              class="pulse-btn"
             >
               지금 시작하기
             </Button>
             <Button
-              :variant="ButtonVariant.Secondary"
-              :size="CommonSize.Medium"
               :round="true"
+              :size="CommonSize.Medium"
+              :variant="ButtonVariant.Secondary"
               @click="navigateTo('/career')"
             >
               경험 둘러보기
             </Button>
           </div>
         </div>
-
-      
       </div>
 
       <!-- 대시보드 통계 섹션 -->
@@ -60,7 +57,7 @@
           </div>
           <div class="stat-info">
             <span class="stat-label">완성된 경험</span>
-            <h2 class="stat-value">{{ (stats?.completed  || 0) + (stats?.modified || 0) }}</h2>
+            <h2 class="stat-value">{{ (stats?.completed || 0) + (stats?.modified || 0) }}</h2>
           </div>
         </Card>
         <Card class="stat-card">
@@ -78,7 +75,7 @@
           </div>
           <div class="stat-info">
             <span class="stat-label">AI 분석 완료</span>
-            <h2 class="stat-value">{{ stats?.analyzed || 0 }}</h2>
+            <h2 class="stat-value">{{ stats?.aiAnalyzed || 0 }}</h2>
           </div>
         </Card>
       </div>
@@ -88,7 +85,7 @@
         <div class="recent-activities">
           <div class="section-header">
             <h3 class="section-title">최근 등록한 경험</h3>
-            <NuxtLink to="/career" class="view-all">전체보기</NuxtLink>
+            <NuxtLink class="view-all" to="/career">전체보기</NuxtLink>
           </div>
           <div v-if="recentExperiences.length > 0" class="activities-list">
             <div
@@ -102,15 +99,15 @@
                 <h4 class="activity-title">{{ item.title }}</h4>
                 <p class="activity-org">{{ item.background || '소속 없음' }}</p>
               </div>
-              <v-icon size="small" color="#9ca3af">mdi-chevron-right</v-icon>
+              <v-icon color="#9ca3af" size="small">mdi-chevron-right</v-icon>
             </div>
           </div>
           <div v-else class="empty-activities">
-            <v-icon size="48" color="#e5e7eb">mdi-text-box-plus-outline</v-icon>
+            <v-icon color="#e5e7eb" size="48">mdi-text-box-plus-outline</v-icon>
             <p>아직 등록된 경험이 없습니다.</p>
             <Button
-              :variant="ButtonVariant.Ghost"
               :size="CommonSize.Small"
+              :variant="ButtonVariant.Ghost"
               @click="navigateTo('/career/register')"
             >
               첫 경험 등록하기
@@ -123,26 +120,32 @@
           <h3 class="section-title">AI 커리어 엔진</h3>
           <div class="ai-cards">
             <div class="ai-card" @click="handleAiAnalysis">
-              <v-icon color="#2563eb" class="ai-icon">mdi-brain</v-icon>
+              <v-icon class="ai-icon" color="#2563eb">mdi-brain</v-icon>
               <div class="ai-card-info">
                 <h4 class="ai-card-title">AI 경험 분석</h4>
-                <p class="ai-card-desc">등록된 경험을 분석하여 당신의 강점과 핵심 역량을 추출합니다.</p>
+                <p class="ai-card-desc">
+                  등록된 경험을 분석하여 당신의 강점과 핵심 역량을 추출합니다.
+                </p>
               </div>
             </div>
             <div class="ai-card" @click="handleAiResume">
               <div class="ai-card-tag">Coming Soon</div>
-              <v-icon color="#8b5cf6" class="ai-icon">mdi-file-document-edit-outline</v-icon>
+              <v-icon class="ai-icon" color="#8b5cf6">mdi-file-document-edit-outline</v-icon>
               <div class="ai-card-info">
                 <h4 class="ai-card-title">AI 이력서 생성</h4>
-                <p class="ai-card-desc">경험 데이터를 기반으로 직무 맞춤형 이력서를 자동 생성합니다.</p>
+                <p class="ai-card-desc">
+                  경험 데이터를 기반으로 직무 맞춤형 이력서를 자동 생성합니다.
+                </p>
               </div>
             </div>
             <div class="ai-card" @click="handleAiFeedback">
               <div class="ai-card-tag">Coming Soon</div>
-              <v-icon color="#10b981" class="ai-icon">mdi-comment-check-outline</v-icon>
+              <v-icon class="ai-icon" color="#10b981">mdi-comment-check-outline</v-icon>
               <div class="ai-card-info">
                 <h4 class="ai-card-title">전체 커리어 피드백</h4>
-                <p class="ai-card-desc">내 전체 경험 데이터를 바탕으로 커리어 방향성과 개선점을 제안합니다.</p>
+                <p class="ai-card-desc">
+                  내 전체 경험 데이터를 바탕으로 커리어 방향성과 개선점을 제안합니다.
+                </p>
               </div>
             </div>
           </div>
@@ -152,9 +155,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 // 1. 외부 라이브러리 import
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 // 2. 프로젝트 내부 import
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';

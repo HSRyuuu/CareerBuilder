@@ -218,6 +218,32 @@
     color: var(--text-primary);
     margin: 0;
   }
+
+  &.ai-cta-card {
+    border: 1px dashed var(--primary-color);
+    background: rgba(139, 92, 246, 0.05) !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(139, 92, 246, 0.1) !important;
+      border-style: solid;
+      transform: translateY(-4px);
+    }
+
+    .stat-cta-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .stat-cta-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: block;
+      margin-top: 2px;
+    }
+  }
 }
 
 // Part3: 테이블 섹션
