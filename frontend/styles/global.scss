@@ -1,4 +1,5 @@
 @use './variables' as *;
+@use './toast';
 
 body {
   background-color: var(--bg-secondary);
