@@ -37,26 +37,43 @@
       </div>
 
       <!-- Part2: 통계 섹션 -->
-      <div class="career-list-stats-section">
-        <div class="career-list-stat-item">
-          <div class="career-list-stat-number">{{ stats.total }}</div>
-          <div class="career-list-stat-label">전체 경험</div>
-        </div>
-        <div class="career-list-stat-divider" />
-        <div class="career-list-stat-item">
-          <div class="career-list-stat-number">{{ stats.completed }}</div>
-          <div class="career-list-stat-label">작성 완료</div>
-        </div>
-        <div class="career-list-stat-divider" />
-        <div class="career-list-stat-item">
-          <div class="career-list-stat-number">{{ stats.incomplete }}</div>
-          <div class="career-list-stat-label">보완 필요</div>
-        </div>
-        <div class="career-list-stat-divider" />
-        <div class="career-list-stat-item">
-          <div class="career-list-stat-number">{{ stats.analyzed }}</div>
-          <div class="career-list-stat-label">AI 분석 완료</div>
-        </div>
+      <div class="dashboard-stats-grid">
+        <Card class="stat-card">
+          <div class="stat-icon" style="background: rgba(37, 99, 235, 0.1)">
+            <v-icon color="#2563eb">mdi-trophy-outline</v-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">총 경험 수</span>
+            <h2 class="stat-value">{{ stats.total }}</h2>
+          </div>
+        </Card>
+        <Card class="stat-card">
+          <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1)">
+            <v-icon color="#10b981">mdi-check-circle-outline</v-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">완성된 경험</span>
+            <h2 class="stat-value">{{ stats.completed }}</h2>
+          </div>
+        </Card>
+        <Card class="stat-card">
+          <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1)">
+            <v-icon color="#f59e0b">mdi-alert-circle-outline</v-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">보완 필요</span>
+            <h2 class="stat-value">{{ stats.incomplete }}</h2>
+          </div>
+        </Card>
+        <Card class="stat-card">
+          <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1)">
+            <v-icon color="#8b5cf6">mdi-auto-fix</v-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">AI 분석 완료</span>
+            <h2 class="stat-value">{{ stats.analyzed }}</h2>
+          </div>
+        </Card>
       </div>
 
       <!-- Part3: 경험 목록 테이블 -->
@@ -102,6 +119,7 @@ import Button from '@/components/atoms/Button/Button.vue';
 import { FormSize, FormVariant, ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
 import ExperienceTable from '@/components/organisms/ExperienceTable/ExperienceTable.vue';
 import type { TExperienceTableFilters } from '@/components/organisms/ExperienceTable/ExperienceTable.vue';
+import Card from '@/components/molecules/Card/Card.vue';
 
 definePageMeta({
   layout: 'default',
