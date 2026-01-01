@@ -15,6 +15,7 @@ import type {
   TRefreshTokenResponse,
 } from '@/types/api-types';
 import { HttpMethod } from '@/types/api-types';
+import { MENU_URLS } from '~/constants/menus';
 
 // 토큰 갱신 중 여부 (중복 갱신 방지)
 let isRefreshing = false;
@@ -244,7 +245,7 @@ export const useApi = async <T, TBody = unknown>(
       authStore.clearAuth();
 
       // 로그인 페이지로 이동
-      navigateTo('/login');
+      navigateTo(MENU_URLS.LOGIN);
 
       return {
         data: null,

@@ -36,17 +36,7 @@
             <v-icon size="small">mdi-arrow-left</v-icon>
             목록으로
           </Button>
-          <Button
-            v-if="hasAiAnalysis"
-            :variant="ButtonVariant.Secondary"
-            :size="CommonSize.Medium"
-            :round="true"
-            class="u-ai-btn-filled"
-            @click="handleNavigateToAiEdit"
-          >
-            <v-icon size="small">mdi-robot-outline</v-icon>
-            AI 분석 결과
-          </Button>
+          
           <Button
             :variant="ButtonVariant.Secondary"
             :size="CommonSize.Medium"
@@ -57,6 +47,7 @@
             <v-icon size="small">mdi-auto-fix</v-icon>
             AI 분석 요청
           </Button>
+          
           <Button
             :variant="ButtonVariant.Primary"
             :size="CommonSize.Medium"
@@ -65,6 +56,17 @@
           >
             <v-icon size="small">mdi-pencil</v-icon>
             수정하기
+          </Button>
+          <Button
+            v-if="hasAiAnalysis"
+            :variant="ButtonVariant.Secondary"
+            :size="CommonSize.Medium"
+            :round="true"
+            class="u-ai-btn-filled"
+            @click="handleNavigateToAiEdit"
+          >
+            <v-icon size="small">mdi-pencil</v-icon>
+            수정하기 with AI
           </Button>
         </template>
       </template>
@@ -102,6 +104,7 @@ import { fetchExperience, updateExperience, fetchAIAnalysisExists } from '~/api/
 import { requestAiAnalysis } from '~/api/ai/api';
 import ExperienceAnalysisModal from '@/components/organisms/ExperienceAnalysisModal/ExperienceAnalysisModal.vue';
 import type { TExperienceUpdate, TExperience } from '~/api/experience/types';
+import { MENU_URLS } from '~/constants/menus';
 
 const route = useRoute();
 const toast = useToast();
@@ -256,7 +259,7 @@ const handleAnalysisRequest = async (experience: TExperience, options: any) => {
 };
 
 const handleBack = () => {
-  navigateTo('/career');
+  navigateTo(MENU_URLS.CAREER);
 };
 
 onMounted(() => {

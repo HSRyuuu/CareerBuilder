@@ -3,7 +3,7 @@
     <div class="auth-card-wrapper">
       <Card class="auth-card">
         <div class="auth-header">
-          <div class="auth-logo" @click="navigateTo('/welcome')">
+          <div class="auth-logo" @click="navigateTo(MENU_URLS.WELCOME)">
             <div class="auth-logo-icon">CB</div>
             <span class="auth-logo-text">CareerBuilder</span>
           </div>
@@ -96,6 +96,7 @@ import type { TLoginRequest } from '@/api/auth/types';
 import Card from '@/components/molecules/Card/Card.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import Input from '@/components/atoms/Input/Input.vue';
+import { MENU_URLS } from '~/constants/menus';
 
 // 9. Ref/Reactive 선언
 definePageMeta({
@@ -131,8 +132,7 @@ const handleLogin = async () => {
         userName: data.userInfo.username,
         email: data.userInfo.email,
       });
-      //toast.success(`${data.userInfo.username}님, 환영합니다!`);
-      navigateTo('/home');
+      navigateTo(MENU_URLS.HOME);
     }
   } catch (e) {
     console.error('Login Error:', e);

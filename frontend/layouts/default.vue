@@ -20,11 +20,11 @@
           </Button>
           <Button
             v-if="authStore.isAuthenticated"
-            :variant="ButtonVariant.Secondary"
+            :variant="ButtonVariant.Danger"
             :size="CommonSize.Medium"
             @click="handleMockLogout"
           >
-            로그아웃
+            임시 로그아웃
           </Button>
           <Button
             :variant="ButtonVariant.Secondary"
@@ -56,7 +56,7 @@
       <!-- 사용자 정보 -->
       <div
         :class="['layout-sidebar-user', { 'layout-sidebar-user--collapsed': isSidebarCollapsed }]"
-        @click="navigateTo('/settings')"
+        @click="navigateTo(MENU_URLS.SETTING)"
       >
         <div v-if="isSidebarCollapsed" class="layout-sidebar-user-icon-only">
           <v-icon>mdi-account-circle</v-icon>
@@ -110,6 +110,7 @@ import Button from '@/components/atoms/Button/Button.vue';
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
 import { useMenu } from '@/composables/useMenu';
 import { useAuthStore } from '@/stores/auth';
+import { MENU_URLS } from '~/constants/menus';
 
 const route = useRoute();
 const menu = useMenu();
@@ -143,12 +144,12 @@ const handleMockLogin = () => {
     userName: '임시유저',
     email: 'test@careerbuilder.com',
   });
-  navigateTo('/home');
+  navigateTo(MENU_URLS.HOME);
 };
 
 const handleMockLogout = () => {
   authStore.clearAuth();
-  navigateTo('/welcome');
+  navigateTo(MENU_URLS.WELCOME);
 };
 </script>
 

@@ -30,6 +30,7 @@
 import Button from '@/components/atoms/Button/Button.vue';
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
 import { useAuthStore } from '@/stores/auth';
+import { MENU_URLS } from '~/constants/menus';
 
 const authStore = useAuthStore();
 
@@ -40,7 +41,7 @@ const handleMockLogin = () => {
     userName: '임시유저',
     email: 'admin@careerbuilder.com',
   });
-  navigateTo('/home');
+  navigateTo(MENU_URLS.HOME);
 };
 </script>
 

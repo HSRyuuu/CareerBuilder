@@ -108,6 +108,7 @@ import { ExperienceFormMode } from '@/types/experience-types';
 import type { TExperienceFormData } from '@/types/experience-types';
 import type { TExperienceAIAnalysisResponse } from '@/api/experience/types';
 import { INITIAL_DUMMY_DATA, MOCK_AI_ANALYSIS } from './data';
+import { MENU_URLS } from '~/constants/menus';
 
 definePageMeta({
   layout: 'full-page', 
@@ -154,7 +155,7 @@ const startAiAnalysis = () => {
 };
 
 const goToSignup = () => {
-  navigateTo('/welcome/signup');
+  navigateTo(MENU_URLS.SIGNUP);
 };
 </script>
 

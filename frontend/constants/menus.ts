@@ -7,7 +7,23 @@ export const Menu = {
   Home: 'HOME',
   Career: 'CAREER',
   Resume: 'RESUME',
+  AI: 'AI',
 } as const;
+
+export const MENU_URLS = {
+  HOME: '/home',
+  CAREER: '/career',
+  CAREER_REGISTER: '/career/register',
+  RESUME: '/resume',
+  AI: '/ai',
+  SETTING: '/settings',
+  WELCOME: '/welcome',
+  LOGIN: '/welcome/login',
+  SIGNUP: '/welcome/signup',
+  TRY_CAREER: '/welcome/try/career',
+  AI_EXPERIENCE: '/ai/experience',
+}
+
 
 export type TMenuKey = (typeof Menu)[keyof typeof Menu];
 
@@ -21,9 +37,10 @@ export type TMenuItem = {
 
 // 메뉴 목록
 export const MENU_ITEMS: TMenuItem[] = [
-  { key: Menu.Home, path: '/home', label: '홈', icon: 'mdi-home' },
-  { key: Menu.Career, path: '/career', label: '경험', icon: 'mdi-text-box-multiple' },
-  { key: Menu.Resume, path: '/resume', label: '이력서', icon: 'mdi-account-details' },
+  { key: Menu.Home, path: MENU_URLS.HOME, label: '홈', icon: 'mdi-home' },
+    { key: Menu.AI, path: MENU_URLS.AI, label: 'AI 코칭', icon: 'mdi-brain' },
+  { key: Menu.Career, path: MENU_URLS.CAREER, label: '경험', icon: 'mdi-text-box-multiple' },
+  { key: Menu.Resume, path: MENU_URLS.RESUME, label: '이력서', icon: 'mdi-account-details' },
 ];
 
 // 메뉴 키로 메뉴 아이템 찾기
@@ -36,4 +53,5 @@ export const getMenuKeyByPath = (path: string): TMenuKey | undefined => {
   const menu = MENU_ITEMS.find((item) => path.startsWith(item.path));
   return menu?.key;
 };
+
 

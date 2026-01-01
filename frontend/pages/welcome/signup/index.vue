@@ -3,7 +3,7 @@
     <div class="auth-card-wrapper">
       <Card class="auth-card">
         <div class="auth-header">
-          <div class="auth-logo" @click="navigateTo('/welcome')">
+          <div class="auth-logo" @click="navigateTo(MENU_URLS.WELCOME)">
             <div class="auth-logo-icon">CB</div>
             <span class="auth-logo-text">CareerBuilder</span>
           </div>
@@ -268,6 +268,7 @@ import Card from '@/components/molecules/Card/Card.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import Input from '@/components/atoms/Input/Input.vue';
 import DocumentModal from '@/components/organisms/DocumentModal/DocumentModal.vue';
+import { MENU_URLS } from '~/constants/menus';
 
 // 9. Ref/Reactive 선언
 definePageMeta({
@@ -402,7 +403,7 @@ const handleSignup = async () => {
     }
     
     toast.success('회원가입이 완료되었습니다! 로그인해주세요.');
-    navigateTo('/welcome/login');
+    navigateTo(MENU_URLS.LOGIN);
   } catch (e) {
     console.error('Signup Error:', e);
     toast.error('오류가 발생했습니다.');

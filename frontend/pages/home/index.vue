@@ -24,7 +24,7 @@
               :variant="ButtonVariant.Primary"
               class="pulse-btn"
               icon="mdi-rocket-launch"
-              @click="navigateTo('/career/register')"
+              @click="navigateTo(MENU_URLS.CAREER_REGISTER)"
             >
               지금 등록하기
             </Button>
@@ -32,7 +32,7 @@
               :round="true"
               :size="CommonSize.Medium"
               :variant="ButtonVariant.Secondary"
-              @click="navigateTo('/career')"
+              @click="navigateTo(MENU_URLS.CAREER)"
             >
               내 경험 둘러보기
             </Button>
@@ -108,7 +108,7 @@
             <Button
               :size="CommonSize.Small"
               :variant="ButtonVariant.Ghost"
-              @click="navigateTo('/career/register')"
+              @click="navigateTo(MENU_URLS.CAREER_REGISTER)"
             >
               첫번째 경험을 등록하고 AI 분석을 받아보세요 →
             </Button>
@@ -170,6 +170,7 @@ import type { TExperience, TExperienceStatsSummary } from '~/api/experience/type
 // 5. 로컬 컴포넌트 import
 import Button from '@/components/atoms/Button/Button.vue';
 import Card from '@/components/molecules/Card/Card.vue';
+import { MENU_URLS } from '~/constants/menus';
 
 // 9. Ref/Reactive 선언
 definePageMeta({
@@ -207,7 +208,7 @@ onMounted(() => {
 });
 
 const handleAiAnalysis = () => {
-  navigateTo('/career/analysis/exp');
+  navigateTo(MENU_URLS.AI_EXPERIENCE);
 };
 
 const handleAiResume = () => {

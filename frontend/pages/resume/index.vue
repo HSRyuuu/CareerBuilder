@@ -9,7 +9,7 @@ const toast = useToast();
 const router = useRouter();
 
 onMounted(() => {
-  toast.info('준비 중입니다.');
+  toast.info('이력서 기능 준비 중입니다.');
   router.back();
 });
 </script>

@@ -210,7 +210,7 @@ import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
 
 // 2. 프로젝트 내부 import
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
-
+import { MENU_URLS } from '~/constants/menus';
 // 3. API/Composables import
 import { useAuthStore } from '@/stores/auth';
 
@@ -243,25 +243,25 @@ onUnmounted(() => {
 });
 // 11. 함수 선언
 const handleStartClick = () => {
-  navigateTo('/welcome/signup');
+  navigateTo(MENU_URLS.SIGNUP);
 };
 
 const handleTryClick = () => {
-  navigateTo('/welcome/try/career');
+  navigateTo(MENU_URLS.TRY_CAREER);
 };
 
 const handleLoginClick = () => {
-  navigateTo('/welcome/login');
+  navigateTo(MENU_URLS.LOGIN);
 };
 
 const handleSignupClick = () => {
-  navigateTo('/welcome/signup');
+  navigateTo(MENU_URLS.SIGNUP);
 };
 
 // 페이지 접근 시 로그인 상태라면 대시보드로 리다이렉트
 onBeforeMount(() => {
   if (authStore.isAuthenticated) {
-    navigateTo('/home');
+    navigateTo(MENU_URLS.HOME);
   }
 });
 </script>

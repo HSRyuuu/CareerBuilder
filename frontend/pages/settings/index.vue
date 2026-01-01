@@ -183,6 +183,7 @@ import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
 import Card from '@/components/molecules/Card/Card.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import DocumentModal from '@/components/organisms/DocumentModal/DocumentModal.vue';
+import { MENU_URLS } from '~/constants/menus';
 
 // 9. Ref/Reactive 선언
 definePageMeta({
@@ -225,13 +226,13 @@ const handleLogout = async () => {
     authStore.clearAuth();
     colorMode.preference = 'light';
     toast.success('로그아웃 되었습니다.');
-    navigateTo('/welcome');
+    navigateTo(MENU_URLS.WELCOME);
   } catch (error) {
     console.error('Logout error:', error);
     // 에러가 나더라도 클라이언트 상태는 지워주는 것이 좋음
     authStore.clearAuth();
     colorMode.preference = 'light';
-    navigateTo('/welcome');
+    navigateTo(MENU_URLS.WELCOME);
   }
 };
 

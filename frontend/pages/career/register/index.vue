@@ -44,6 +44,7 @@ import { createExperience } from '~/api/experience/api';
 import type { TExperienceCreate } from '~/api/experience/types';
 
 import { ExperienceSectionKind } from '@/types/experience-types';
+import { MENU_URLS } from '~/constants/menus';
 
 const toast = useToast();
 
@@ -118,7 +119,7 @@ const handleSave = async () => {
   toast.success('저장되었습니다!');
 
   // 목록 페이지로 이동
-  await navigateTo('/career');
+  await navigateTo(MENU_URLS.CAREER);
 };
 
 const handleCancel = () => {

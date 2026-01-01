@@ -21,21 +21,14 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    margin: 10 auto;
-    max-width: 1120px;
-    // Given the request "PageHeader taking full width", keeping content full width or centered?
-    // Usually header content aligns with page content.
-    // Let's add margin auto to align with .content-wrapper if needed, but the background should be full.
-    // We'll leave it full width for now, user can center if asked.
-    // Actually, to match the "content-wrapper" alignment, we might want the TEXT to be centered?
-    // "PageHeader ... occupying the full width left and right" usually means the BAR background.
-    // I will add a container inside for content if I want to align it with page content, but existing code didn't have it.
-    // I will keep it simple.
+    margin: 0 auto;
+    width: 100%;
+    flex-wrap: wrap;
   }
 
   &__text {
     flex: 1;
-    min-width: 0;
+    min-width: 250px;
   }
 
   &__title {
@@ -57,8 +50,10 @@
   &__actions {
     display: flex;
     align-items: center;
-    gap: 10px; // 12px * 0.8
-    flex-shrink: 0;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex: 1;
   }
 }
 

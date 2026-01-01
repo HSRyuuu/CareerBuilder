@@ -1,44 +1,10 @@
 <template>
   <div class="career-list-page">
+    <PageHeader
+      title="경험"
+      subtitle="경험을 정리하고, AI로 경험을 분석하여 커리어를 축적하세요."
+    />
     <div class="content-wrapper">
-      <!-- Part1: 카드 그리드 -->
-      <div class="career-list-cards-grid">
-        <div class="career-list-info-card ai-card theme-purple" @click="handleAiAnalysisRequest">
-          <div class="career-list-card-icon ai-analysis">
-            <v-icon color="white">mdi-brain</v-icon>
-          </div>
-          <h3 class="career-list-card-title">AI 경험 분석 요청</h3>
-          <p class="career-list-card-description">
-            AI가 당신의 경험을 분석하여 전문성을 강화할 수 있도록 도와드립니다
-          </p>
-          <div class="career-list-card-action-link">분석 요청하기 →</div>
-        </div>
-
-        <div class="career-list-info-card ai-card theme-blue" @click="handleFeedback">
-          <div class="ai-card-tag">Coming Soon</div>
-          <div class="career-list-card-icon feedback">
-            <v-icon color="white">mdi-comment-check-outline</v-icon>
-          </div>
-          <h3 class="career-list-card-title">전체 커리어 피드백</h3>
-          <p class="career-list-card-description">
-            경험 데이터를 바탕으로 커리어 방향성과 개선점을 제안받으세요
-          </p>
-          <div class="career-list-card-action-link">피드백 보기 →</div>
-        </div>
-
-        <div class="career-list-info-card ai-card theme-emerald" @click="handleResumeCreate">
-          <div class="ai-card-tag">Coming Soon</div>
-          <div class="career-list-card-icon resume">
-            <v-icon color="white">mdi-file-document-edit-outline</v-icon>
-          </div>
-          <h3 class="career-list-card-title">이력서 생성</h3>
-          <p class="career-list-card-description">
-            내 경험을 바탕으로 직무 맞춤형 이력서를 자동 생성합니다
-          </p>
-          <div class="career-list-card-action-link">이력서 생성 →</div>
-        </div>
-      </div>
-
       <!-- Part2: 통계 섹션 -->
       <div class="dashboard-stats-grid">
         <Card class="stat-card">
@@ -151,12 +117,14 @@ import { computed, ref, watch } from 'vue';
 import type { TExperienceStatsSummary } from '@/types/experience-types';
 import type { TExperience, TExperienceListParams, } from '~/api/experience/types';
 import { fetchExperiences, fetchExperienceStatsSummary } from '~/api/experience/api';
+import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
 import type { TExperienceTableFilters } from '@/components/organisms/ExperienceTable/ExperienceTable.vue';
 import ExperienceTable from '@/components/organisms/ExperienceTable/ExperienceTable.vue';
 import Card from '@/components/molecules/Card/Card.vue';
 import { ExperienceStatus } from '@/types/experience-types';
+import { MENU_URLS } from '~/constants/menus';
 
 definePageMeta({
   layout: 'default',
@@ -244,11 +212,11 @@ watch(
 );
 
 const handleRegister = () => {
-  navigateTo('/career/register');
+  navigateTo(MENU_URLS.CAREER_REGISTER);
 };
 
 const handleAiAnalysisRequest = () => {
-  navigateTo('/career/analysis/exp');
+  navigateTo(MENU_URLS.AI_EXPERIENCE);
 };
 
 const handleAnalyzedCardClick = async () => {

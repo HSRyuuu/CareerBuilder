@@ -36,6 +36,7 @@
             :variant="FormVariant.Outlined"
             class="sort-select"
           />
+          
           <button
             :title="filters.sortDir === 'DESC' ? '내림차순' : '오름차순'"
             class="sort-direction-btn"
@@ -66,12 +67,13 @@
       <!-- 선택 버튼 셀 커스텀 렌더링 -->
       <template #cell(select)="{ row }">
         <Button
-          :round="true"
-          :size="CommonSize.Small"
-          :variant="ButtonVariant.Outlined"
-          class="row-select-btn"
+          :variant="ButtonVariant.Secondary"
+            :size="CommonSize.Small"
+            :round="true"
+            class="u-ai-btn-outline"
           @click.stop="handleSelect(row)"
         >
+          <v-icon size="small">mdi-auto-fix</v-icon>
           {{ selectButtonLabel }}
         </Button>
       </template>
