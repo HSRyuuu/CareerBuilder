@@ -54,6 +54,28 @@
         </Card>
       </section>
 
+      <!-- 약관 및 정책 섹션 -->
+      <section class="settings-section">
+        <h3 class="section-title">약관 및 정책</h3>
+        <Card class="options-card">
+          <div class="setting-item clickable" @click="showTermsModal = true">
+            <div class="setting-item-info">
+              <h4 class="setting-item-title">서비스 이용약관</h4>
+              <p class="setting-item-desc">서비스 이용에 관한 약관을 확인합니다.</p>
+            </div>
+            <v-icon color="var(--text-tertiary)">mdi-chevron-right</v-icon>
+          </div>
+          <div class="setting-divider"></div>
+          <div class="setting-item clickable" @click="showPrivacyModal = true">
+            <div class="setting-item-info">
+              <h4 class="setting-item-title">개인정보 처리방침</h4>
+              <p class="setting-item-desc">개인정보 수집 및 이용에 관한 정책을 확인합니다.</p>
+            </div>
+            <v-icon color="var(--text-tertiary)">mdi-chevron-right</v-icon>
+          </div>
+        </Card>
+      </section>
+
       <!-- 위험 구역 -->
       <section class="settings-section danger-zone">
         <h3 class="section-title">계정 관리</h3>
@@ -88,6 +110,59 @@
         </Card>
       </section>
     </div>
+
+    <!-- 이용약관 모달 -->
+    <DocumentModal
+      v-model="showTermsModal"
+      :name="TERMS_OF_SERVICE.name"
+      :title="TERMS_OF_SERVICE.title"
+      :max-width="700"
+    >
+      <div class="terms-content">
+        <template v-for="(section, index) in TERMS_OF_SERVICE.sections" :key="index">
+          <h3>{{ section.title }}</h3>
+          <p v-if="section.content">{{ section.content }}</p>
+          <ul v-if="section.list">
+            <li v-for="(item, idx) in section.list" :key="idx">{{ item }}</li>
+          </ul>
+        </template>
+      </div>
+
+      <template #actions>
+        <Button :variant="ButtonVariant.Primary" @click="showTermsModal = false">
+          확인
+        </Button>
+      </template>
+    </DocumentModal>
+
+    <!-- 개인정보 처리방침 모달 -->
+    <DocumentModal
+      v-model="showPrivacyModal"
+      :name="PRIVACY_POLICY.name"
+      :title="PRIVACY_POLICY.title"
+      :max-width="700"
+    >
+      <div class="terms-content">
+        <template v-for="(section, index) in PRIVACY_POLICY.sections" :key="index">
+          <h3>{{ section.title }}</h3>
+          <p v-if="section.content">{{ section.content }}</p>
+          <ul v-if="section.list">
+            <li v-for="(item, idx) in section.list" :key="idx">
+              <template v-if="typeof item === 'string'">{{ item }}</template>
+              <template v-else>
+                <strong>{{ item.label }}:</strong> {{ item.value }}
+              </template>
+            </li>
+          </ul>
+        </template>
+      </div>
+
+      <template #actions>
+        <Button :variant="ButtonVariant.Primary" @click="showPrivacyModal = false">
+          확인
+        </Button>
+      </template>
+    </DocumentModal>
   </div>
 </template>
 
@@ -97,6 +172,7 @@ import { ref, computed } from 'vue';
 
 // 2. 프로젝트 내부 import
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
+import { TERMS_OF_SERVICE, PRIVACY_POLICY } from '@/constants/legal-documents';
 
 // 3. API/Composables import
 import { useAuthStore } from '@/stores/auth';
@@ -106,6 +182,7 @@ import { logout } from '@/api/auth/api';
 import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
 import Card from '@/components/molecules/Card/Card.vue';
 import Button from '@/components/atoms/Button/Button.vue';
+import DocumentModal from '@/components/organisms/DocumentModal/DocumentModal.vue';
 
 // 9. Ref/Reactive 선언
 definePageMeta({
@@ -117,6 +194,8 @@ const toast = useToast();
 const colorMode = useColorMode();
 
 const isNotify = ref(false);
+const showTermsModal = ref(false);
+const showPrivacyModal = ref(false);
 
 const isDark = computed({
   get: () => colorMode.value === 'dark',
@@ -163,7 +242,7 @@ const handleDeleteAccount = () => {
 
 <style lang="scss" scoped>
 .settings-page {
-  padding: 0;
+  padding: 26px;
 }
 
 .settings-container {
@@ -238,6 +317,21 @@ const handleDeleteAccount = () => {
   
   &:first-child { padding-top: 8px; }
   &:last-child { padding-bottom: 8px; }
+
+  &.clickable {
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0 -12px;
+    padding: 16px 12px;
+    transition: all 0.2s ease;
+
+    &:first-child { padding-top: 16px; margin-top: -8px; }
+    &:last-child { padding-bottom: 16px; margin-bottom: -8px; }
+
+    &:hover {
+      background: var(--bg-tertiary);
+    }
+  }
 }
 
 .setting-item-info, .danger-info {
