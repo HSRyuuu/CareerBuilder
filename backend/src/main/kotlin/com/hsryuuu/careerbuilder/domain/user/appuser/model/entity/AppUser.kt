@@ -1,5 +1,6 @@
 package com.hsryuuu.careerbuilder.domain.user.appuser.model.entity
 
+import com.hsryuuu.careerbuilder.domain.plan.model.entity.Subscription
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
 import org.springframework.data.annotation.CreatedDate
@@ -32,4 +33,7 @@ data class AppUser(
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     var updatedAt: LocalDateTime = LocalDateTime.now(),
-)
+) {
+    @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL])
+    var subscription: Subscription? = null
+}

@@ -24,6 +24,8 @@ enum class ErrorCode(
     // MEMBER
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
 
+    // PLAN
+    PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "플랜을 찾을 수 없습니다."),
 
     // Experience
     EXPERIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "경험 항목을 찾을 수 없습니다."),

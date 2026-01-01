@@ -1,5 +1,6 @@
 package com.hsryuuu.careerbuilder.domain.ai.service
 
+import com.hsryuuu.careerbuilder.application.factory.AiModelFactory
 import com.hsryuuu.careerbuilder.domain.ai.model.ExperienceAnalysisResponse
 import com.hsryuuu.careerbuilder.domain.ai.prompt.ExperiencePrompts
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.Experience
@@ -12,11 +13,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class AiGenerationService(
-    private val chatClient: ChatClient
+    private val chatClient: ChatClient,
+    private val aiModelFactory: AiModelFactory
 ) {
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    fun analyzeExperience(experience: Experience): ChatResponse {
+    fun analyzeExperience(experience: Experience, modelName: String): ChatResponse {
         log.info("[START] AI 경험분석 요청 | experienceId: ${experience.id}, title: ${experience.title}")
 
         // AI 응답 타입 정의
@@ -41,17 +43,19 @@ class AiGenerationService(
 
         val template = PromptTemplate(ExperiencePrompts.EXPERIENCE_ANALYSIS_PROMPT)
         val prompt = template.render(variables)
+        val modelOption = aiModelFactory.getModelOption(modelName)
 
         // AI 분석 요청
         val chatResponse = chatClient.prompt()
             .user { userSpec -> userSpec.text(prompt) }
+            .options(modelOption)
             .call()
             .chatResponse()
-
 
         if (chatResponse == null) {
             throw RuntimeException("AI Response is null")
         }
+
         log.info("AI 경험분석 응답 완료")
 
         return chatResponse

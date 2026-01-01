@@ -1,5 +1,7 @@
 package com.hsryuuu.careerbuilder.domain.ai.handler
 
+import com.hsryuuu.careerbuilder.application.exception.ErrorCode.PLAN_NOT_FOUND
+import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import com.hsryuuu.careerbuilder.domain.ai.event.ExperienceAnalysisEvent
 import com.hsryuuu.careerbuilder.domain.ai.model.ExperienceAnalysisResponse
 import com.hsryuuu.careerbuilder.domain.ai.model.entity.AiExperienceAnalysis
@@ -11,6 +13,7 @@ import com.hsryuuu.careerbuilder.domain.ai.service.AiGenerationService
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.Experience
 import com.hsryuuu.careerbuilder.domain.experience.model.entity.ExperienceStatus
 import com.hsryuuu.careerbuilder.domain.experience.repository.ExperienceRepository
+import com.hsryuuu.careerbuilder.domain.plan.repository.SubscriptionRepository
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.model.ChatResponse
 import org.springframework.ai.converter.BeanOutputConverter
@@ -28,6 +31,7 @@ class ExperienceAnalysisEventListener(
     private val aiRequestRepository: AiRequestRepository,
     private val experienceRepository: ExperienceRepository,
     private val aiExperienceAnalysisRepository: AiExperienceAnalysisRepository,
+    private val subscriptionRepository: SubscriptionRepository,
     private val aiGenerationService: AiGenerationService,
 ) {
 
@@ -50,12 +54,16 @@ class ExperienceAnalysisEventListener(
             return
         }
 
+        val subscription =
+            subscriptionRepository.findByUserId(experience.user.id!!) ?: throw GlobalException(PLAN_NOT_FOUND)
+
         try {
             // 1. 상태 변경: PROCESSING
             aiRequest.status = AiRequestStatus.PROCESSING
             aiRequestRepository.saveAndFlush(aiRequest)
             // 2. AI 호출 (Service 위임 - Exception 처리됨)
-            val chatResponse = aiGenerationService.analyzeExperience(experience)
+            val chatResponse =
+                aiGenerationService.analyzeExperience(experience, subscription.plan.experienceAnalysisModel)
             // 3. 결과 저장 (Entity 생성 및 저장)
             val aiAnalysis = saveAiAnalysis(
                 aiRequest,

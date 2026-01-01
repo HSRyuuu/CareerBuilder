@@ -5,6 +5,13 @@ import com.hsryuuu.careerbuilder.application.exception.GlobalException
 import com.hsryuuu.careerbuilder.application.security.AuthManager
 import com.hsryuuu.careerbuilder.application.security.JwtTokenProvider
 import com.hsryuuu.careerbuilder.application.security.UserInfo
+import com.hsryuuu.careerbuilder.domain.plan.model.entity.PlanType
+import com.hsryuuu.careerbuilder.domain.plan.model.entity.Subscription
+import com.hsryuuu.careerbuilder.domain.plan.model.entity.SubscriptionHistory
+import com.hsryuuu.careerbuilder.domain.plan.model.entity.SubscriptionStatus
+import com.hsryuuu.careerbuilder.domain.plan.repository.PlanRepository
+import com.hsryuuu.careerbuilder.domain.plan.repository.SubscriptionHistoryRepository
+import com.hsryuuu.careerbuilder.domain.plan.repository.SubscriptionRepository
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.dto.UserSignUpRequest
 import com.hsryuuu.careerbuilder.domain.user.appuser.model.entity.AppUser
 import com.hsryuuu.careerbuilder.domain.user.appuser.repository.AppUserRepository
@@ -21,6 +28,9 @@ import java.util.*
 @Service
 class AuthService(
     private val userRepository: AppUserRepository,
+    private val planRepository: PlanRepository,
+    private val subscriptionRepository: SubscriptionRepository,
+    private val subscriptionHistoryRepository: SubscriptionHistoryRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtTokenProvider: JwtTokenProvider,
     private val authManager: AuthManager
@@ -53,13 +63,35 @@ class AuthService(
             password = encodedPassword,
             email = request.email
         )
+
+
         try {
             val savedUser = userRepository.save(appUser)
+            // 기본 플랜 생성
+            savePlanSubscription(savedUser)
             return savedUser.id!!
-
         } catch (e: DataIntegrityViolationException) {
             throw GlobalException(ErrorCode.DUPLICATE_VALUE)
         }
+    }
+
+    private fun savePlanSubscription(user: AppUser) {
+        val plan = planRepository.findByPlanType(PlanType.BASIC) ?: throw GlobalException(ErrorCode.PLAN_NOT_FOUND)
+        val subscription = subscriptionRepository.save(
+            Subscription(
+                user = user,
+                plan = plan,
+                status = SubscriptionStatus.ACTIVE
+            )
+        )
+        subscriptionHistoryRepository.save(
+            SubscriptionHistory(
+                subscription = subscription,
+                nextPlan = plan,
+                changeReason = "회원가입"
+            )
+        )
+
     }
 
     @Transactional(readOnly = true)
