@@ -122,7 +122,7 @@ const isOpen = computed({
       margin-bottom: 12px !important;
       
       &.text-alert {
-        color: #ef4444; // Red color for warning title
+        color: #ef4444; 
       }
     }
 
@@ -157,7 +157,7 @@ const isOpen = computed({
     border-radius: 12px;
     display: flex;
     align-items: flex-start;
-    color: #b45309; // Darker warning text color
+    color: #b45309; 
     font-size: 13.5px;
     line-height: 1.6;
 
@@ -174,10 +174,24 @@ const isOpen = computed({
 
 // Dark mode adjustments
 :global(.dark-mode) {
-  .ai-warning-box {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
-    border-color: rgba(245, 158, 11, 0.3);
+  .ai-help-content {
+    .help-section h3.text-alert {
+      color: #f87171; 
+    }
+
+    .ai-warning-box {
+      background: var(--bg-tertiary);
+      border-color: var(--border-color);
+      color: var(--text-secondary);
+
+      span {
+        color: var(--text-secondary);
+      }
+
+      strong {
+        color: var(--text-primary);
+      }
+    }
   }
 }
 </style>
