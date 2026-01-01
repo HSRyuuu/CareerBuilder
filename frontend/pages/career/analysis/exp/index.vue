@@ -19,13 +19,13 @@
 
     <div class="content-wrapper">
       <!-- AI 설명 블록 -->
-      <div class="ai-intro-banner">
+      <div class="ai-intro-banner u-ai-bg-soft">
         <div class="banner-content">
           <div class="banner-icon">
             <v-icon color="white" size="32">mdi-auto-fix</v-icon>
           </div>
           <div class="banner-text">
-            <h2 class="banner-title">더 강력해진 AI 경험 분석</h2>
+            <h2 class="banner-title u-ai-text-gradient">더 강력해진 AI 경험 분석</h2>
             <p class="banner-description">
               등록된 경험을 선택하면 AI가 전문성을 극대화할 수 있도록 분석 가이드를 제공합니다.
             </p>
@@ -85,6 +85,7 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { ExperienceStatus } from '@/types/experience-types';
 import type { TExperience, TExperienceListParams, SortDirection, ExperienceSortKey } from '~/api/experience/types';
 import { fetchExperiences } from '~/api/experience/api';
+import { requestAiAnalysis } from '~/api/ai/api';
 import ExperienceTable from '@/components/organisms/ExperienceTable/ExperienceTable.vue';
 import ExperienceAnalysisModal from '@/components/organisms/ExperienceAnalysisModal/ExperienceAnalysisModal.vue';
 import PageHeader from '@/components/organisms/PageHeader/PageHeader.vue';
@@ -159,10 +160,13 @@ const handleSelect = (row: TExperience) => {
   showAnalysisModal.value = true;
 };
 
-const handleAnalysisRequest = (experience: TExperience, options: any) => {
-  toast.success(`'${experience.title}'에 대한 AI 분석을 시작합니다.`);
-  console.log('Analysis Options:', options);
-  // TODO: API 연동
+const handleAnalysisRequest = async (experience: TExperience, options: any) => {
+  const { error } = await requestAiAnalysis(experience.id, options);
+  
+  if (!error) {
+    toast.success(`'${experience.title}'에 대한 AI 분석 요청이 완료되었습니다. 분석이 완료되면 알림을 통해 알려드려요!`);
+    console.log('Analysis Options:', options);
+  }
 };
 
 const handleBack = () => {
@@ -184,8 +188,6 @@ const handleBack = () => {
 }
 
 .ai-intro-banner {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-  border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: 16px;
   padding: 32px;
   display: flex;
@@ -211,12 +213,7 @@ const handleBack = () => {
     .banner-text {
       .banner-title {
         font-size: 22px;
-        font-weight: 800;
         letter-spacing: -0.5px;
-        background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
         margin-bottom: 6px;
       }
 

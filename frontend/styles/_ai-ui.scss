@@ -1,0 +1,80 @@
+// AI 관련 공통 UI 스타일
+@use './variables' as *;
+
+// 1. AI 전용 그라디언트 정의
+$ai-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+$ai-gradient-reverse: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+$ai-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+$ai-shadow-hover: 0 6px 16px rgba(59, 130, 246, 0.4);
+
+// 2. AI 텍스트 그라디언트
+.u-ai-text-gradient {
+  background: $ai-gradient;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+// 3. AI 버튼 스타일 (Filled)
+.u-ai-btn-filled {
+  background: $ai-gradient !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 700 !important;
+  box-shadow: $ai-shadow !important;
+  transition: all 0.3s ease !important;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $ai-shadow-hover !important;
+    opacity: 0.95;
+  }
+
+  .v-icon {
+    color: white !important;
+    margin-right: 4px !important;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+  }
+}
+
+// 4. AI 버튼 스타일 (Outline / Gradient Border)
+.u-ai-btn-outline {
+  border: 1.5px solid transparent !important;
+  background-image: linear-gradient(var(--bg-primary), var(--bg-primary)), $ai-gradient !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  color: #8b5cf6 !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease !important;
+
+  &:hover {
+    transform: translateY(-1px);
+    background-image: linear-gradient(rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.08)), 
+                      linear-gradient(var(--bg-primary), var(--bg-primary)), 
+                      $ai-gradient !important;
+    background-clip: padding-box, padding-box, border-box !important;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15) !important;
+  }
+
+  .v-icon {
+    color: #8b5cf6 !important;
+    margin-right: 4px !important;
+  }
+}
+
+// 다크모드 대응
+.dark-mode {
+  .u-ai-btn-outline {
+    color: #a78bfa !important;
+    .v-icon {
+      color: #a78bfa !important;
+    }
+  }
+}
+
+// 5. AI 특수 카드/배너용 배경
+.u-ai-bg-soft {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}

@@ -7,8 +7,8 @@ import java.util.*
 data class ExperienceAnalysisResponse(
 
     // 1. 경험 전체 요약 및 피드백
-    val overallSummary: String?,
-    val overallFeedback: String?,
+    val overallSummary: String,
+    val overallFeedback: String,
 
     // 2. 핵심 요약(목표) 피드백 및 수정
     val goalImprovement: ImprovementDetail,

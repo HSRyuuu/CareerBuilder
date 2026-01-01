@@ -1,5 +1,6 @@
 @use './variables' as *;
 @use './toast';
+@use './ai-ui';
 
 body {
   background-color: var(--bg-secondary);
