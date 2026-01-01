@@ -113,6 +113,46 @@
             </p>
           </div>
 
+          <!-- 약관 동의 섹션 -->
+          <div class="agreement-section">
+            <div class="agreement-item">
+              <v-checkbox
+                v-model="agreeTerms"
+                color="primary"
+                hide-details
+                density="compact"
+              >
+                <template #label>
+                  <span class="agreement-label">
+                    <span class="required-mark">[필수]</span>
+                    <button type="button" class="agreement-link" @click.stop="showTermsModal = true">
+                      서비스 이용약관
+                    </button>
+                    에 동의합니다.
+                  </span>
+                </template>
+              </v-checkbox>
+            </div>
+            <div class="agreement-item">
+              <v-checkbox
+                v-model="agreePrivacy"
+                color="primary"
+                hide-details
+                density="compact"
+              >
+                <template #label>
+                  <span class="agreement-label">
+                    <span class="required-mark">[필수]</span>
+                    <button type="button" class="agreement-link" @click.stop="showPrivacyModal = true">
+                      개인정보 처리방침
+                    </button>
+                    에 동의합니다.
+                  </span>
+                </template>
+              </v-checkbox>
+            </div>
+          </div>
+
           <Button
             type="submit"
             :variant="ButtonVariant.Primary"
@@ -147,6 +187,65 @@
         </div>
       </Card>
     </div>
+
+    <!-- 이용약관 모달 -->
+    <DocumentModal
+      v-model="showTermsModal"
+      :name="TERMS_OF_SERVICE.name"
+      :title="TERMS_OF_SERVICE.title"
+      :max-width="700"
+    >
+      <div class="terms-content">
+        <template v-for="(section, index) in TERMS_OF_SERVICE.sections" :key="index">
+          <h3>{{ section.title }}</h3>
+          <p v-if="section.content">{{ section.content }}</p>
+          <ul v-if="section.list">
+            <li v-for="(item, idx) in section.list" :key="idx">{{ item }}</li>
+          </ul>
+        </template>
+      </div>
+
+      <template #actions>
+        <Button :variant="ButtonVariant.Secondary" @click="showTermsModal = false">
+          닫기
+        </Button>
+        <Button :variant="ButtonVariant.Primary" @click="handleAgreeTerms">
+          동의합니다
+        </Button>
+      </template>
+    </DocumentModal>
+
+    <!-- 개인정보 처리방침 모달 -->
+    <DocumentModal
+      v-model="showPrivacyModal"
+      :name="PRIVACY_POLICY.name"
+      :title="PRIVACY_POLICY.title"
+      :max-width="700"
+    >
+      <div class="terms-content">
+        <template v-for="(section, index) in PRIVACY_POLICY.sections" :key="index">
+          <h3>{{ section.title }}</h3>
+          <p v-if="section.content">{{ section.content }}</p>
+          <ul v-if="section.list">
+            <li v-for="(item, idx) in section.list" :key="idx">
+              <template v-if="typeof item === 'string'">{{ item }}</template>
+              <template v-else>
+                <strong>{{ item.label }}:</strong> {{ item.value }}
+              </template>
+            </li>
+          </ul>
+        </template>
+      </div>
+
+      <template #actions>
+        <Button :variant="ButtonVariant.Secondary" @click="showPrivacyModal = false">
+          닫기
+        </Button>
+        <Button :variant="ButtonVariant.Primary" @click="handleAgreePrivacy">
+          동의합니다
+        </Button>
+      </template>
+    </DocumentModal>
   </div>
 </template>
 
@@ -156,6 +255,7 @@ import { ref, reactive, computed } from 'vue';
 
 // 2. 프로젝트 내부 import
 import { ButtonVariant, CommonSize } from '@/constants/enums/style-enum';
+import { TERMS_OF_SERVICE, PRIVACY_POLICY } from '@/constants/legal-documents';
 
 // 3. API/Composables import
 import { signup, checkUsername, checkEmail } from '@/api/auth/api';
@@ -167,6 +267,7 @@ import type { TUserSignUpRequest } from '@/api/auth/types';
 import Card from '@/components/molecules/Card/Card.vue';
 import Button from '@/components/atoms/Button/Button.vue';
 import Input from '@/components/atoms/Input/Input.vue';
+import DocumentModal from '@/components/organisms/DocumentModal/DocumentModal.vue';
 
 // 9. Ref/Reactive 선언
 definePageMeta({
@@ -194,6 +295,12 @@ const signupForm = reactive<TUserSignUpRequest>({
 
 const passwordConfirm = ref('');
 
+// 약관 동의 상태
+const agreeTerms = ref(false);
+const agreePrivacy = ref(false);
+const showTermsModal = ref(false);
+const showPrivacyModal = ref(false);
+
 // 10. Computed 선언
 const isPasswordMatch = computed(() => {
   return signupForm.password === passwordConfirm.value;
@@ -206,7 +313,9 @@ const isValid = computed(() => {
     signupForm.password.length >= 8 &&
     isPasswordMatch.value &&
     isUsernameChecked.value &&
-    isEmailChecked.value
+    isEmailChecked.value &&
+    agreeTerms.value &&
+    agreePrivacy.value
   );
 });
 
@@ -304,6 +413,16 @@ const handleSignup = async () => {
 
 const handleSocialLogin = (platform: string) => {
   toast.info(`${platform} 회원가입은 준비 중입니다.`);
+};
+
+const handleAgreeTerms = () => {
+  agreeTerms.value = true;
+  showTermsModal.value = false;
+};
+
+const handleAgreePrivacy = () => {
+  agreePrivacy.value = true;
+  showPrivacyModal.value = false;
 };
 </script>
 

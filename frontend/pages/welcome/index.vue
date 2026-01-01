@@ -49,25 +49,25 @@
           <!-- 데코레이션용 플로팅 카드 (4개 사각형 배치) -->
           <div class="floating-card card-1">
             <v-icon color="#60a5fa" size="small">mdi-brain</v-icon>
-            <span style="font-size: 12px; font-weight: 600; color: white; margin-left: 8px">
+            <span style="font-size: 14px; font-weight: 700; color: white; margin-left: 8px">
               AI Skill Extraction
             </span>
           </div>
           <div class="floating-card card-2">
             <v-icon color="#a855f7" size="small">mdi-chart-areaspline</v-icon>
-            <span style="font-size: 12px; font-weight: 600; color: white; margin-left: 8px">
+            <span style="font-size: 14px; font-weight: 700; color: white; margin-left: 8px">
               Growth Analysis
             </span>
           </div>
           <div class="floating-card card-3">
             <v-icon color="#10b981" size="small">mdi-map-marker-path</v-icon>
-            <span style="font-size: 12px; font-weight: 600; color: white; margin-left: 8px">
+            <span style="font-size: 14px; font-weight: 700; color: white; margin-left: 8px">
               Experience Mapping
             </span>
           </div>
           <div class="floating-card card-4">
             <v-icon color="#f59e0b" size="small">mdi-lightbulb-outline</v-icon>
-            <span style="font-size: 12px; font-weight: 600; color: white; margin-left: 8px">
+            <span style="font-size: 14px; font-weight: 700; color: white; margin-left: 8px">
               Career Insights
             </span>
           </div>
@@ -80,61 +80,114 @@
       <div class="features-container">
         <div class="features-header">
           <span class="features-subtitle">Key Features</span>
-          <h2 class="features-title">커리어 성장을 위한 완벽한 도구</h2>
+          <h2 class="features-title">AI가 리드하는 커리어 브랜딩</h2>
         </div>
         <div class="features-grid">
           <div class="feature-card">
             <div class="feature-icon-wrapper" style="background: rgba(37, 99, 235, 0.1)">
-              <v-icon color="#2563eb">mdi-text-box-multiple-outline</v-icon>
+              <v-icon color="#2563eb">mdi-auto-fix</v-icon>
             </div>
-            <h3 class="feature-name">경험 통합 관리</h3>
+            <h3 class="feature-name">AI 가이드 기반 기록</h3>
             <p class="feature-desc">
-              프로젝트, 성과, 스킬 등 흩어져 있는 업무 경험을 한 곳에서 체계적으로 기록하고
-              관리합니다.
+              무엇을 적을지 막막하신가요? 각 섹션별 AI 가이드와 힌트 상자가 전문적인 기록을 완성할 수 있도록 돕습니다.
             </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper" style="background: rgba(168, 85, 247, 0.1)">
-              <v-icon color="#a855f7">mdi-auto-fix</v-icon>
+              <v-icon color="#a855f7">mdi-text-search-variant</v-icon>
             </div>
-            <h3 class="feature-name">AI 역량 분석</h3>
+            <h3 class="feature-name">성과 중심 문장 교정</h3>
             <p class="feature-desc">
-              작성된 내용을 AI가 분석하여 당신의 숨겨진 강점과 보완이 필요한 역량을 명확히
-              짚어드립니다.
+              파편화된 업무 내용을 AI가 분석하여, 정량적인 성과와 핵심 역량이 드러나는 전문적인 문장으로 정교하게 다듬어 드립니다.
             </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper" style="background: rgba(16, 185, 129, 0.1)">
-              <v-icon color="#10b981">mdi-file-document-edit-outline</v-icon>
+              <v-icon color="#10b981">mdi-chart-timeline-variant</v-icon>
             </div>
-            <h3 class="feature-name">맞춤형 이력서 생성</h3>
+            <h3 class="feature-name">직무 역량 정밀 맵핑</h3>
             <p class="feature-desc">
-              잘 관리된 경험 데이터를 바탕으로, 원하는 직무와 상황에 맞는 이력서를 클릭 한 번으로
-              생성합니다.
+              기존의 경험들이 실제 어떤 직무 역량으로 연결되는지 통계 데이터와 시각화 지표를 통해 한눈에 확인할 수 있습니다.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA Section -->
+    <!-- AI Workflow Section -->
+    <section class="ai-process">
+      <div class="process-container">
+        <div class="process-text">
+          <h2 class="section-title">투박한 초안이<br/><span>완벽한 커리어 자산</span>으로</h2>
+          <p class="section-desc">
+            당신이 입력한 단순한 사실들을 CareerBuilder AI가 분석하여<br/>
+            채용 담당자의 눈을 사로잡는 강력한 성과 데이터로 재탄생시킵니다.
+          </p>
+          
+          <ul class="process-steps">
+            <li>
+              <v-icon color="#2563eb">mdi-check-circle</v-icon>
+              <span>가이드 박스를 활용한 핵심 정보 입력</span>
+            </li>
+            <li>
+              <v-icon color="#2563eb">mdi-check-circle</v-icon>
+              <span>AI 기반의 문맥 분석 및 핵심 역량 추출</span>
+            </li>
+            <li>
+              <v-icon color="#2563eb">mdi-check-circle</v-icon>
+              <span>성과 중심의 매력적인 커리어 블록 완성</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="process-visual">
+          <div class="visual-card before">
+            <div class="card-label">Before</div>
+            <div class="card-content">
+              "새로운 결제 기능을 개발했습니다. 버그 없이 잘 작동했고 고객들도 좋아했어요."
+            </div>
+          </div>
+          <div class="visual-arrow">
+            <v-icon>mdi-chevron-double-right</v-icon>
+          </div>
+          <div class="visual-card after">
+            <div class="card-label">After with AI</div>
+            <div class="card-content">
+              "결제 전환율 15% 향상을 목표로 신규 결제 자동화 엔진을 설계 및 개발하여, 결제 오류 발생률을 0.01%로 낮추고 일 평균 결제 처리량을 30% 증대시켰습니다."
+            </div>
+            <div class="ai-glow"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="welcome-cta">
       <div class="cta-container">
-        <h2 class="cta-title">준비되셨나요?</h2>
-        <p class="cta-description">
-          지금 바로 CareerBuilder를 통해 당신의 성장을 기록하세요.<br />
-          당신의 노력은 데이터가 되고, 데이터는 강력한 커리어가 됩니다.
-        </p>
-        <Button
-          class="cta-btn"
-          :variant="ButtonVariant.Primary"
-          :size="CommonSize.Large"
-          :round="true"
-          style="background: white; color: #2563eb"
-          @click="handleSignupClick"
-        >
-          무료로 시작하기
-        </Button>
+        <!-- 배경 데코레이션 -->
+        <div class="cta-bg-glow glow-1"></div>
+        <div class="cta-bg-glow glow-2"></div>
+        
+        <div class="cta-content">
+          <div class="cta-icon">
+            <v-icon color="white" size="30">mdi-robot</v-icon>
+          </div>
+          <h2 class="cta-title">지금 바로 시작하세요</h2>
+          <p class="cta-description">
+            무의미하게 흘려보냈던 업무 시간들이 당신의 강력한 커리어 경쟁력이 됩니다.<br />
+            CareerBuilder AI와 함께 준비된 인재로 거듭나세요.
+          </p>
+          <div class="cta-buttons">
+            <Button
+              class="cta-btn primary-white"
+              :variant="ButtonVariant.Primary"
+              :size="CommonSize.Large"
+              :round="true"
+              @click="handleSignupClick"
+            >
+              무료로 시작하기
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
   </div>

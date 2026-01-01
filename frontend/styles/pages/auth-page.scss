@@ -173,6 +173,51 @@
   .auth-submit-btn {
     margin-top: 8px;
   }
+
+  // 약관 동의 섹션
+  .agreement-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: var(--bg-tertiary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+  }
+
+  .agreement-item {
+    .v-checkbox {
+      margin: 0;
+    }
+
+    .agreement-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+
+      .required-mark {
+        color: black;
+        font-weight: 600;
+        margin-right: 4px;
+      }
+
+      .agreement-link {
+        color: #2563eb;
+        font-weight: 600;
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: inherit;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover {
+          color: #1e40af;
+        }
+      }
+    }
+  }
 }
 
 .auth-divider {
