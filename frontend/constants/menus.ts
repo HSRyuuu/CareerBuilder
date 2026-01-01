@@ -6,6 +6,7 @@
 export const Menu = {
   Home: 'HOME',
   Career: 'CAREER',
+  Resume: 'RESUME',
 } as const;
 
 export type TMenuKey = (typeof Menu)[keyof typeof Menu];
@@ -21,7 +22,8 @@ export type TMenuItem = {
 // 메뉴 목록
 export const MENU_ITEMS: TMenuItem[] = [
   { key: Menu.Home, path: '/home', label: '홈', icon: 'mdi-home' },
-  { key: Menu.Career, path: '/career', label: '경험', icon: 'mdi-file-document' },
+  { key: Menu.Career, path: '/career', label: '경험', icon: 'mdi-text-box-multiple' },
+  { key: Menu.Resume, path: '/resume', label: '이력서', icon: 'mdi-account-details' },
 ];
 
 // 메뉴 키로 메뉴 아이템 찾기
