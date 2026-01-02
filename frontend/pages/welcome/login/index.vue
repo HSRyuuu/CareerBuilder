@@ -7,6 +7,9 @@
             <div class="auth-logo-icon">CB</div>
             <span class="auth-logo-text">CareerBuilder</span>
           </div>
+        </div>
+
+        <div class="auth-content">
           <h1 class="auth-title">다시 오신 것을 환영합니다!</h1>
           <p class="auth-subtitle">계정에 로그인하여 커리어를 관리하세요.</p>
         </div>

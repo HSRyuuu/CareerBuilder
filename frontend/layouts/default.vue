@@ -3,8 +3,8 @@
     <!-- 상단 헤더 -->
     <header class="layout-header">
       <div class="layout-header-left">
-        <div class="layout-logo">
-          <div class="layout-logo-icon">CB</div>
+        <div class="layout-logo" @click="navigateTo(MENU_URLS.HOME)">
+          <img src="/cb-logo.png" alt="CareerBuilder" class="layout-logo-img" />
           <span class="layout-logo-text">CareerBuilder</span>
         </div>
       </div>

@@ -4,7 +4,7 @@
     <header class="layout-header welcome-header">
       <div class="layout-header-left">
         <div class="layout-logo" @click="navigateTo('/')">
-          <div class="layout-logo-icon">CB</div>
+          <img src="/cb-logo.png" alt="CareerBuilder" class="layout-logo-img" />
           <span class="layout-logo-text">CareerBuilder</span>
         </div>
       </div>
@@ -76,17 +76,16 @@ const handleMockLogin = () => {
     gap: 12px;
     cursor: pointer;
 
-    .layout-logo-icon {
-      width: 32px;
+    .layout-logo-img {
       height: 32px;
-      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      width: auto;
+      object-fit: contain;
       border-radius: 8px;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 14px;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.02);
+      }
     }
 
     .layout-logo-text {

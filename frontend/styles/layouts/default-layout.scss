@@ -33,26 +33,24 @@
 .layout-logo {
   display: flex;
   align-items: center;
-  gap: 10px; // 12px * 0.8
+  gap: 10px;
   cursor: pointer;
 }
 
-.layout-logo-icon {
-  width: 28px; // 36px * 0.8
-  height: 28px;
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  border-radius: 8px; // 10px * 0.8
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 11px; // 14px * 0.8
-  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
+.layout-logo-img {
+  height: 26px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
 .layout-logo-text {
-  font-size: 15px; // 18px * 0.8
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.3px;
@@ -97,6 +95,17 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border-color: var(--primary-color);
+  }
+
+  .dark-mode & {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+    
+    &:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
   }
 
   .chip-text {
